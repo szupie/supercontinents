@@ -11,9 +11,9 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-import { select, pointer } from "https://cdn.skypack.dev/d3-selection@3";
-import { scaleLinear } from "https://cdn.skypack.dev/d3-scale@4";
-import { zoom } from "https://cdn.skypack.dev/d3-zoom@3";
+import { select, pointer } from 'https://cdn.skypack.dev/d3-selection@3';
+import { scaleLinear } from 'https://cdn.skypack.dev/d3-scale@4';
+import { zoom } from 'https://cdn.skypack.dev/d3-zoom@3';
 
 export {
 	init,
@@ -30,12 +30,12 @@ let projection;
 let scale, rotate;
 let redrawCallback = ()=>{};
 
-function init(canvas, theProjection, diameter) {
+function init(canvas, containerNode, theProjection, diameter) {
 	initWebgl(canvas);
 
 	resize(diameter);
 
-	initPanning(diameter, theProjection);
+	initPanning(diameter, theProjection, containerNode);
 }
 
 function resize(diameter) {
@@ -53,7 +53,7 @@ function setRedrawCallback(callback) {
 }
 
 
-function initPanning(diameter, theProjection) {
+function initPanning(diameter, theProjection, containerNode) {
 	projection = theProjection;
 
 	// The current rotation
@@ -76,11 +76,11 @@ function initPanning(diameter, theProjection) {
 		.scaleExtent([.8, 1.5])
 		.on("start", function (event) {
 			q = rotate, d = [0, 0, 0]; // accumulate change in d
-			r = pointer(event);
+			r = pointer(event, this);
 		})
 		.on("zoom.redraw", function (event) {
 			// scale = scale0 * event.transform.k;
-			var p = pointer(event);
+			var p = pointer(event, this);
 			var dr = [lambda(p[0]) - lambda(r[0]), phi(p[1]) - phi(r[1])];
 			r = p;
 
@@ -97,7 +97,7 @@ function initPanning(diameter, theProjection) {
 			redraw();
 		});
 
-	select("body")
+	select(containerNode)
 		.call(zoomHandler);	
 }
 

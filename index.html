@@ -4,37 +4,19 @@
 		<title>Supercontinents</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<!-- <link href="style.css" rel="stylesheet"> -->
-		<style>
-			body {
-			  margin: 0;
-			  overflow: hidden;
-			  background: black;
-			}
-
-			canvas, svg {
-			  position:absolute;
-			  top:0;
-			  left: 50%;
-			  transform: translateX(-50%);
-			}
-
-			#globe-overlay {
-				opacity: 0.5;
-			}
-
-			.city {
-				fill: transparent;
-				stroke: #eee;
-				stroke-width: 2px;
-				/*cursor: pointer;*/
-			}
-		</style>
+		<link href="styles/style.css" rel="stylesheet">
 	</head>
 	<body>
-		<canvas id="globe-texture"></canvas>
-		<canvas id="globe-overlay"></canvas>
-		<svg id="globe-data"></svg>
+		<h2><span id="mya-value">0</span> million years ago</h2>
+		<div id="globe">
+			<canvas id="globe-texture"></canvas>
+			<canvas id="globe-overlay"></canvas>
+			<svg id="globe-data"></svg>
+		</div>
+		<div id="timeline">
+			<ol id="maps-list">
+			</ol>
+		</div>
 	</body>
 
 	<script src="./js/app.js" type="module"></script>

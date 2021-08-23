@@ -1,0 +1,44 @@
+@import 'timeline.css';
+
+@font-face {
+	font-family: "Philibert Italic";
+	src: 
+		local("Philibert-Italic"), 
+		url("/PhiliItaRus.woff") format("opentype");
+	font-weight: 300;
+}
+html {
+	font-family: sans-serif;
+}
+body {
+	margin: 0;
+	overflow: hidden;
+	background: black;
+	color: #fff;
+}
+
+h1, h2 {
+	text-align: center;
+	font-family: "Philibert Italic";
+}
+
+canvas, svg {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+#globe {
+	position: relative;
+}
+#globe-overlay {
+	opacity: 0.5;
+}
+
+.city {
+	fill: transparent;
+	stroke: #eee;
+	stroke-width: 2px;
+	/*cursor: pointer;*/
+}
