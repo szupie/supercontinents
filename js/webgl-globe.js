@@ -11,15 +11,12 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-import { select, pointer } from 'https://cdn.skypack.dev/d3-selection@3';
-import { scaleLinear } from 'https://cdn.skypack.dev/d3-scale@4';
-import { zoom } from 'https://cdn.skypack.dev/d3-zoom@3';
 
 export {
 	init,
 	resize,
 	setTexture,
-	setRedrawCallback
+	redraw
 };
 
 let context;
@@ -27,15 +24,12 @@ let texture;
 let translateUniform, scaleUniform, rotateUniform;
 
 let projection;
-let scale, rotate;
-let redrawCallback = ()=>{};
 
 function init(canvas, containerNode, theProjection, diameter) {
+	projection = theProjection;
 	initWebgl(canvas);
 
 	resize(diameter);
-
-	initPanning(diameter, theProjection, containerNode);
 }
 
 function resize(diameter) {
@@ -48,68 +42,10 @@ function setTexture(image) {
 	redraw();
 }
 
-function setRedrawCallback(callback) {
-	redrawCallback = callback;
-}
-
-
-function initPanning(diameter, theProjection, containerNode) {
-	projection = theProjection;
-
-	// The current rotation
-	scale = projection.scale();
-	rotate = [0, 0, 0];
-	// let scale0 = scale;
-
-
-	var lambda = scaleLinear()
-		.domain([-diameter / 2, diameter / 2])
-		.range([-180, 180]);
-
-	var phi = scaleLinear()
-		.domain([0, diameter])
-		.range([90, -90]);
-
-	var q, r, transform, d;
-
-	var zoomHandler = zoom()
-		.scaleExtent([.8, 1.5])
-		.on("start", function (event) {
-			q = rotate, d = [0, 0, 0]; // accumulate change in d
-			r = pointer(event, this);
-		})
-		.on("zoom.redraw", function (event) {
-			// scale = scale0 * event.transform.k;
-			var p = pointer(event, this);
-			var dr = [lambda(p[0]) - lambda(r[0]), phi(p[1]) - phi(r[1])];
-			r = p;
-
-			// inverse dr[0] if the mouse is beyond one of the poles
-			var a = (phi(p[1]) - rotate[1]) * Math.PI / 180,
-				ca = Math.cos(a),
-				sa = Math.sin(a);
-
-			d = [d[0] + dr[0] * (ca < 0 ? -1 : 1),
-						d[1] + dr[1], d[2] + dr[0] * -sa];
-
-			rotate = [q[0] + d[0], q[1] + d[1], q[2] + 0 * d[2]];
-
-			redraw();
-		});
-
-	select(containerNode)
-		.call(zoomHandler);	
-}
-
 function redraw() {
-	projection.scale(scale).rotate(rotate);
-
-	context.uniform1f(scaleUniform, projection.scale());
 	context.uniform3fv(rotateUniform, projection.rotate());
 	// context.bindTexture(context.TEXTURE_2D, texture); // XXX Safari
 	context.drawArrays(context.TRIANGLE_FAN, 0, 4);
-
-	redrawCallback();
 }
 
 
@@ -178,8 +114,8 @@ void main(void) {
 	}
 }
 `;
-function initWebgl(canvas) {
 
+function initWebgl(canvas) {
 	// Create the WebGL context, with fallback for experimental support.
 	context = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 
@@ -223,6 +159,7 @@ function initWebgl(canvas) {
 	scaleUniform = context.getUniformLocation(program, "u_scale");
 	rotateUniform = context.getUniformLocation(program, "u_rotate");
 
+	context.uniform1f(scaleUniform, projection.scale());
 
 	texture = context.createTexture();
 	context.bindTexture(context.TEXTURE_2D, texture);

@@ -1,23 +1,24 @@
 import { select, selectAll } from 'https://cdn.skypack.dev/d3-selection@3';
 import { geoPath, geoOrthographic, geoGraticule } from 'https://cdn.skypack.dev/d3-geo@3';
 
-import { init as initTextureGlobe, setRedrawCallback } from './webgl-globe.js';
+import { init as initTextureGlobe, redraw as redrawGlobeTexture } from './webgl-globe.js';
+import { init as initRotationControl } from './rotation-control.js';
 import * as mapSelector from './map-selector.js';
 
-let diameter = Math.min(window.innerWidth, window.innerHeight, 600);
+let radius = Math.min(window.innerWidth, window.innerHeight, 600)/2;
 
 const projection = geoOrthographic()
-	.translate([diameter/2, diameter/2])
-	.scale(diameter/2);
+	.translate([radius, radius])
+	.scale(radius);
 
 const globeContainer = document.getElementById('globe');
 const textureCanvas = document.getElementById('globe-texture');
-textureCanvas.setAttribute('width', diameter);
-textureCanvas.setAttribute('height', diameter);
+textureCanvas.setAttribute('width', radius*2);
+textureCanvas.setAttribute('height', radius*2);
 
 const overlayCanvas = document.getElementById('globe-overlay');
-overlayCanvas.setAttribute('width', diameter);
-overlayCanvas.setAttribute('height', diameter);
+overlayCanvas.setAttribute('width', radius*2);
+overlayCanvas.setAttribute('height', radius*2);
 const ctx = overlayCanvas.getContext('2d');
 
 const canvasPathGenerator = geoPath()
@@ -29,13 +30,13 @@ const svgPathGenerator = geoPath()
 	.pointRadius(5);
 
 const svgNode = select('#globe-data')
-	.attr('width', diameter)
-	.attr('height', diameter);
+	.attr('width', radius*2)
+	.attr('height', radius*2);
 
 fetch('./cities-time.json')
 	.then(response=>response.json())
 	.then(setRenderFunction);
-let redrawCallback;
+let redrawCallback = ()=>{};
 
 const graticule = geoGraticule();
 function drawGraticule() {
@@ -70,14 +71,21 @@ function setRenderFunction(json) {
 			.attr('data-name', function(d) { return d.properties.name });
 
 	redrawCallback = function() {
-		ctx.clearRect(0, 0, diameter, diameter);
+		ctx.clearRect(0, 0, radius*2, radius*2);
 		drawGraticule();
 		updateCityPositions();
 	};
 
 	redrawCallback();
-	setRedrawCallback(redrawCallback);
+}
+function redrawGlobe(rotation = false) {
+	if (rotation && !isNaN(rotation[0]) && !isNaN(rotation[1])) {
+		projection.rotate(rotation);
+	}
+	redrawCallback();
+	redrawGlobeTexture();
 }
 
-initTextureGlobe(textureCanvas, globeContainer, projection, diameter, redrawCallback);
+initTextureGlobe(textureCanvas, globeContainer, projection, radius*2, redrawCallback);
+initRotationControl(projection, textureCanvas, redrawGlobe)
 mapSelector.init(document.getElementById('maps-list'));
