@@ -15,16 +15,25 @@ function init(theProjection, theCanvasNode, theRedrawFunction) {
 	redrawFunction = theRedrawFunction;
 
 	canvasNode.parentNode.addEventListener('pointerdown', handleDragStart);
-	canvasNode.parentNode.addEventListener('pointermove', handleDragMove);
+	document.addEventListener('pointermove', handleDragMove);
 	document.addEventListener('pointerup', handleDragEnd);
 }
 
 let startingGeoCoord;
 let draggingGlobe = false;
+let hemisphereOrientation = 1;
+let lastY;
+
 function handleDragStart(e){
 	startingGeoCoord = projection.invert(pointer(e, canvasNode));
 	if (!isNaN(startingGeoCoord[0]) && !isNaN(startingGeoCoord[1])) {
 		draggingGlobe = true;
+
+		const radius = projection.scale();
+		lastY = pointer(e, canvasNode)[1]-radius;
+		hemisphereOrientation = getHemisphereOrientation(
+			startingGeoCoord, projection.rotate()[0]
+		);
 	}
 }
 
@@ -32,22 +41,33 @@ function handleDragMove(e) {
 	if (draggingGlobe) {
 		const radius = projection.scale();
 
-		const pointerOffset = pointer(e, canvasNode).map(val=>val-radius);
+		let pointerOffset = pointer(e, canvasNode).map(val=>val-radius);
+
+		// clamp to closest point on globe circumference
 		const pointerDistanceFromCenter = Math.sqrt(
 			pointerOffset.map(val=>Math.pow(val, 2))
 			.reduce((sum, current)=>sum+current)
 		);
-
-		if (pointerDistanceFromCenter < radius) {
-			const [lambda, phi] = calcRotation(
-				startingGeoCoord, pointerOffset, radius
+		if (pointerDistanceFromCenter > radius) {
+			pointerOffset = pointerOffset.map(
+				val=>val/pointerDistanceFromCenter*radius
 			);
-			if (!isNaN(lambda) && !isNaN(phi)) {
-				initInertia();
-				redrawFunction([lambda, phi]);
-			}
-			// debugGeometry(startingGeoCoord, pointer(e, canvasNode), lambda, phi, radius);
 		}
+
+		const [lambda, phi] = calcRotation(
+			startingGeoCoord, pointerOffset, radius
+		);
+		if (!isNaN(lambda) && !isNaN(phi)) {
+			const direction = lastY - pointerOffset[1];
+			hemisphereOrientation = getHemisphereOrientation(
+				startingGeoCoord, lambda, direction
+			);
+			lastY = pointerOffset[1];
+
+			initInertia();
+			redrawFunction([lambda, phi]);
+		}
+		// debugGeometry(startingGeoCoord, pointer(e, canvasNode), lambda, phi, radius);
 	}
 }
 
@@ -58,40 +78,71 @@ function handleDragEnd(e) {
 
 function calcRotation(geoCoord, pointerOffset, radius) {
 	// Farthest a point on a given latitude can be from polar axis
-	// (In this projection, each latitude ellipse has a
-	// constant horizontal radius regardless of viewing angle)
+	// (In this projection, each latitude ellipse has
+	// a constant horizontal radius regardless of viewing angle)
 	const latitudeRadius = radius * Math.cos(toRadians(geoCoord[1]));
 
-	const lambda = toDegrees(Math.asin(
-		Math.min(pointerOffset[0]/latitudeRadius, 1)
-	));
+	const clampedPointerX = clampAbs(pointerOffset[0], latitudeRadius);
+	let lambda = toDegrees(Math.asin(clampedPointerX/latitudeRadius));
+	if (hemisphereOrientation == -1) {
+		lambda = 180-lambda;
+	}
 
-
-	const a = -pointerOffset[1]/radius;
-	const b = Math.cos(toRadians(geoCoord[1]))*Math.cos(toRadians(lambda));
-	const c = Math.sin(toRadians(geoCoord[1]));
-	const plusOrMinus = Math.sqrt(-Math.pow(a,2)+Math.pow(b,2)+Math.pow(c,2));
+	const pointerY = -pointerOffset[1];
+	const yOffsetAtLambda = latitudeRadius*Math.cos(toRadians(lambda));
+	const ellipseOriginMaxY = radius*Math.sin(toRadians(geoCoord[1]));
+	const plusOrMinus = Math.sqrt(-Math.pow(pointerY,2)+Math.pow(yOffsetAtLambda,2)+Math.pow(ellipseOriginMaxY,2));
 
 	let phi;
-	if (c != -a) {
-		if (b*plusOrMinus != c*(a+c)+Math.pow(b, 2)) {
-			phi = toDegrees(2*Math.atan( (b-plusOrMinus)/(a+c) ));
+	if (ellipseOriginMaxY != -pointerY) {
+		if (yOffsetAtLambda*plusOrMinus != ellipseOriginMaxY*(pointerY+ellipseOriginMaxY)+Math.pow(yOffsetAtLambda, 2)) {
+			// this is usually the correct solution
+			phi = toDegrees(2*Math.atan( (yOffsetAtLambda-plusOrMinus)/(pointerY+ellipseOriginMaxY) ));
 		} else {
-			console.log('need to figure out when this happens');
-			if (b*plusOrMinus+c*(a+c)+Math.pow(b, 2) != 0) {
-				phi = toDegrees(2*Math.atan( (b+plusOrMinus)/(a+c) ));
+			if (yOffsetAtLambda*plusOrMinus+ellipseOriginMaxY*(pointerY+ellipseOriginMaxY)+Math.pow(yOffsetAtLambda, 2) != 0) {
+				// can’t yet find a case when this would be correct
+				phi = toDegrees(2*Math.atan( (yOffsetAtLambda+plusOrMinus)/(pointerY+ellipseOriginMaxY) ));
 			} else {
-				console.log('not plus either');
+				console.log('Unhandled case:', pointerY, yOffsetAtLambda, ellipseOriginMaxY);
 			}
 		}
 	} else {
-		phi = toDegrees(2*Math.atan(a/b));
-		console.log('special case');
-		if (b == 0) { console.log('why b == 0'); }
-		if (Math.pow(a, 2)+Math.pow(b, 2) == 0) {console.log('why a^2+b^2 == 0');}
+		// I guess the above formulas run into a division by 0 issue
+		// when a point is dragged to its mirrored position across the equator,
+		// and this other formula works only for those specific instances?
+		phi = toDegrees(2*Math.atan(pointerY/yOffsetAtLambda));
 	}
 
 	return [lambda - geoCoord[0], phi];
+}
+
+// value depends on which east-west hemisphere the coordinate lies:
+// 1: if upwards from the point leads closer to north pole
+// -1: if upwards from the point leads closer to south pole
+// 0: if coordinate is rotated maximally eastward/westward
+function getHemisphereOrientation(geoCoord, lambda, direction) {
+	const angleFromFront = normDegree(
+		lambda + geoCoord[0]
+	);
+	if (angleFromFront > 90 && angleFromFront < 270) {
+		return -1;
+	} else if (angleFromFront == 90 || angleFromFront == 270) {
+		if (direction) {
+			// positive direction means up; positive latitude means north
+			// use south-up orientation when moving up in northern hemisphere;
+			// use south-up orientation when moving down in southern hemisphere
+			// so, use south-up when signs match
+			if (direction * geoCoord[1] > 0) {
+				return -1;
+			} else {
+				return 1;
+			}
+		} else {
+			return 0;
+		}
+	} else {
+		return 1;
+	}
 }
 
 function debugGeometry(geoCoord, targetPos, lambda, phi, radius) {
@@ -172,15 +223,15 @@ function inertiaUpdateLoop() {
 			if (!isNaN(lastChange)) {
 				const rotationDiffs = [];
 				for (let i=0; i<rotationHistory[axis].length-1; i++) {
-					// to do: wrapping values
 					const diff = rotationHistory[axis][i] - rotationHistory[axis][i+1];
-					rotationDiffs.push(diff);
+					rotationDiffs.push(closestHalfRotation(diff));
 				}
 				const maxSpeed = 30;
 				if (rotationDiffs.length) {
-					recentSpeeds[axis] = clamp(
-						rotationDiffs.reduce((sum, current)=>sum+current) / rotationDiffs.length,
-						-maxSpeed,
+					recentSpeeds[axis] = clampAbs(
+						rotationDiffs.reduce(
+							(sum,current)=>sum+current
+						) / rotationDiffs.length,
 						maxSpeed
 					);
 				}
@@ -211,8 +262,22 @@ function inertiaUpdateLoop() {
 
 // Helper functions
 
+function clampAbs(val, abs) {
+	return clamp(val, -abs, abs);
+}
+
 function clamp(val, min, max) {
 	return Math.min(Math.max(val, min), max);
+}
+
+// returns equivalent 0° ≤ degree < 360°
+function normDegree(degree) {
+	return (degree+3600)%360;
+}
+
+// returns equivalent -180° ≤ degree < 180°
+function closestHalfRotation(degree) {
+	return (degree+180+3600)%360-180;
 }
 
 function toDegrees(radians) {
