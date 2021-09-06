@@ -10,7 +10,7 @@ export {
 	setToClosestMap
 }
 
-let currentMapIndex = 0;
+let selectedMapIndex = 0;
 let currentMya = 0;
 
 const oldestMya = mapDates[mapDates.length-1]['mya'];
@@ -18,15 +18,17 @@ const oldestMya = mapDates[mapDates.length-1]['mya'];
 let mapsListNode;
 
 
-function init(containerNode) {
+let updateCallback = ()=>{};
+function init(containerNode, theUpdateCallback) {
 	mapsListNode = containerNode;
+	updateCallback = theUpdateCallback;
 
 	createMapIndicators();
 
 	setUpKeyboardHandler();
 	setUpPointerHandler();
 
-	setMap(currentMapIndex);
+	setMap(selectedMapIndex);
 }
 
 function createMapIndicators() {
@@ -51,12 +53,12 @@ function setToClosestMap(mya) {
 }
 
 function setMap(newIndex) {
-	currentMapIndex = newIndex;
-	currentMya = mapDates[currentMapIndex]['mya'];
-	
-	loadMapImage(mapDates[currentMapIndex]['file']);
+	selectedMapIndex = newIndex;
 
-	document.getElementById('mya-value').textContent = currentMya;
+	loadMapImage(mapDates[selectedMapIndex]['file']).then(()=>{
+		currentMya = mapDates[selectedMapIndex]['mya'];
+		updateCallback();
+	});
 
 	// highlight indicator for current map
 	mapsListNode.querySelectorAll('.map-link').forEach((node, i)=>{
@@ -73,12 +75,16 @@ function getTexturePath(name) {
 }
 
 function loadMapImage(name) {
-	const image = new Image;
-	const requestTime = Date.now();
-	image.onload = e=>{
-		updateTexture(image, requestTime);
-	};
-	image.src = getTexturePath(name);
+	return new Promise((resolve, reject) => {
+		const image = new Image;
+		const requestTime = Date.now();
+		image.onload = e=>{
+			updateTexture(image, requestTime);
+			resolve();
+		};
+		image.onerror = reject;
+		image.src = getTexturePath(name);
+	});
 }
 
 let lastUpdate = 0;
@@ -87,8 +93,9 @@ function updateTexture(image, requestTime) {
 	// Show textures as they become available, 
 	// dropping any texture that were requested earlier than the last loaded one
 	if (requestTime > lastUpdate) {
-		setTexture(image);
 		lastUpdate = requestTime;
+
+		setTexture(image);
 	}
 }
 
@@ -103,8 +110,8 @@ function setUpKeyboardHandler() {
 		}
 		if (direction !== 0) {
 			// increment/decrement and wrap
-			const newIndex = 
-				(currentMapIndex + direction + mapDates.length)%mapDates.length;
+			const count = mapDates.length;
+			const newIndex = (selectedMapIndex + direction + count) % count;
 			setMap(newIndex);
 		}
 	});

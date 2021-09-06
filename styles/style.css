@@ -38,7 +38,14 @@ canvas, svg {
 
 .city {
 	fill: transparent;
-	stroke: #eee;
+	r: 8px;
+	stroke: #eeec;
 	stroke-width: 2px;
-	/*cursor: pointer;*/
+	cursor: pointer;
+	transition: r 100ms ease-in-out;
+}
+.city.tracked {
+	r: 5px;
+	stroke-width: 2px;
+	stroke: #eee;
 }

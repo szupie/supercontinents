@@ -1,7 +1,8 @@
 import { pointer } from 'https://cdn.skypack.dev/d3-selection@3';
 
 export {
-	init
+	init,
+	transitionToCoord
 }
 
 let projection;
@@ -19,12 +20,44 @@ function init(theProjection, theCanvasNode, theRedrawFunction) {
 	document.addEventListener('pointerup', handleDragEnd);
 }
 
+let targetRotation;
+let transitionLoop;
+const transitionDuration = 300;
+
+function transitionToCoord(geoCoord) {
+	cancelInertia();
+
+	targetRotation = geoCoord.map(val=>-val);
+	const start = getCurrentRotation();
+	const startTime = Date.now();
+	transitionLoop = ()=>{
+		const percentage = clamp(
+			(Date.now() - startTime)/transitionDuration,
+			0, 1
+		);
+		const newRotation = targetRotation.map((val,i)=>
+			val*percentage+start[i]*(1-percentage)
+		);
+		redrawFunction(newRotation);
+
+		if (percentage < 1) {
+			requestAnimationFrame(transitionLoop);
+		}
+	}
+	requestAnimationFrame(transitionLoop);
+}
+function cancelTransition() {
+	transitionLoop = ()=>{};
+}
+
 let startingGeoCoord;
 let draggingGlobe = false;
 let hemisphereOrientation = 1;
 let lastY;
 
-function handleDragStart(e){
+function handleDragStart(e) {
+	cancelTransition();
+
 	startingGeoCoord = projection.invert(pointer(e, canvasNode));
 	if (!isNaN(startingGeoCoord[0]) && !isNaN(startingGeoCoord[1])) {
 		draggingGlobe = true;
@@ -32,13 +65,15 @@ function handleDragStart(e){
 		const radius = projection.scale();
 		lastY = pointer(e, canvasNode)[1]-radius;
 		hemisphereOrientation = getHemisphereOrientation(
-			startingGeoCoord, projection.rotate()[0]
+			startingGeoCoord, getCurrentRotation()[0]
 		);
 	}
 }
 
 function handleDragMove(e) {
 	if (draggingGlobe) {
+		cancelTransition();
+
 		const radius = projection.scale();
 
 		let pointerOffset = pointer(e, canvasNode).map(val=>val-radius);
@@ -196,66 +231,71 @@ function debugGeometry(geoCoord, targetPos, lambda, phi, radius) {
 // Inertial rotation
 
 let inertiaActive = false;
+const rotationHistories = [[], []];
+const maxInertiaSpeed = 30;
+const inertiaDecayFactor = 0.9;
+const inertiaWindowSize = 5;
+
 function initInertia() {
 	if (!inertiaActive) {
 		window.requestAnimationFrame(inertiaUpdateLoop);
 		inertiaActive = true;
 	}
 }
+function cancelInertia() {
+	inertiaActive = false;
+	rotationHistories[0].length = 0;
+	rotationHistories[1].length = 0;
+}
 
-const rotationHistory = [[], []];
 function inertiaUpdateLoop() {
-	const currentRotation = projection.rotate().slice(0, 2);
-
+	// record current rotation
+	const currentRotation = getCurrentRotation();
 	currentRotation.forEach((rotation, axis)=>{
-		rotationHistory[axis].unshift(rotation);
-		rotationHistory[axis].length = 5;
+		rotationHistories[axis].unshift(rotation);
+		rotationHistories[axis].length = inertiaWindowSize;
 	});
 
-
-	if (draggingGlobe) {
-		window.requestAnimationFrame(inertiaUpdateLoop);
-	} else {
-		const recentSpeeds = [];
+	if (!draggingGlobe) {
+		const newRotation = currentRotation.slice();
 
 		currentRotation.forEach((rotation, axis)=>{
-			const lastChange = rotation - rotationHistory[axis][0];
-			if (!isNaN(lastChange)) {
-				const rotationDiffs = [];
-				for (let i=0; i<rotationHistory[axis].length-1; i++) {
-					const diff = rotationHistory[axis][i] - rotationHistory[axis][i+1];
-					rotationDiffs.push(closestHalfRotation(diff));
-				}
-				const maxSpeed = 30;
-				if (rotationDiffs.length) {
-					recentSpeeds[axis] = clampAbs(
-						rotationDiffs.reduce(
-							(sum,current)=>sum+current
-						) / rotationDiffs.length,
-						maxSpeed
-					);
-				}
-				if (Math.abs(recentSpeeds[axis]) < 0.01) {
-					rotationHistory[axis].length = 0;
-				}
+			const avgSpeed = calculateRecentSpeed(rotationHistories[axis]);
+
+			// calculate new rotation if speed is over threshold
+			if (!isNaN(avgSpeed) && Math.abs(avgSpeed) > 0.01) {
+				newRotation[axis] = rotation + clampAbs(
+					avgSpeed, maxInertiaSpeed
+				) * inertiaDecayFactor;
+			} else {
+				rotationHistories[axis].length = 0;
 			}
 		});
-		let newLambda = currentRotation[0];
-		let newPhi = currentRotation[1];
-		if (recentSpeeds[0] && !isNaN(recentSpeeds[0])) {
-			newLambda = currentRotation[0] + recentSpeeds[0]*0.9;
-		}
-		if (recentSpeeds[1] && !isNaN(recentSpeeds[1])) {
-			newPhi = currentRotation[1] + recentSpeeds[1]*0.9;
-		}
-		if (currentRotation[0] != newLambda || currentRotation[1] != newPhi) {
-			redrawFunction([newLambda, newPhi]);
+
+		if (currentRotation[0] != newRotation[0] || 
+			currentRotation[1] != newRotation[1]) {
+			redrawFunction(newRotation);
 			window.requestAnimationFrame(inertiaUpdateLoop);
 		} else {
-			inertiaActive = false;
-			rotationHistory[0].length = 0;
-			rotationHistory[1].length = 0;
+			cancelInertia();
 		}
+	} else {
+		// continue recording rotations while dragging in order to detect stops
+		window.requestAnimationFrame(inertiaUpdateLoop);
+	}
+}
+
+function calculateRecentSpeed(history) {
+	const rotationDiffs = [];
+	for (let i=0; i<history.length-1; i++) {
+		const diff = history[i] - history[i+1];
+		rotationDiffs.push(closestHalfRotation(diff));
+	}
+
+	if (rotationDiffs.length) {
+		return rotationDiffs.reduce(
+			(sum,current)=>sum+current
+		) / rotationDiffs.length;
 	}
 }
 
@@ -286,4 +326,8 @@ function toDegrees(radians) {
 
 function toRadians(degrees) {
 	return degrees/180*Math.PI;
+}
+
+function getCurrentRotation() {
+	return projection.rotate().slice(0, 2);
 }
