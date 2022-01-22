@@ -4,6 +4,7 @@ import { geoPath, geoOrthographic, geoGraticule, geoDistance } from 'https://cdn
 import { init as initTextureGlobe, redraw as redrawGlobeTexture } from './webgl-globe.js';
 import { init as initRotationControl, transitionToCoord } from './rotation-control.js';
 import * as mapSelector from './map-selector.js';
+import { init as initTimeline } from './timeline.js';
 
 let radius = Math.min(window.innerWidth, window.innerHeight, 600)/2;
 
@@ -118,5 +119,8 @@ function coordsVisible(coords) {
 
 initTextureGlobe(textureCanvas, globeContainer, projection, radius*2);
 initRotationControl(projection, textureCanvas, redrawGlobe);
+
+initTimeline();
 mapSelector.init(document.getElementById('maps-list'), handleMapUpdate);
+
 redrawGlobe();

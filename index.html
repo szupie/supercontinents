@@ -7,13 +7,106 @@
 		<link href="styles/style.css" rel="stylesheet">
 	</head>
 	<body>
-		<h2><span id="mya-value">0</span> million years ago</h2>
+		<h2 id="current-map-label"><span id="mya-value">0</span> million years ago</h2>
 		<div id="globe">
 			<canvas id="globe-texture"></canvas>
 			<canvas id="globe-overlay"></canvas>
 			<svg id="globe-data"></svg>
 		</div>
 		<div id="timeline">
+			<ol id="life-events-list">
+				<li data-mya="0.3">
+					<a href="#humans">Humans</a>
+				</li>
+				<li data-mya="66">
+					<a href="#k-pg-extinction">K–Pg Extinction</a>
+				</li>
+				<li data-mya="100">
+					<a href="#flowers">Flowers</a>
+				</li>
+				<li data-mya="160">
+					<a href="#birds">Birds</a>
+				</li>
+				<li data-mya="220">
+					<a href="#dinosaurs-mammals">Dinosaurs & Mammals</a>
+				</li>
+				<li data-mya="252">
+					<a href="#great-dying">Great Dying</a>
+				</li>
+				<li data-mya="312">
+					<a href="#amniotes">Amniotes</a>
+				</li>
+				<li data-mya="368">
+					<a href="#seeds">Seeds</a>
+				</li>
+				<li data-mya="420">
+					<a href="#stems-roots-leaves">Stems, Roots & Leaves</a>
+				</li>
+				<li data-mya="470">
+					<a href="#land-plants-animals">Land Plants & Animals</a>
+				</li>
+				<li data-mya="541">
+					<a href="#animals-diversify">Animals Diversify</a>
+				</li>
+				<li data-mya="635">
+					<a href="#ediacaran-biota">Ediacaran Biota</a>
+				</li>
+			</ol>
+			<ol id="supercontinents-list">
+				<li data-form-start-mya="320" data-form-mya="255" data-break-mya="225" data-break-end-mya="175">
+					<em class="label">Pangea</em>
+				</li>
+				<li data-form-mya="600" data-break-mya="560">
+					<em class="label">Pannotia</em>
+				</li>
+				<li data-form-mya="1100" data-break-mya="750">
+					<em class="label">Rodinia</em>
+				</li>
+			</ol>
+			<ol id="periods-list">
+				<li data-start-mya="23" data-end-mya="3">
+					<em class="label">Neogene</em>
+				</li>
+				<li data-start-mya="66" data-end-mya="23">
+					<em class="label">Paleogene</em>
+				</li>
+				<li data-start-mya="145" data-end-mya="66">
+					<em class="label">Cretaceous</em>
+				</li>
+				<li data-start-mya="201" data-end-mya="145">
+					<em class="label">Jurassic</em>
+				</li>
+				<li data-start-mya="252" data-end-mya="201">
+					<em class="label">Triassic</em>
+				</li>
+				<li data-start-mya="299" data-end-mya="252">
+					<em class="label">Permian</em>
+				</li>
+				<li data-start-mya="359" data-end-mya="299">
+					<em class="label">Carboniferous</em>
+				</li>
+				<li data-start-mya="419" data-end-mya="359">
+					<em class="label">Devonian</em>
+				</li>
+				<li data-start-mya="444" data-end-mya="419">
+					<em class="label">Silurian</em>
+				</li>
+				<li data-start-mya="485" data-end-mya="444">
+					<em class="label">Ordovician</em>
+				</li>
+				<li data-start-mya="541" data-end-mya="485">
+					<em class="label">Cambrian</em>
+				</li>
+				<li data-start-mya="635" data-end-mya="541">
+					<em class="label">Ediacaran</em>
+				</li>
+				<li data-start-mya="720" data-end-mya="635">
+					<em class="label">Cryogenian</em>
+				</li>
+				<li data-start-mya="1000" data-end-mya="720">
+					<em class="label">Tonian</em>
+				</li>
+			</ol>
 			<ol id="maps-list">
 			</ol>
 		</div>

@@ -7,7 +7,7 @@ import { mapDates } from './map-dates.js';
 export {
 	init,
 	currentMya,
-	setToClosestMap
+	myaToPercent
 }
 
 let selectedMapIndex = 0;
@@ -19,9 +19,9 @@ let mapsListNode;
 
 
 let updateCallback = ()=>{};
-function init(containerNode, theUpdateCallback) {
+function init(containerNode, mapUpdateCallback) {
 	mapsListNode = containerNode;
-	updateCallback = theUpdateCallback;
+	updateCallback = mapUpdateCallback;
 
 	createMapIndicators();
 
@@ -31,11 +31,24 @@ function init(containerNode, theUpdateCallback) {
 	setMap(selectedMapIndex);
 }
 
+function myaToPercent(mya) {
+	return mya/oldestMya*100;
+}
+
+const myaBisector = bisector(d=>d['mya']);
+function getClosestMapAtMya(mya) {
+	return myaBisector.center(mapDates, mya);
+}
+
+
+/*
+  DOM operations
+*/
 function createMapIndicators() {
 	select(mapsListNode)
 		.selectAll(null).data(mapDates).enter()
 		.append('li')
-			.style('top', d=>`${d['mya']/oldestMya*100}%`)
+			.style('top', d=>`${myaToPercent(d['mya'])}%`)
 			.append('a')
 				.text(d=>`${d['mya']} MYA`)
 				.classed('map-link', true)
@@ -47,11 +60,22 @@ function createMapIndicators() {
 				});
 }
 
-const myaBisector = bisector(d=>d['mya']);
-function setToClosestMap(mya) {
-	setMap(myaBisector.center(mapDates, mya));
+// removes specified className from all map indicator nodes
+// if an index is provided, that indicator becomes only node with className
+function resetClassForAllMaps(className, index) {
+	const indicatorNodes = mapsListNode.querySelectorAll('.map-link');
+	indicatorNodes.forEach(node=>{
+		node.classList.remove(className)
+	});
+	if (typeof index !== 'undefined') {
+		indicatorNodes[index].classList.add(className);
+	}
 }
 
+
+/*
+  Update map texture
+*/
 function setMap(newIndex) {
 	selectedMapIndex = newIndex;
 
@@ -61,13 +85,7 @@ function setMap(newIndex) {
 	});
 
 	// highlight indicator for current map
-	mapsListNode.querySelectorAll('.map-link').forEach((node, i)=>{
-		if (i != newIndex) {
-			node.classList.remove('selected');
-		} else {
-			node.classList.add('selected');
-		}
-	});
+	resetClassForAllMaps('selected', newIndex);
 }
 
 function getTexturePath(name) {
@@ -99,6 +117,10 @@ function updateTexture(image, requestTime) {
 	}
 }
 
+
+/*
+  Controls
+*/
 function setUpKeyboardHandler() {
 	document.addEventListener('keydown', e=>{
 		let direction = 0;
@@ -132,9 +154,17 @@ function setUpPointerHandler() {
 			handleDrag(e);
 		}
 	});
+
+	// highlight closest map while hovering
+	mapsListNode.addEventListener('mousemove', e=>{
+		resetClassForAllMaps('hovering', getClosestMapAtPointerEvent(e));
+	});
 }
-function handleDrag(e) {
+function getClosestMapAtPointerEvent(e) {
 	const yPercent = pointer(e, mapsListNode)[1] / mapsListNode.clientHeight;
 	const mya = yPercent*oldestMya;
-	setToClosestMap(mya);
+	return getClosestMapAtMya(mya);
+}
+function handleDrag(e) {
+	setMap(getClosestMapAtPointerEvent(e));
 }

@@ -18,7 +18,6 @@ body {
 }
 
 h1, h2 {
-	text-align: center;
 	font-family: "Philibert Italic";
 }
 
@@ -34,6 +33,10 @@ canvas, svg {
 }
 #globe-overlay {
 	opacity: 0.5;
+}
+
+#current-map-label {
+	text-align: center;
 }
 
 .city {
