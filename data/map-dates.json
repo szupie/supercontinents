@@ -1,8 +1,4 @@
-export {
-	mapDates
-};
-
-const mapDates = [
+ [
 	{ "file": "1", "mya": 0 },
 	{ "file": "2", "mya": 0.021 },
 	{ "file": "3", "mya": 3.7 },
@@ -93,4 +89,4 @@ const mapDates = [
 	{ "file": "90", "mya": 600 },
 	{ "file": "92", "mya": 690 },
 	{ "file": "93", "mya": 750 }
-];
+]

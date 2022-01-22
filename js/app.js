@@ -120,7 +120,7 @@ function coordsVisible(coords) {
 initTextureGlobe(textureCanvas, globeContainer, projection, radius*2);
 initRotationControl(projection, textureCanvas, redrawGlobe);
 
-initTimeline();
 mapSelector.init(document.getElementById('maps-list'), handleMapUpdate);
+initTimeline();
 
 redrawGlobe();

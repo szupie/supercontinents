@@ -1,4 +1,4 @@
-import { myaToPercent } from './map-selector.js';
+import { mapsReadyPromise } from './map-selector.js';
 
 export {
 	init
@@ -10,12 +10,18 @@ const lifeEventsNode = document.getElementById('life-events-list');
 const supercontinentsNode = document.getElementById('supercontinents-list');
 const periodsNode = document.getElementById('periods-list');
 
-function init() {
-	createMyaLabels();
+let mapsSelector;
 
-	positionSupercontinents();
-	positionPeriods();
-	positionLifeEvents();
+function init() {
+	mapsReadyPromise.then(funcs=>{
+		mapsSelector = funcs;
+
+		createMyaLabels();
+
+		positionSupercontinents();
+		positionPeriods();
+		positionLifeEvents();
+	});
 
 	setUpExpansionListeners();
 }
@@ -25,14 +31,14 @@ function createMyaLabels() {
 	labelsContainerNode.classList.add('axis-labels');
 
 	// create labels at intervals
-	for (let labelValue=0; myaToPercent(labelValue)<=100; labelValue+=200) {
+	for (let mya=0; mapsSelector.myaToPercent(mya)<=100; mya+=200) {
 		const labelNode = document.createElement('span');
 		labelNode.classList.add('label');
 
-		labelNode.textContent = labelValue;
+		labelNode.textContent = mya;
 
 		labelsContainerNode.appendChild(labelNode);
-		labelNode.style.top = `${myaToPercent(labelValue)}%`;
+		labelNode.style.top = `${mapsSelector.myaToPercent(mya)}%`;
 	}
 
 	const axisTitleNode = document.createElement('span');
@@ -50,8 +56,8 @@ function positionSupercontinents() {
 	for (let i=0; i<nodes.length; i++) {
 		const end = nodes[i].getAttribute('data-break-mya');
 		const start = nodes[i].getAttribute('data-form-mya');
-		nodes[i].style.top = `${myaToPercent(end)}%`;
-		nodes[i].style.bottom = `${100 - myaToPercent(start)}%`;
+		nodes[i].style.top = `${mapsSelector.myaToPercent(end)}%`;
+		nodes[i].style.bottom = `${100 - mapsSelector.myaToPercent(start)}%`;
 
 		const prestart = nodes[i].getAttribute('data-form-start-mya');
 		if (prestart) {
@@ -70,10 +76,10 @@ function positionPeriods() {
 	const nodes = periodsNode.children;
 
 	for (let i=0; i<nodes.length; i++) {
-		nodes[i].style.top = `${myaToPercent(
+		nodes[i].style.top = `${mapsSelector.myaToPercent(
 			nodes[i].getAttribute('data-end-mya')
 		)}%`;
-		nodes[i].style.bottom = `${100 - myaToPercent(
+		nodes[i].style.bottom = `${100 - mapsSelector.myaToPercent(
 			nodes[i].getAttribute('data-start-mya')
 		)}%`;
 	}
@@ -81,7 +87,7 @@ function positionPeriods() {
 
 function positionLifeEvents() {
 	lifeEventsNode.querySelectorAll('li').forEach(node=>{
-		node.style.top = `${myaToPercent(node.getAttribute('data-mya'))}%`;
+		node.style.top = `${mapsSelector.myaToPercent(node.getAttribute('data-mya'))}%`;
 	})
 }
 

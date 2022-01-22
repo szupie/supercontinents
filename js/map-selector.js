@@ -2,18 +2,25 @@ import { select, selectAll, pointer } from './d3-modules.js';
 import { bisector } from './d3-modules.js';
 
 import { setTexture } from './webgl-globe.js';
-import { mapDates } from './map-dates.js';
 
 export {
 	init,
 	currentMya,
-	myaToPercent
+	mapsReadyPromise
 }
 
 let selectedMapIndex = 0;
 let currentMya = 0;
 
-const oldestMya = mapDates[mapDates.length-1]['mya'];
+let mapDates, oldestMya;
+const mapsReadyPromise = fetch('./data/map-dates.json')
+	.then(response=>response.json())
+	.then(data=>{
+		mapDates = data;
+		oldestMya = mapDates[mapDates.length-1]['mya'];
+
+		return {myaToPercent, getClosestMapAtMya};
+	});
 
 let mapsListNode;
 
@@ -23,12 +30,13 @@ function init(containerNode, mapUpdateCallback) {
 	mapsListNode = containerNode;
 	updateCallback = mapUpdateCallback;
 
-	createMapIndicators();
-
+	mapsReadyPromise.then(()=>{
+		createMapIndicators();
+		setMap(selectedMapIndex);
+	});
+	
 	setUpKeyboardHandler();
 	setUpPointerHandler();
-
-	setMap(selectedMapIndex);
 }
 
 function myaToPercent(mya) {
