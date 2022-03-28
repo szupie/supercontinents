@@ -9,10 +9,11 @@
 }
 html {
 	font-family: sans-serif;
+	font-size: 16px;
 }
 body {
 	margin: 0;
-	overflow: hidden;
+	overflow-x: hidden;
 	background: black;
 	color: #fff;
 }
@@ -29,14 +30,19 @@ canvas, svg {
 }
 
 #globe {
-	position: relative;
+	position: fixed;
+	top: 4rem;
+	left: 50%;
 }
 #globe-overlay {
 	opacity: 0.5;
 }
 
 #current-map-label {
-	text-align: center;
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 .city {

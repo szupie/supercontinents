@@ -6,7 +6,7 @@
 	--expansion-easing: ease-in-out;
 	--dimmed-white: #C4C4C4;
 	height: calc(100% - 2*var(--vert-margin));
-	position: absolute;
+	position: fixed;
 	top: var(--vert-margin);
 	right: 0;
 	color: #E5E5E5;
