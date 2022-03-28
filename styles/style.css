@@ -47,6 +47,14 @@ canvas, svg {
 #globe #globe-data * {
 	pointer-events: auto;
 }
+#globe #globe-data .graticule {
+	stroke: #fff8;
+	fill: none;
+	pointer-events: none;
+}
+#globe #globe-data .graticule.prime-meridian {
+	stroke-dasharray: 2;
+}
 #globe-overlay {
 	opacity: 0.5;
 }

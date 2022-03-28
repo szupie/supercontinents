@@ -38,13 +38,19 @@ fetch('./cities-time.json')
 	.then(response=>response.json())
 	.then(initCities);
 
-const graticule = geoGraticule();
-function drawGraticule() {
-	ctx.beginPath();
-	ctx.strokeStyle = '#fff';
-	canvasPathGenerator(graticule());
-	ctx.stroke();
+function createGraticule() {
+	const lines = {
+		'prime-meridian': geoGraticule().step([180, 0]),
+		'equator': geoGraticule().step([0, 360])
+	}
+	for (const line in lines) {
+		svgNode.append('path')
+			.datum(lines[line])
+			.attr("class", `graticule ${line}`)
+			.attr("d", svgPathGenerator);
+	}
 }
+createGraticule();
 
 function handleMapUpdate() {
 	document.getElementById('mya-value').textContent = mapSelector.currentMya;
@@ -97,9 +103,12 @@ function initCities(json) {
 	updateCityPositions();
 }
 
+function updateSvgProjection() {
+	svgNode.selectAll(".graticule").attr("d", svgPathGenerator);
+}
 function redrawOverlays() {
 	ctx.clearRect(0, 0, radius*2, radius*2);
-	drawGraticule();
+	updateSvgProjection();
 };
 
 function redrawGlobe(rotation = false) {
