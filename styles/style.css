@@ -34,6 +34,19 @@ canvas, svg {
 	top: 4rem;
 	left: 50%;
 }
+#globe-texture {
+	border-radius: 100%;
+	cursor: grab;
+}
+#globe.dragging #globe-texture {
+	cursor: grabbing;
+}
+#globe > :not(#globe-texture) {
+	pointer-events: none;
+}
+#globe #globe-data * {
+	pointer-events: auto;
+}
 #globe-overlay {
 	opacity: 0.5;
 }

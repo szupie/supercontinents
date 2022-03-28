@@ -8,6 +8,7 @@ export {
 let projection;
 let canvasNode;
 let redrawFunction = ()=>{};
+let dragHandlerNode;
 
 
 function init(theProjection, theCanvasNode, theRedrawFunction) {
@@ -15,7 +16,9 @@ function init(theProjection, theCanvasNode, theRedrawFunction) {
 	canvasNode = theCanvasNode;
 	redrawFunction = theRedrawFunction;
 
-	canvasNode.parentNode.addEventListener('pointerdown', handleDragStart);
+	// attach listener to container node so dragging works on overlaid items
+	dragHandlerNode = canvasNode.parentNode;
+	dragHandlerNode.addEventListener('pointerdown', handleDragStart);
 	document.addEventListener('pointermove', handleDragMove);
 	document.addEventListener('pointerup', handleDragEnd);
 }
@@ -61,6 +64,7 @@ function handleDragStart(e) {
 	startingGeoCoord = projection.invert(pointer(e, canvasNode));
 	if (!isNaN(startingGeoCoord[0]) && !isNaN(startingGeoCoord[1])) {
 		draggingGlobe = true;
+		dragHandlerNode.classList.add('dragging');
 
 		const radius = projection.scale();
 		lastY = pointer(e, canvasNode)[1]-radius;
@@ -108,6 +112,7 @@ function handleDragMove(e) {
 
 function handleDragEnd(e) {
 	draggingGlobe = false;
+		dragHandlerNode.classList.remove('dragging');
 }
 
 
