@@ -47,6 +47,9 @@ canvas, svg {
 #globe #globe-data * {
 	pointer-events: auto;
 }
+#globe #globe-data {
+	overflow: visible;
+}
 #globe #globe-data .graticule {
 	stroke: #fff8;
 	fill: none;
@@ -54,6 +57,28 @@ canvas, svg {
 }
 #globe #globe-data .graticule.prime-meridian {
 	stroke-dasharray: 2;
+}
+#globe-data .poles .label {
+	fill: #fff;
+	font-family: "CMU Serif";
+	font-size: 11px;
+	text-anchor: middle;
+	text-shadow: 0 0 2px #000;
+}
+#globe-data .poles polyline {
+	stroke: #eeec;
+	stroke-width: 1px;
+	marker-start: url(#pole-marker);
+}
+#globe-data .poles polyline.stroke {
+	stroke: #000a;
+	stroke-width: 2px;
+	marker-start: none;
+}
+#pole-marker circle {
+	fill: #eeec;
+	stroke: #000a;
+	stroke-width: 1px;
 }
 #globe-overlay {
 	opacity: 0.5;

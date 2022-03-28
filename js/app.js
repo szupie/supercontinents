@@ -38,7 +38,8 @@ fetch('./cities-time.json')
 	.then(response=>response.json())
 	.then(initCities);
 
-function createGraticule() {
+function createGlobeOverlays() {
+	// create prime meridian and equator
 	const lines = {
 		'prime-meridian': geoGraticule().step([180, 0]),
 		'equator': geoGraticule().step([0, 360])
@@ -49,8 +50,29 @@ function createGraticule() {
 			.attr("class", `graticule ${line}`)
 			.attr("d", svgPathGenerator);
 	}
+
+	// create pole indicators
+	const poles = [
+		{
+			"coordinates": [0, 90],
+			"label": "North Pole"
+		}, { 
+			"coordinates": [0, -90],
+			"label": "South Pole"
+		}
+	];
+	const poleContainers = svgNode.append('g').attr('class', 'poles')
+		.selectAll(null).data(poles)
+		.enter().append('g')
+		.attr('data-label', d=>d.label);
+	poleContainers.append('polyline').attr('class', 'stroke');
+	poleContainers.append('polyline');
+	poleContainers.append("text")
+		.attr("class", "label")
+		.text(d=>d.label);
+	updatePoles();
 }
-createGraticule();
+createGlobeOverlays();
 
 function handleMapUpdate() {
 	document.getElementById('mya-value').textContent = mapSelector.currentMya;
@@ -105,6 +127,29 @@ function initCities(json) {
 
 function updateSvgProjection() {
 	svgNode.selectAll(".graticule").attr("d", svgPathGenerator);
+	updatePoles();
+}
+function updatePoles() {
+	svgNode.selectAll('.poles g')
+		.attr('visibility', d=>{
+			return coordsVisible(d.coordinates) ? 'visible' : 'hidden';
+		})
+		.each(positionPoles);
+}
+function positionPoles(d) {
+	const polePoint = projection(d.coordinates);
+	const axisLength = (polePoint[1]-radius)*0.1;
+	const labelOffset = (polePoint[1] > radius) ? 16 : -8;
+	const tipPoint = [radius, axisLength + polePoint[1]];
+
+	select(this).selectAll('polyline')
+		.attr('points', `${polePoint} ${tipPoint}`);
+
+	select(this).selectAll('.label')
+		.attr(
+			'transform', 
+			`translate(${radius}, ${axisLength + labelOffset + polePoint[1]})`
+		);
 }
 function redrawOverlays() {
 	ctx.clearRect(0, 0, radius*2, radius*2);

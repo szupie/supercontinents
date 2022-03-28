@@ -10,7 +10,13 @@
 		<div id="globe">
 			<canvas id="globe-texture"></canvas>
 			<canvas id="globe-overlay"></canvas>
-			<svg id="globe-data"></svg>
+			<svg id="globe-data">
+				<defs>
+					<marker id="pole-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+						<circle cx="5" cy="5" r="5"/>
+					</marker>
+				</defs>
+			</svg>
 		</div>
 		<h2 id="current-map-label"><span id="mya-value">0</span> million years ago</h2>
 		<div id="timeline">
