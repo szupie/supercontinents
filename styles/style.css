@@ -52,3 +52,9 @@ canvas, svg {
 	stroke-width: 2px;
 	stroke: #eee;
 }
+
+@media not (prefers-reduced-motion) {
+	html {
+		scroll-behavior: smooth;
+	}
+}

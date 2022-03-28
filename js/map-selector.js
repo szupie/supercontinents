@@ -9,7 +9,7 @@ export {
 	mapsReadyPromise
 }
 
-let selectedMapIndex = 0;
+let selectedMapIndex;
 let currentMya = 0;
 
 let mapDates, oldestMya;
@@ -19,7 +19,7 @@ const mapsReadyPromise = fetch('./data/map-dates.json')
 		mapDates = data;
 		oldestMya = mapDates[mapDates.length-1]['mya'];
 
-		return {myaToPercent, getClosestMapAtMya};
+		return {myaToPercent, setMapToMya, oldestMya};
 	});
 
 let mapsListNode;
@@ -32,7 +32,7 @@ function init(containerNode, mapUpdateCallback) {
 
 	mapsReadyPromise.then(()=>{
 		createMapIndicators();
-		setMap(selectedMapIndex);
+		setMap(0);
 	});
 	
 	setUpKeyboardHandler();
@@ -46,6 +46,10 @@ function myaToPercent(mya) {
 const myaBisector = bisector(d=>d['mya']);
 function getClosestMapAtMya(mya) {
 	return myaBisector.center(mapDates, mya);
+}
+
+function setMapToMya(targetMya) {
+	setMap(getClosestMapAtMya(targetMya));
 }
 
 
@@ -85,15 +89,17 @@ function resetClassForAllMaps(className, index) {
   Update map texture
 */
 function setMap(newIndex) {
-	selectedMapIndex = newIndex;
+	if (selectedMapIndex != newIndex) { // avoid redraw if no change
+		selectedMapIndex = newIndex;
 
-	loadMapImage(mapDates[selectedMapIndex]['file']).then(()=>{
-		currentMya = mapDates[selectedMapIndex]['mya'];
-		updateCallback();
-	});
+		loadMapImage(mapDates[selectedMapIndex]['file']).then(()=>{
+			currentMya = mapDates[selectedMapIndex]['mya'];
+			updateCallback();
+		});
 
-	// highlight indicator for current map
-	resetClassForAllMaps('selected', newIndex);
+		// highlight indicator for current map
+		resetClassForAllMaps('selected', newIndex);
+	}
 }
 
 function getTexturePath(name) {

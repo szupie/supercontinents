@@ -118,6 +118,22 @@
 	transform: none;
 	bottom: calc(32px - var(--vert-margin)); /* 32px from bottom of viewport */
 }
+#timeline .axis-labels .label:not(.cursor) {
+	transition-property: opacity, transform;
+	transition-duration: 200ms;
+}
+#timeline .axis-labels .label.cursor {
+	top: 0;
+}
+#timeline #maps-list:not(:hover)~.axis-labels .label.cursor {
+	opacity: 0;
+}
+#timeline #maps-list:hover~.axis-labels .label:not(.title).obscured {
+	opacity: 0;
+}
+#timeline #maps-list:hover~.axis-labels .label.title.obscured {
+	transform: translateY(75%);
+}
 
 #supercontinents-list, #periods-list {
 	position: absolute;

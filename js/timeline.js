@@ -31,7 +31,9 @@ function createMyaLabels() {
 	labelsContainerNode.classList.add('axis-labels');
 
 	// create labels at intervals
-	for (let mya=0; mapsSelector.myaToPercent(mya)<=100; mya+=200) {
+	const interval = 200;
+	const allLabelNodes = [];
+	for (let mya=0; mapsSelector.myaToPercent(mya)<=100; mya+=interval) {
 		const labelNode = document.createElement('span');
 		labelNode.classList.add('label');
 
@@ -39,6 +41,8 @@ function createMyaLabels() {
 
 		labelsContainerNode.appendChild(labelNode);
 		labelNode.style.top = `${mapsSelector.myaToPercent(mya)}%`;
+
+		allLabelNodes.push(labelNode);
 	}
 
 	const axisTitleNode = document.createElement('span');
@@ -46,6 +50,32 @@ function createMyaLabels() {
 	axisTitleNode.classList.add('title');
 	axisTitleNode.classList.add('label');
 	labelsContainerNode.appendChild(axisTitleNode);
+
+	allLabelNodes.push(axisTitleNode);
+
+	// create label that follows cursor
+	const cursorNode = document.createElement('span');
+	cursorNode.classList.add('label');
+	cursorNode.classList.add('cursor');
+	labelsContainerNode.appendChild(cursorNode);
+
+	// update cursor label text and position
+	mapsListNode.addEventListener('mousemove', e=>{
+		if (e.target == mapsListNode) {
+			const mya = mapsSelector.oldestMya*e.offsetY/e.target.clientHeight;
+			const threshold = 20;
+			const intervalDist = Math.min(mya%interval, interval-mya%interval);
+			const bottomDist = mapsSelector.oldestMya-mya;
+
+			allLabelNodes.forEach(node => node.classList.remove('obscured'));
+			if (intervalDist < threshold || bottomDist < threshold) {
+				const nearestLabelIndex = Math.round(mya/interval);
+				allLabelNodes[nearestLabelIndex].classList.add('obscured');
+			}
+			cursorNode.textContent = Math.round(mya/10)*10; // round to 10s
+			cursorNode.style.transform = `translateY(calc(${e.offsetY}px - 50%))`;
+		}
+	});
 
 	timelineNode.appendChild(labelsContainerNode);
 }
@@ -88,7 +118,11 @@ function positionPeriods() {
 function positionLifeEvents() {
 	lifeEventsNode.querySelectorAll('li').forEach(node=>{
 		node.style.top = `${mapsSelector.myaToPercent(node.getAttribute('data-mya'))}%`;
-	})
+		node.addEventListener('click', e=>{
+			const targetMya = node.getAttribute('data-mya');
+			mapsSelector.setMapToMya(targetMya);
+		});
+	});
 }
 
 let expansionDelayTimer;
