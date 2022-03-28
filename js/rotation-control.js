@@ -7,14 +7,14 @@ export {
 
 let projection;
 let canvasNode;
-let redrawFunction = ()=>{};
+let redrawGlobe = ()=>{};
 let dragHandlerNode;
 
 
-function init(theProjection, theCanvasNode, theRedrawFunction) {
+function init(theProjection, theCanvasNode, redrawFunction) {
 	projection = theProjection;
 	canvasNode = theCanvasNode;
-	redrawFunction = theRedrawFunction;
+	redrawGlobe = redrawFunction;
 
 	// attach listener to container node so dragging works on overlaid items
 	dragHandlerNode = canvasNode.parentNode;
@@ -22,6 +22,9 @@ function init(theProjection, theCanvasNode, theRedrawFunction) {
 	document.addEventListener('pointermove', handleDragMove);
 	document.addEventListener('pointerup', handleDragEnd);
 }
+
+
+// Transition point to center
 
 let targetRotation;
 let transitionLoop;
@@ -41,7 +44,7 @@ function transitionToCoord(geoCoord) {
 		const newRotation = targetRotation.map((val,i)=>
 			val*percentage+start[i]*(1-percentage)
 		);
-		redrawFunction(newRotation);
+		redrawGlobe(newRotation);
 
 		if (percentage < 1) {
 			requestAnimationFrame(transitionLoop);
@@ -52,6 +55,9 @@ function transitionToCoord(geoCoord) {
 function cancelTransition() {
 	transitionLoop = ()=>{};
 }
+
+
+// Handle drag events
 
 let startingGeoCoord;
 let draggingGlobe = false;
@@ -104,7 +110,7 @@ function handleDragMove(e) {
 			lastY = pointerOffset[1];
 
 			initInertia();
-			redrawFunction([lambda, phi]);
+			redrawGlobe([lambda, phi]);
 		}
 		// debugGeometry(startingGeoCoord, pointer(e, canvasNode), lambda, phi, radius);
 	}
@@ -115,6 +121,8 @@ function handleDragEnd(e) {
 		dragHandlerNode.classList.remove('dragging');
 }
 
+
+// Calculate rotations
 
 function calcRotation(geoCoord, pointerOffset, radius) {
 	// Farthest a point on a given latitude can be from polar axis
@@ -135,12 +143,13 @@ function calcRotation(geoCoord, pointerOffset, radius) {
 
 	let phi;
 	if (ellipseOriginMaxY != -pointerY) {
-		if (yOffsetAtLambda*plusOrMinus != ellipseOriginMaxY*(pointerY+ellipseOriginMaxY)+Math.pow(yOffsetAtLambda, 2)) {
+		if (plusOrMinus != ellipseOriginMaxY*(pointerY+ellipseOriginMaxY)/yOffsetAtLambda+yOffsetAtLambda) {
 			// this is usually the correct solution
 			phi = toDegrees(2*Math.atan( (yOffsetAtLambda-plusOrMinus)/(pointerY+ellipseOriginMaxY) ));
 		} else {
-			if (yOffsetAtLambda*plusOrMinus+ellipseOriginMaxY*(pointerY+ellipseOriginMaxY)+Math.pow(yOffsetAtLambda, 2) != 0) {
-				// can’t yet find a case when this would be correct
+			if (yOffsetAtLambda+ellipseOriginMaxY*(pointerY+ellipseOriginMaxY)/plusOrMinus+yOffsetAtLambda != 0) {
+				// I have no idea if this has any geometric meaning
+				// but I guess it’s needed to resolve singularities
 				phi = toDegrees(2*Math.atan( (yOffsetAtLambda+plusOrMinus)/(pointerY+ellipseOriginMaxY) ));
 			} else {
 				console.log('Unhandled case:', pointerY, yOffsetAtLambda, ellipseOriginMaxY);
@@ -279,7 +288,7 @@ function inertiaUpdateLoop() {
 
 		if (currentRotation[0] != newRotation[0] || 
 			currentRotation[1] != newRotation[1]) {
-			redrawFunction(newRotation);
+			redrawGlobe(newRotation);
 			window.requestAnimationFrame(inertiaUpdateLoop);
 		} else {
 			cancelInertia();
