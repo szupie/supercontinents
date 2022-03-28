@@ -84,10 +84,8 @@
 	text-decoration: none;
 	color: inherit;
 	display: block;
-	padding: 8px 0;
-	/* make links wider to account for movements during timeline expansion */
-	min-width: calc(var(--scrubber-expanded-width) - var(--scrubber-width) + 2em);
-
+	padding: 5px 10px;
+	margin-right: -10px;
 }
 #timeline #life-events-list a:hover {
 	color: #fff;
@@ -113,8 +111,8 @@
 }
 #timeline .axis-labels .title {
 	font-size: 9px;
-	color: var(--dimmed-white);
 	word-spacing: 100vw; /* hack to break every word into own line */
+	text-transform: none;
 	transform: none;
 	bottom: calc(32px - var(--vert-margin)); /* 32px from bottom of viewport */
 }

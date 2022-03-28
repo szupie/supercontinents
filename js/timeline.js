@@ -146,7 +146,14 @@ function setUpExpansionListeners() {
 		}
 	});
 
-	mapsListNode.addEventListener('mouseleave', collapse);
+	timelineNode.addEventListener('mouseleave', e=>{
+		// expand if cursor moves past edge (Fitts law)
+		if (e.clientX >= document.documentElement.clientWidth) {
+			expand();
+		} else {
+			collapse();
+		}
+	});
 	document.addEventListener('mouseup', e=>{
 		cancelExpansionTimer();
 	});
