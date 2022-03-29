@@ -4,7 +4,6 @@
 	--scrubber-expanded-width: 140px;
 	--expansion-duration: 150ms;
 	--expansion-easing: ease-in-out;
-	--dimmed-white: #C4C4C4;
 	height: calc(100% - 2*var(--vert-margin));
 	position: fixed;
 	top: var(--vert-margin);
