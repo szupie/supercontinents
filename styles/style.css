@@ -51,20 +51,28 @@ canvas, svg {
 #globe #globe-data {
 	overflow: visible;
 }
-#globe #globe-data .graticule {
+#globe-data .label {
+	fill: #fff;
+	font-family: "CMU Serif";
+	font-weight: bold;
+	font-size: 8px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	text-anchor: middle;
+	stroke: #0005;
+	paint-order: stroke;
+	stroke-width: 5;
+}
+#globe #globe-data .graticule path {
 	stroke: #fff8;
 	fill: none;
 	pointer-events: none;
 }
-#globe #globe-data .graticule.prime-meridian {
+#globe #globe-data #meridian {
 	stroke-dasharray: 2;
 }
-#globe-data .poles .label {
-	fill: #fff;
-	font-family: "CMU Serif";
-	font-size: 11px;
-	text-anchor: middle;
-	text-shadow: 0 0 2px #000;
+#globe-data .graticule .label {
+	transform: translateY(-0.8em);
 }
 #globe-data .poles polyline {
 	stroke: #eeec;

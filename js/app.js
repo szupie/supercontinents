@@ -39,26 +39,27 @@ fetch('./cities-time.json')
 	.then(initCities);
 
 function createGlobeOverlays() {
-	// create prime meridian and equator
+	// create meridian and equator
 	const lines = {
-		'prime-meridian': geoGraticule().step([180, 0]),
+		'meridian': geoGraticule().step([180, 0]),
 		'equator': geoGraticule().step([0, 360])
 	}
+	const graticuleContainer = svgNode.select('.graticule');
 	for (const line in lines) {
-		svgNode.append('path')
+		graticuleContainer.append('path')
 			.datum(lines[line])
-			.attr("class", `graticule ${line}`)
-			.attr("d", svgPathGenerator);
+			.attr('id', line)
+			.attr('d', svgPathGenerator);
 	}
 
 	// create pole indicators
 	const poles = [
 		{
-			"coordinates": [0, 90],
-			"label": "North Pole"
+			'coordinates': [0, 90],
+			'label': 'North Pole'
 		}, { 
-			"coordinates": [0, -90],
-			"label": "South Pole"
+			'coordinates': [0, -90],
+			'label': 'South Pole'
 		}
 	];
 	const poleContainers = svgNode.append('g').attr('class', 'poles')
@@ -126,7 +127,7 @@ function initCities(json) {
 }
 
 function updateSvgProjection() {
-	svgNode.selectAll(".graticule").attr("d", svgPathGenerator);
+	svgNode.selectAll('.graticule path').attr('d', svgPathGenerator);
 	updatePoles();
 }
 function updatePoles() {
@@ -138,7 +139,7 @@ function updatePoles() {
 }
 function positionPoles(d) {
 	const polePoint = projection(d.coordinates);
-	const axisLength = (polePoint[1]-radius)*0.1;
+	const axisLength = (polePoint[1]-radius)*0.06;
 	const labelOffset = (polePoint[1] > radius) ? 16 : -8;
 	const tipPoint = [radius, axisLength + polePoint[1]];
 
@@ -168,7 +169,7 @@ function redrawGlobe(rotation = false) {
 
 function coordsVisible(coords) {
 	const currentCenter = projection.rotate().slice(0, 2).map(val=>-val);
-	return geoDistance(coords, currentCenter) < Math.PI/2;
+	return geoDistance(coords, currentCenter) <= Math.PI/2;
 }
 
 initTextureGlobe(textureCanvas, globeContainer, projection, radius*2);
