@@ -2,7 +2,9 @@ import { pointer } from 'https://cdn.skypack.dev/d3-selection@3';
 
 export {
 	init,
-	transitionToCoord
+	transitionToCoord,
+	getCurrentRotation,
+	isNorthUp
 }
 
 let projection;
@@ -344,4 +346,8 @@ function toRadians(degrees) {
 
 function getCurrentRotation() {
 	return projection.rotate().slice(0, 2);
+}
+
+function isNorthUp() {
+	return (getCurrentRotation()[1] < 90 && getCurrentRotation()[1] > -90);
 }

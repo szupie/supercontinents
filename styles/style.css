@@ -72,7 +72,7 @@ canvas, svg {
 	stroke-dasharray: 2;
 }
 #globe-data .graticule .label {
-	transform: translateY(-0.8em);
+	transform: translateY(-0.7em);
 }
 #globe-data .poles polyline {
 	stroke: #eeec;

@@ -2,7 +2,7 @@ import { select, selectAll } from 'https://cdn.skypack.dev/d3-selection@3';
 import { geoPath, geoOrthographic, geoGraticule, geoDistance } from 'https://cdn.skypack.dev/d3-geo@3';
 
 import { init as initTextureGlobe, redraw as redrawGlobeTexture } from './webgl-globe.js';
-import { init as initRotationControl, transitionToCoord } from './rotation-control.js';
+import { init as initRotationControl, transitionToCoord, getCurrentRotation, isNorthUp } from './rotation-control.js';
 import * as mapSelector from './map-selector.js';
 import { init as initTimeline } from './timeline.js';
 
@@ -73,7 +73,6 @@ function createGlobeOverlays() {
 		.text(d=>d.label);
 	updatePoles();
 }
-createGlobeOverlays();
 
 function handleMapUpdate() {
 	document.getElementById('mya-value').textContent = mapSelector.currentMya;
@@ -128,14 +127,50 @@ function initCities(json) {
 
 function updateSvgProjection() {
 	svgNode.selectAll('.graticule path').attr('d', svgPathGenerator);
+	adjustEquatorLabel();
 	updatePoles();
 }
+
+function adjustEquatorLabel() {
+	const graticuleLabel = document.querySelector('.graticule .label textPath');
+	const normalisedRotation = (getCurrentRotation()[0] + 360) % 360;
+	let labelOffsetSign = 1;
+	if (isNorthUp()) {
+		// orient label correct-side up
+		graticuleLabel.setAttribute('side', 'left');
+		// move label to avoid text wrapping around globe
+		if (normalisedRotation > 50 && normalisedRotation < 220) {
+			labelOffsetSign = -1;
+		}
+	} else {
+		graticuleLabel.setAttribute('side', 'right');
+		if (normalisedRotation > 45 && normalisedRotation < 80) {
+			labelOffsetSign = -1;
+		}
+	}
+	graticuleLabel.setAttribute(
+		'startOffset', `${(100 - 7*labelOffsetSign) % 100}%`
+	);
+}
+
 function updatePoles() {
 	svgNode.selectAll('.poles g')
 		.attr('visibility', d=>{
 			return coordsVisible(d.coordinates) ? 'visible' : 'hidden';
 		})
 		.each(positionPoles);
+
+	// if both pole labels are visible, show only top-most one for simplicity
+	const visibleLabels = document.querySelectorAll(
+		'#globe-data .poles g[visibility="visible"]'
+	);
+	if (visibleLabels.length > 1) {
+		if (isNorthUp()) {
+			visibleLabels[1].setAttribute('visibility', 'hidden');
+		} else {
+			visibleLabels[0].setAttribute('visibility', 'hidden');
+		}
+	}
 }
 function positionPoles(d) {
 	const polePoint = projection(d.coordinates);
@@ -179,3 +214,4 @@ mapSelector.init(document.getElementById('maps-list'), handleMapUpdate);
 initTimeline();
 
 redrawGlobe();
+createGlobeOverlays();
