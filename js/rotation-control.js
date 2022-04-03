@@ -4,7 +4,8 @@ export {
 	init,
 	transitionToCoord,
 	getCurrentRotation,
-	isNorthUp
+	isNorthUp,
+	getDragCoords
 }
 
 let projection;
@@ -79,6 +80,8 @@ function handleDragStart(e) {
 		hemisphereOrientation = getHemisphereOrientation(
 			startingGeoCoord, getCurrentRotation()[0]
 		);
+
+		redrawGlobe();
 	}
 }
 
@@ -121,6 +124,14 @@ function handleDragMove(e) {
 function handleDragEnd(e) {
 	draggingGlobe = false;
 		dragHandlerNode.classList.remove('dragging');
+}
+
+function getDragCoords() {
+	if (draggingGlobe) {
+		return startingGeoCoord;
+	} else {
+		return false;
+	}
 }
 
 

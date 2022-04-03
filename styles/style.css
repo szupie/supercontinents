@@ -92,6 +92,24 @@ canvas, svg {
 #globe-overlay {
 	opacity: 0.5;
 }
+#drag-indicator {
+	stroke: #fffc;
+	stroke-width: 1px;
+	stroke-dasharray: 2;
+	fill: #fff4;
+	filter: drop-shadow(0 0 2px #000c);
+	animation: dash 2s linear infinite;
+	transition-property: opacity, stroke-width;
+	transition-duration: 100ms;
+}
+#globe:not(.dragging) #drag-indicator {
+	opacity: 0;
+}
+@keyframes dash {
+	to {
+		stroke-dashoffset: -2%;
+	}
+}
 
 #current-map-label {
 	position: fixed;
