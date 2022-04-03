@@ -1,7 +1,5 @@
 import { mapsReadyPromise } from './map-selector.js';
 
-import { bisector } from 'https://cdn.skypack.dev/d3-array@3';
-
 export {
 	init
 }
@@ -23,39 +21,9 @@ function init() {
 		positionSupercontinents();
 		positionPeriods();
 		positionLifeEvents();
-
-		document.addEventListener('scroll', setMapToScrollPosition);
-		setMapToScrollPosition();
 	});
 
 	setUpExpansionListeners();
-}
-
-
-const storyNodes = document.querySelectorAll('#stories article');
-const yBisector = bisector(node => node.offsetTop).right;
-
-// for each major event, show corresponding map when scrolled to story
-// between stories, interpolate target year based on percentage scrolled
-function setMapToScrollPosition() {
-	const prevStoryIndex = yBisector(storyNodes, Math.round(window.scrollY))-1;
-	if (prevStoryIndex < 0) {
-		mapsSelector.setMapToMya(0);
-	} else {
-		const prevStory = storyNodes[prevStoryIndex];
-		const nextStory = storyNodes[prevStoryIndex+1];
-
-		const storiesDiffY = nextStory.offsetTop - prevStory.offsetTop;
-		const scrollPastPrev = window.scrollY - prevStory.offsetTop;
-
-		const prevMya = Number.parseFloat(prevStory.getAttribute('data-mya'));
-		const nextMya = Number.parseFloat(nextStory.getAttribute('data-mya'));
-		const storiesDiffMya = nextMya - prevMya;
-
-		const targetMya = prevMya + storiesDiffMya*scrollPastPrev/storiesDiffY;
-		mapsSelector.setMapToMya(targetMya);
-	}
-	// TO DO: handle maps beyond oldest event
 }
 
 function createMyaLabels() {

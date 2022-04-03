@@ -1,14 +1,14 @@
 import { select, selectAll } from 'https://cdn.skypack.dev/d3-selection@3';
 import { geoPath, geoOrthographic, geoGraticule, geoDistance, geoCircle } from 'https://cdn.skypack.dev/d3-geo@3';
 
-import { init as initTextureGlobe, redraw as redrawGlobeTexture } from './webgl-globe.js';
+import { init as initTextureGlobe, redraw as redrawGlobeTexture } from './globe/webgl-globe.js';
 import {
 	init as initRotationControl,
 	transitionToCoord,
 	getCurrentRotation,
 	isNorthUp,
 	getDragCoords
-} from './rotation-control.js';
+} from './globe/rotation-control.js';
 import * as mapSelector from './map-selector.js';
 import { init as initTimeline } from './timeline.js';
 
