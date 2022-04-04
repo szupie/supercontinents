@@ -82,6 +82,23 @@ function setMapToScrollPosition() {
 	// TO DO: handle maps beyond oldest event
 }
 
+const myaAttrBisector = bisector(node => node.getAttribute('data-mya')).left;
+	
+function setScrollToMya(mya) {
+	const prevStoryIndex = myaAttrBisector(storyNodes, mya)-1;
+	const prevStory = storyNodes[prevStoryIndex];
+	const nextStory = storyNodes[prevStoryIndex+1];
+
+	const prevMya = Number.parseFloat(prevStory.getAttribute('data-mya'));
+	const nextMya = Number.parseFloat(nextStory.getAttribute('data-mya'));
+
+	const percent = (mya - prevMya) / (nextMya - prevMya)
+	window.scrollTo({
+		top: prevStory.offsetTop + percent*(nextStory.offsetTop - prevStory.offsetTop),
+		behavior: 'instant'
+	});
+}
+
 
 /*
   DOM operations
@@ -210,5 +227,8 @@ function getClosestMapAtPointerEvent(e) {
 	return getClosestMapAtMya(mya);
 }
 function handleDrag(e) {
-	setMap(getClosestMapAtPointerEvent(e));
+	const yPercent = pointer(e, mapsListNode)[1] / mapsListNode.clientHeight;
+	const targetMya = yPercent*oldestMya;
+	setScrollToMya(targetMya);
+	// setMap(getClosestMapAtPointerEvent(e));
 }
