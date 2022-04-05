@@ -42,9 +42,9 @@ const svgNode = select('#globe-data')
 
 const dragCircleGen = geoCircle().radius(3);
 
-fetch('./cities-time.json')
+fetch('./data/continent-positions.json')
 	.then(response=>response.json())
-	.then(initCities);
+	.then(initContinents);
 
 function createGlobeOverlays() {
 	// create meridian and equator
@@ -87,18 +87,18 @@ function createGlobeOverlays() {
 
 function handleMapUpdate() {
 	document.getElementById('mya-value').textContent = mapSelector.currentMya;
-	updateCityPositions();
+	updateContinentPositions();
 
-	if (trackedCity) {
-		transitionToCoord(getCoordsFromData(select(trackedCity).datum()));
+	if (trackedContinent) {
+		transitionToCoord(getCoordsFromData(select(trackedContinent).datum()));
 	}
 
 }
 
-function updateCityPositions() {
-	svgNode.selectAll('.city')
+function updateContinentPositions() {
+	svgNode.selectAll('.continent')
 		.attr('visibility', d=>{
-			return coordsVisible(getCoordsFromData(d)) ? 'visible' : 'hidden';
+			return coordsVisible(getCoordsFromData(d), 0.8) ? 'visible' : 'hidden';
 		})
 		.attr('transform', d=>`translate(${projection(getCoordsFromData(d))})`);
 }
@@ -112,28 +112,28 @@ function getCoordsFromData(d) {
 	return coords;
 }
 
-let trackedCity;
-function initCities(json) {
-	svgNode.append('g').attr('class', 'cities')
+let trackedContinent;
+function initContinents(json) {
+	svgNode.append('g').attr('class', 'continents')
 		.selectAll(null).data(json.features)
-		.enter().append('circle')
-			.classed('city', true)
-			.attr('data-name', d=>d.properties.name)
+		.enter().append('text')
+			.classed('continent label', true)
+			.text(d=>d.properties.name)
 			.on('click', function(e, d) {
-				trackedCity = this;
-				trackedCity.classList.add('tracked');
+				trackedContinent = this;
+				trackedContinent.classList.add('tracked');
 				transitionToCoord(getCoordsFromData(d));
 			});
 
 	// deselection listener
 	globeContainer.addEventListener('pointerdown', e=>{
-		if (trackedCity) {
-			trackedCity.classList.remove('tracked');
-			trackedCity = false;
+		if (trackedContinent) {
+			trackedContinent.classList.remove('tracked');
+			trackedContinent = false;
 		}
 	});
 
-	updateCityPositions();
+	updateContinentPositions();
 }
 
 function updateSvgProjection() {
@@ -215,14 +215,14 @@ function redrawGlobe(rotation = false) {
 		projection.rotate(rotation);
 	}
 	redrawOverlays();
-	updateCityPositions();
+	updateContinentPositions();
 	redrawGlobeTexture();
 }
 
 
-function coordsVisible(coords) {
+function coordsVisible(coords, threshold=1) {
 	const currentCenter = projection.rotate().slice(0, 2).map(val=>-val);
-	return geoDistance(coords, currentCenter) <= Math.PI/2;
+	return geoDistance(coords, currentCenter) <= Math.PI/2*threshold;
 }
 
 initTextureGlobe(textureCanvas, globeContainer, projection, radius*2);

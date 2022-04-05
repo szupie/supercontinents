@@ -45,7 +45,8 @@ canvas, svg {
 #globe > :not(#globe-texture) {
 	pointer-events: none;
 }
-#globe #globe-data * {
+#globe #globe-data .continent.label {
+	cursor: pointer;
 	pointer-events: auto;
 }
 #globe #globe-data {
