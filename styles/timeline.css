@@ -8,7 +8,7 @@
 	position: fixed;
 	top: var(--vert-margin);
 	right: 0;
-	color: #E5E5E5;
+	color: var(--white-shade-1);
 
 	transition: transform var(--expansion-duration) var(--expansion-easing);
 }
@@ -206,7 +206,7 @@ ol#periods-list {
 	position: absolute;
 	right: 7px;
 	bottom: 0;
-	color: var(--dimmed-white);
+	color: var(--white-shade-2);
 	letter-spacing: 0.05em;
 	transition-property: transform, opacity;
 	transition-duration: var(--expansion-duration);
