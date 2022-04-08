@@ -118,6 +118,10 @@ function positionPeriods() {
 function positionLifeEvents() {
 	lifeEventsNode.querySelectorAll('li').forEach(node=>{
 		node.style.top = `${mapsSelector.myaToPercent(node.getAttribute('data-mya'))}%`;
+		node.addEventListener('click', e=>{
+			document.querySelector(e.target.hash).scrollIntoView();
+			e.preventDefault();
+		});
 	});
 }
 
