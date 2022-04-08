@@ -9,6 +9,7 @@
 	top: var(--vert-margin);
 	right: 0;
 	color: var(--white-shade-1);
+	pointer-events: none;
 
 	transition: transform var(--expansion-duration) var(--expansion-easing);
 }
@@ -37,6 +38,7 @@
 	cursor: pointer;
 	width: var(--scrubber-expanded-width);
 	background-color: #fff2;
+	pointer-events: auto;
 }
 #maps-list:not(:hover) {
 	opacity: 0.8;
@@ -85,6 +87,7 @@
 	display: block;
 	padding: 5px 10px;
 	margin-right: -10px;
+	pointer-events: auto;
 }
 #timeline #life-events-list a:hover {
 	color: #fff;
