@@ -1,4 +1,5 @@
 @import 'timeline.css';
+@import 'globe.css';
 
 @font-face {
 	font-family: "Philibert Italic";
@@ -31,98 +32,6 @@ canvas, svg {
 	transform: translateX(-50%);
 }
 
-#globe {
-	position: fixed;
-	top: 4rem;
-	left: 50%;
-}
-#globe-texture {
-	border-radius: 100%;
-	cursor: grab;
-}
-#globe.dragging #globe-texture {
-	cursor: grabbing;
-}
-#globe > :not(#globe-texture) {
-	pointer-events: none;
-}
-#globe #globe-overlay {
-	overflow: visible;
-	border-radius: 100%;
-	box-shadow: inset 0em 0em 30px 5px #0008;
-}
-#globe-overlay .label {
-	fill: var(--white-shade-1);
-	font-family: "CMU Serif";
-	font-weight: bold;
-	font-size: 8px;
-	letter-spacing: 0.2em;
-	text-transform: uppercase;
-	text-anchor: middle;
-	stroke: #0005;
-	paint-order: stroke;
-	stroke-width: 5;
-}
-#globe-overlay .continent.label {
-	font-family: "CMU Classical Serif";
-	font-size: 12px;
-	letter-spacing: 0;
-	text-transform: none;
-	stroke: #0009;
-	stroke-width: 3;
-	fill: var(--white-shade-2);
-	cursor: pointer;
-	pointer-events: auto;
-}
-#globe-overlay .continent.label:hover,
-#globe-overlay .continent.label.tracked {
-	fill: #fff;
-	stroke: #000d;
-}
-#globe #globe-overlay .graticule path {
-	stroke: #fff8;
-	fill: none;
-	pointer-events: none;
-}
-#globe #globe-overlay #meridian {
-	stroke-dasharray: 2;
-}
-#globe-overlay .graticule .label {
-	transform: translateY(-0.7em);
-}
-#globe-overlay .poles polyline {
-	stroke: #eeec;
-	stroke-width: 1px;
-	marker-start: url(#pole-marker);
-}
-#globe-overlay .poles polyline.stroke {
-	stroke: #000a;
-	stroke-width: 2px;
-	marker-start: none;
-}
-#pole-marker circle {
-	fill: #eeec;
-	stroke: #000a;
-	stroke-width: 1px;
-}
-#drag-indicator {
-	stroke: #fffc;
-	stroke-width: 1px;
-	stroke-dasharray: 2;
-	fill: #fff4;
-	filter: drop-shadow(0 0 2px #000c);
-	animation: dash 2s linear infinite;
-	transition-property: opacity, stroke-width;
-	transition-duration: 100ms;
-}
-#globe:not(.dragging) #drag-indicator {
-	opacity: 0;
-}
-@keyframes dash {
-	to {
-		stroke-dashoffset: -2%;
-	}
-}
 
 #current-map-label {
 	position: fixed;
