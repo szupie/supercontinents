@@ -1,10 +1,10 @@
-import { select, selectAll } from 'https://cdn.skypack.dev/d3-selection@3';
+import { select, selectAll } from '../d3-modules.js';
 import { 
 	geoPath,
 	geoGraticule,
 	geoDistance,
 	geoCircle
-} from 'https://cdn.skypack.dev/d3-geo@3';
+} from '../d3-modules.js';
 
 import {
 	transitionToCoord,

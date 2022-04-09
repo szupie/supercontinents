@@ -1,4 +1,4 @@
-import { geoOrthographic } from 'https://cdn.skypack.dev/d3-geo@3';
+import { geoOrthographic } from './d3-modules.js';
 
 import { init as initRotationControl } from './globe/rotation-control.js';
 import { init as initTextureGlobe, redraw as redrawGlobeTexture } from './globe/webgl-globe.js';

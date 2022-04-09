@@ -1,5 +1,5 @@
-import { select, selectAll, pointer } from 'https://cdn.skypack.dev/d3-selection@3';
-import { bisector } from 'https://cdn.skypack.dev/d3-array@3';
+import { select, selectAll, pointer } from './d3-modules.js';
+import { bisector } from './d3-modules.js';
 
 import { setTexture } from './globe/webgl-globe.js';
 

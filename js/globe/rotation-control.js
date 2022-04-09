@@ -1,4 +1,4 @@
-import { pointer } from 'https://cdn.skypack.dev/d3-selection@3';
+import { pointer } from '../d3-modules.js';
 
 export {
 	init,
