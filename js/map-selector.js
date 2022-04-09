@@ -36,10 +36,30 @@ function init(containerNode, mapUpdateCallback) {
 
 		document.addEventListener('scroll', setMapToScrollPosition);
 		setMapToScrollPosition();
+
+		// requestReconstructedPositions([-6,17]);
 	});
 	
 	// setUpKeyboardHandler();
 	setUpPointerHandler();
+}
+function requestReconstructedPositions(coord) {
+	const queries = [];
+	const results = {};
+	mapDates.slice(-5).forEach(item=>{ // test oldest 5 only
+	// mapDates.forEach(item=>{
+		queries.push(fetch(`https://gws.gplates.org/reconstruct/reconstruct_points/?points=${coord[0]},${coord[1]}&time=${item.mya}&model=PALEOMAP`)
+			.then(response=>response.json())
+			.then(data=>{
+				results[`${item.mya}`] = data['coordinates'][0];
+			}));
+	});
+	Promise.all(queries).then(a=>{
+		const keys = Object.keys(results).sort((a,b)=>Number.parseFloat(a)>Number.parseFloat(b));
+		const out = [];
+		keys.forEach(key=>{out.push(`"${key}":[${results[key][0]},${results[key][1]}]`)});
+		console.log(out.join(', '));
+	});
 }
 
 function myaToPercent(mya) {
