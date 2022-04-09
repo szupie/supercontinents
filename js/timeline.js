@@ -121,6 +121,10 @@ function positionLifeEvents() {
 		node.addEventListener('click', e=>{
 			document.querySelector(e.target.hash).scrollIntoView();
 			e.preventDefault();
+			document.querySelector('#stories').classList.add('switching');
+			setTimeout(e=>{
+				document.querySelector('#stories').classList.remove('switching');
+			}, 300);
 		});
 	});
 }

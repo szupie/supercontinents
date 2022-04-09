@@ -79,4 +79,11 @@ canvas, svg {
 	html {
 		scroll-behavior: smooth;
 	}
+	#stories {
+		transition: opacity 500ms;
+	}
+	#stories.switching {
+		opacity: 0.2;
+		transition-duration: 100ms;
+	}
 }
