@@ -4,7 +4,7 @@
 	font-family: "Philibert Italic";
 	src: 
 		local("Philibert-Italic"), 
-		url("/PhiliItaRus.woff") format("opentype");
+		url("../assets/fonts/PhiliItaRus.woff") format("opentype");
 	font-weight: 300;
 }
 html {

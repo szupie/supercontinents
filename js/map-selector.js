@@ -13,7 +13,7 @@ let selectedMapIndex;
 let currentMya = 0;
 
 let mapDates, oldestMya;
-const mapsReadyPromise = fetch('./data/map-dates.json')
+const mapsReadyPromise = fetch('./assets/data/map-dates.json')
 	.then(response=>response.json())
 	.then(data=>{
 		mapDates = data;
@@ -150,7 +150,7 @@ function setMap(newIndex) {
 }
 
 function getTexturePath(name) {
-	return `./map-textures/${name}.jpg`;
+	return `./assets/map-textures/${name}.jpg`;
 }
 
 function loadMapImage(name) {

@@ -35,7 +35,7 @@ function init(overlayNode, theProjection, theRadius) {
 	svgPathGenerator.projection(projection);
 	setRadius(theRadius);
 
-	fetch('./data/continent-positions.json')
+	fetch('./assets/data/continent-positions.json')
 		.then(response=>response.json())
 		.then(initContinents);
 
