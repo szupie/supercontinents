@@ -146,7 +146,6 @@
 ol#supercontinents-list {
 	margin-left: 3px;
 	left: calc(100% - var(--scrubber-width));
-	pointer-events: none;
 }
 /* indicator strip */
 #supercontinents-list li {
@@ -195,6 +194,7 @@ ol#periods-list {
 	padding-right: var(--padding-right); /* padding instead of margin, to detect hovers at viewport edge */
 	width: 16px; /* width for hover detection */
 	transition: transform var(--expansion-duration) var(--expansion-easing);
+	pointer-events: auto;
 }
 #periods-list li {
 	width: 2px;
@@ -202,7 +202,6 @@ ol#periods-list {
 	right: var(--padding-right);
 	margin-top: 2px;
 	margin-bottom: 2px;
-	pointer-events: none;
 }
 #periods-list li .label {
 	font-family: "CMU Classical Serif";
