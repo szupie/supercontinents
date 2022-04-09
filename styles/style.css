@@ -3,11 +3,36 @@
 
 @font-face {
 	font-family: "Philibert Italic";
-	src: 
-		local("Philibert-Italic"), 
-		url("../assets/fonts/PhiliItaRus.woff") format("opentype");
+	src: local("Philibert Italic Rush"), 
+		 url("../assets/fonts/PhiliItaRus.woff") format("opentype");
 	font-weight: 300;
 }
+/* Philibert by Open Source Publishing http://osp.kitchen/foundry/philibert */
+
+@font-face {
+	font-family: "CMU Serif";
+	src: local("CMU Serif Roman"),
+		 local("Computer Modern Serif"),
+		 url("../assets/fonts/cmunrm.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "CMU Serif";
+	src: local("CMU Serif Bold"), 
+		 url("../assets/fonts/cmunbx.woff") format("woff");
+	font-weight: bold;
+	font-style: normal;
+}
+@font-face {
+	font-family: "CMU Classical Serif";
+	src: local("CMU Classical Serif Italic"), 
+		 url("../assets/fonts/cmunci.woff") format("woff");
+	font-weight: normal;
+	font-style: italic;
+}
+/* CMU font files packaged by https://checkmyworking.com/cm-web-fonts */
+
 html {
 	--white-shade-1: #E5E5E5;
 	--white-shade-2: #C4C4C4;
@@ -22,7 +47,7 @@ body {
 }
 
 h1, h2 {
-	font-family: "Philibert Italic";
+	font-family: "Philibert Italic", "CMU Classical Serif";
 }
 
 canvas, svg {
