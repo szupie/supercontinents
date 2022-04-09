@@ -25,11 +25,11 @@ let translateUniform, scaleUniform, rotateUniform;
 
 let projection;
 
-function init(canvas, containerNode, theProjection, diameter) {
+function init(canvas, theProjection, radius) {
 	projection = theProjection;
 	initWebgl(canvas);
 
-	resize(diameter);
+	resize(radius*2);
 }
 
 function resize(diameter) {

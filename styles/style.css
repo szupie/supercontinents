@@ -46,12 +46,12 @@ canvas, svg {
 #globe > :not(#globe-texture) {
 	pointer-events: none;
 }
-#globe #globe-data {
+#globe #globe-overlay {
 	overflow: visible;
 	border-radius: 100%;
 	box-shadow: inset 0em 0em 30px 5px #0008;
 }
-#globe-data .label {
+#globe-overlay .label {
 	fill: var(--white-shade-1);
 	font-family: "CMU Serif";
 	font-weight: bold;
@@ -63,7 +63,7 @@ canvas, svg {
 	paint-order: stroke;
 	stroke-width: 5;
 }
-#globe-data .continent.label {
+#globe-overlay .continent.label {
 	font-family: "CMU Classical Serif";
 	font-size: 12px;
 	letter-spacing: 0;
@@ -74,28 +74,28 @@ canvas, svg {
 	cursor: pointer;
 	pointer-events: auto;
 }
-#globe-data .continent.label:hover,
-#globe-data .continent.label.tracked {
+#globe-overlay .continent.label:hover,
+#globe-overlay .continent.label.tracked {
 	fill: #fff;
 	stroke: #000d;
 }
-#globe #globe-data .graticule path {
+#globe #globe-overlay .graticule path {
 	stroke: #fff8;
 	fill: none;
 	pointer-events: none;
 }
-#globe #globe-data #meridian {
+#globe #globe-overlay #meridian {
 	stroke-dasharray: 2;
 }
-#globe-data .graticule .label {
+#globe-overlay .graticule .label {
 	transform: translateY(-0.7em);
 }
-#globe-data .poles polyline {
+#globe-overlay .poles polyline {
 	stroke: #eeec;
 	stroke-width: 1px;
 	marker-start: url(#pole-marker);
 }
-#globe-data .poles polyline.stroke {
+#globe-overlay .poles polyline.stroke {
 	stroke: #000a;
 	stroke-width: 2px;
 	marker-start: none;
@@ -104,9 +104,6 @@ canvas, svg {
 	fill: #eeec;
 	stroke: #000a;
 	stroke-width: 1px;
-}
-#globe-overlay {
-	opacity: 0.5;
 }
 #drag-indicator {
 	stroke: #fffc;
