@@ -85,6 +85,8 @@ function setMapToScrollPosition() {
 	const prevStoryIndex = yBisector(storyNodes, Math.round(window.scrollY))-1;
 	if (prevStoryIndex < 0) {
 		setMapToMya(0);
+	} else if (prevStoryIndex+1 >= storyNodes.length) {
+		setMapToMya(oldestMya);
 	} else {
 		const prevStory = storyNodes[prevStoryIndex];
 		const nextStory = storyNodes[prevStoryIndex+1];
@@ -99,7 +101,6 @@ function setMapToScrollPosition() {
 		const targetMya = prevMya + storiesDiffMya*scrollPastPrev/storiesDiffY;
 		setMapToMya(targetMya);
 	}
-	// TO DO: handle maps beyond oldest event
 }
 
 const myaAttrBisector = bisector(node => node.getAttribute('data-mya')).left;
