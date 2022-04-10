@@ -30,7 +30,7 @@ function init(theProjection, theCanvasNode, redrawFunction) {
 // Transition point to center
 
 let transitionLoop;
-const transitionDuration = 300;
+const transitionDuration = 500;
 
 function transitionToCoord(geoCoord) {
 	cancelInertia();
@@ -45,7 +45,8 @@ function transitionToCoord(geoCoord) {
 			(Date.now() - startTime)/transitionDuration,
 			0, 1
 		);
-		const newRotation = rotationDiff.map((val,i)=>val*percentage+start[i]);
+		const eased = (Math.sin((percentage-0.5)*Math.PI) + 1) / 2;
+		const newRotation = rotationDiff.map((val,i)=>val*eased+start[i]);
 		redrawGlobe(newRotation);
 
 		if (percentage < 1) {
