@@ -1,5 +1,6 @@
 import { select, selectAll, pointer } from './d3-modules.js';
 import { bisector } from './d3-modules.js';
+import { clamp } from './common-utils.js';
 
 export {
 	init,
@@ -114,7 +115,7 @@ function setMapToScrollPosition() {
 const myaAttrBisector = bisector(node => node.getAttribute('data-mya')).left;
 	
 function setScrollToMya(mya) {
-	const prevStoryIndex = myaAttrBisector(storyNodes, mya)-1;
+	const prevStoryIndex = clamp(myaAttrBisector(storyNodes, mya)-1, 0, storyNodes.length-2);
 	const prevStory = storyNodes[prevStoryIndex];
 	const nextStory = storyNodes[prevStoryIndex+1];
 

@@ -63,17 +63,19 @@ function createMyaLabels() {
 	mapsListNode.addEventListener('mousemove', e=>{
 		if (e.target == mapsListNode) {
 			const mya = mapsSelector.oldestMya*e.offsetY/e.target.clientHeight;
-			const threshold = 20;
-			const intervalDist = Math.min(mya%interval, interval-mya%interval);
-			const bottomDist = mapsSelector.oldestMya-mya;
+			if (mya > 0 && mya < mapsSelector.oldestMya) {
+				const threshold = 20;
+				const intervalDist = Math.min(mya%interval, interval-mya%interval);
+				const bottomDist = mapsSelector.oldestMya-mya;
 
-			allLabelNodes.forEach(node => node.classList.remove('obscured'));
-			if (intervalDist < threshold || bottomDist < threshold) {
-				const nearestLabelIndex = Math.round(mya/interval);
-				allLabelNodes[nearestLabelIndex].classList.add('obscured');
+				allLabelNodes.forEach(node => node.classList.remove('obscured'));
+				if (intervalDist < threshold || bottomDist < threshold) {
+					const nearestLabelIndex = Math.round(mya/interval);
+					allLabelNodes[nearestLabelIndex].classList.add('obscured');
+				}
+				cursorNode.textContent = Math.round(mya/10)*10; // round to 10s
+				cursorNode.style.transform = `translateY(calc(${e.offsetY}px - 50%))`;
 			}
-			cursorNode.textContent = Math.round(mya/10)*10; // round to 10s
-			cursorNode.style.transform = `translateY(calc(${e.offsetY}px - 50%))`;
 		}
 	});
 

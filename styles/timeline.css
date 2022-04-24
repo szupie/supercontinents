@@ -3,7 +3,7 @@
 	--scrubber-expanded-width: 140px;
 	--expansion-duration: 150ms;
 	--expansion-easing: ease-in-out;
-	height: calc(100% - 2*var(--vert-margin));
+	height: calc(100vh - 2*var(--vert-margin));
 	position: fixed;
 	top: var(--vert-margin);
 	right: 0;
@@ -39,6 +39,20 @@
 	width: var(--scrubber-expanded-width);
 	background-color: #fff2;
 	pointer-events: auto;
+}
+#maps-list::before, #maps-list::after {
+	content: '';
+	display: block;
+	position: absolute;
+	background-color: inherit;
+	height: var(--vert-margin);
+	width: inherit;
+}
+#maps-list::before {
+	bottom: 100%;
+}
+#maps-list::after {
+	top: 100%;
 }
 #maps-list:not(:hover) {
 	opacity: 0.8;
