@@ -49,7 +49,7 @@ function init(containerNode, mapUpdateCallback) {
 		// requestReconstructedPositions([-6,17]);
 	});
 	
-	// setUpKeyboardHandler();
+	setUpKeyboardHandler();
 	setUpPointerHandler();
 }
 function requestReconstructedPositions(coord) {
@@ -219,17 +219,20 @@ function isCached(resolution) {
 function setUpKeyboardHandler() {
 	document.addEventListener('keydown', e=>{
 		let direction = 0;
-		if (e.key === 'ArrowDown') {
+		if (e.key === 'j') {
 			direction = 1;
 		}
-		if (e.key === 'ArrowUp') {
+		if (e.key === 'k') {
 			direction = -1;
 		}
 		if (direction !== 0) {
-			// increment/decrement and wrap
-			const count = mapDates.length;
-			const newIndex = (selectedMapIndex + direction + count) % count;
-			setMap(newIndex);
+			// increment/decrement
+			const newIndex = selectedMapIndex + direction;
+			if (newIndex >= 0 && newIndex < mapDates.length) {
+				setScrollToMya(mapDates[newIndex]['mya']);
+				// also update map manually in case scroll distance is too small
+				setMap(newIndex);
+			}
 		}
 	});
 }
