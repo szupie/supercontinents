@@ -5,7 +5,8 @@ export {
 	transitionToCoord,
 	getCurrentRotation,
 	isNorthUp,
-	getDragCoords
+	getDragCoords,
+	getAntipodeRotation
 }
 
 let projection;
@@ -342,9 +343,10 @@ function normDegree(degree) {
 	return (degree+3600)%360;
 }
 
-// returns equivalent -180° ≤ degree < 180°
+// returns equivalent -180° < degree ≤ 180°
 function closestHalfRotation(degree) {
-	return (degree+180+3600)%360-180;
+	// use negative degree to prefer eastward rotation
+	return 180 - (-degree+180+3600)%360;
 }
 
 function toDegrees(radians) {
@@ -361,4 +363,8 @@ function getCurrentRotation() {
 
 function isNorthUp() {
 	return (getCurrentRotation()[1] < 90 && getCurrentRotation()[1] > -90);
+}
+
+function getAntipodeRotation() {
+	return [getCurrentRotation()[0]+180, -getCurrentRotation()[1]];
 }

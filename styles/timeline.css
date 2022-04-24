@@ -1,6 +1,5 @@
 #timeline {
 	--vert-margin: 3rem;
-	--scrubber-width: 64px;
 	--scrubber-expanded-width: 140px;
 	--expansion-duration: 150ms;
 	--expansion-easing: ease-in-out;
@@ -9,6 +8,7 @@
 	top: var(--vert-margin);
 	right: 0;
 	color: var(--white-shade-1);
+	z-index: 3;
 	pointer-events: none;
 
 	transition: transform var(--expansion-duration) var(--expansion-easing);

@@ -1,7 +1,20 @@
+#globe-group {
+	position: sticky;
+	top: var(--globe-margin);
+	margin: 0 auto;
+	z-index: 2;
+}
 #globe {
-	position: fixed;
-	top: 4rem;
-	left: 50%;
+	position: relative;
+	width: var(--globe-size);
+	height: var(--globe-size);
+	margin: 0 auto;
+	pointer-events: none;
+}
+#globe canvas, #globe svg {
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }
 #globe-texture {
 	border-radius: 100%;
@@ -10,8 +23,25 @@
 #globe.dragging #globe-texture {
 	cursor: grabbing;
 }
-#globe > :not(#globe-texture) {
-	pointer-events: none;
+#reverse-globe {
+	position: absolute;
+	bottom: var(--current-map-label-size);
+	left: calc( (100% - var(--globe-size))/2 );
+	width: 58px;
+	height: 60px;
+	padding: 0;
+	border: 1px solid #666666;
+	border-radius: 4px;
+	color: #919191;
+	background: var(--page-bg);
+	cursor: pointer;
+	pointer-events: auto;
+}
+#reverse-texture {
+	width: 40px;
+	height: 40px;
+	opacity: 0.7;
+	border-radius: 100%;
 }
 #globe #globe-overlay {
 	overflow: visible;

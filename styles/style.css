@@ -36,33 +36,40 @@
 html {
 	--white-shade-1: #E5E5E5;
 	--white-shade-2: #C4C4C4;
-	font-family: sans-serif;
+	--page-bg: #121212;
+	--globe-size: calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width));
+	--globe-margin: 5rem;
+	--current-map-label-size: 1.25rem;
+	--scrubber-width: 64px;
+	font-family: "CMU Serif";
 	font-size: 16px;
 }
 body {
 	margin: 0;
 	overflow-x: hidden;
-	background: black;
+	background-color: var(--page-bg);
 	color: #fff;
 }
 
-h1, h2 {
+h1, h2, #current-map-label {
 	font-family: "Philibert Italic", "CMU Classical Serif";
 }
-
-canvas, svg {
-	position: absolute;
-	top: 0;
-	left: 50%;
-	transform: translateX(-50%);
+button {
+	font-family: "CMU Serif";
+	font-size: 9px;
+	line-height: 12px;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
 }
 
 
 #current-map-label {
-	position: fixed;
-	bottom: 0;
-	left: 50%;
-	transform: translateX(-50%);
+	font-size: 1.25rem;
+	line-height: 1em;
+	text-align: center;
+	margin: 0;
+	padding: 1em 0;
 }
 
 #stories {

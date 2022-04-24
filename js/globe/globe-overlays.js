@@ -29,10 +29,10 @@ let radius;
 const svgPathGenerator = geoPath().pointRadius(5);
 const dragCircleGen = geoCircle().radius(3);
 
-function init(overlayNode, theProjection, theRadius) {
-	overlay = select(overlayNode);
+function init(theProjection, overlayNode, theRadius) {
 	projection = theProjection;
 	svgPathGenerator.projection(projection);
+	overlay = select(overlayNode);
 	setRadius(theRadius);
 
 	fetch('./assets/data/continent-positions.json')
@@ -57,7 +57,7 @@ function handleMapUpdate() {
 function redraw() {
 	updateConstantOverlays();
 	updateContinentPositions();
-};
+}
 
 
 function createGlobeOverlays() {

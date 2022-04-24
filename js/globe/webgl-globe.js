@@ -13,39 +13,94 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 export {
-	init,
-	resize,
-	setTexture,
-	redraw
+	init
 };
 
-let context;
-let texture;
-let translateUniform, scaleUniform, rotateUniform;
+function init(canvas, radius) {
+	let context;
+	let texture;
+	let translateUniform, scaleUniform, rotateUniform;
 
-let projection;
-
-function init(canvas, theProjection, radius) {
-	projection = theProjection;
-	initWebgl(canvas);
+	initWebgl();
 
 	resize(radius*2);
-}
 
-function resize(diameter) {
-	context.uniform2f(translateUniform, diameter / 2, diameter / 2);
-	context.viewport(0, 0, diameter, diameter);
-}
+	return {
+		resize,
+		setTexture,
+		redraw
+	};
 
-function setTexture(image) {
-	context.texImage2D(context.TEXTURE_2D, 0, context.RGBA, context.RGBA, context.UNSIGNED_BYTE, image);
-	redraw();
-}
+	function resize(diameter) {
+		context.uniform2f(translateUniform, diameter / 2, diameter / 2);
+		context.viewport(0, 0, diameter, diameter);
+	}
 
-function redraw() {
-	context.uniform3fv(rotateUniform, projection.rotate());
-	// context.bindTexture(context.TEXTURE_2D, texture); // XXX Safari
-	context.drawArrays(context.TRIANGLE_FAN, 0, 4);
+	function setTexture(image) {
+		context.texImage2D(context.TEXTURE_2D, 0, context.RGBA, context.RGBA, context.UNSIGNED_BYTE, image);
+	}
+
+	function redraw(rotation=[0,0,0]) {
+		context.uniform3fv(rotateUniform, rotation);
+		// context.bindTexture(context.TEXTURE_2D, texture); // XXX Safari
+		context.drawArrays(context.TRIANGLE_FAN, 0, 4);
+	}
+
+	function initWebgl() {
+		// Create the WebGL context, with fallback for experimental support.
+		context = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+		// Compile the vertex shader.
+		var vertexShader = context.createShader(context.VERTEX_SHADER);
+		context.shaderSource(vertexShader, vertexShaderScript);
+		context.compileShader(vertexShader);
+		if (!context.getShaderParameter(vertexShader, context.COMPILE_STATUS)) throw new Error(context.getShaderInfoLog(vertexShader));
+
+		// Compile the fragment shader.
+		var fragmentShader = context.createShader(context.FRAGMENT_SHADER);
+		context.shaderSource(fragmentShader, fragmentShaderScript);
+		context.compileShader(fragmentShader);
+		if (!context.getShaderParameter(fragmentShader, context.COMPILE_STATUS)) throw new Error(context.getShaderInfoLog(fragmentShader));
+
+		// Link and use the program.
+		var program = context.createProgram();
+		context.attachShader(program, vertexShader);
+		context.attachShader(program, fragmentShader);
+		context.linkProgram(program);
+		if (!context.getProgramParameter(program, context.LINK_STATUS)) throw new Error(context.getProgramInfoLog(program));
+		context.useProgram(program);
+
+		// Define the positions (as vec2) of the square that covers the canvas.
+		var positionBuffer = context.createBuffer();
+		context.bindBuffer(context.ARRAY_BUFFER, positionBuffer);
+		context.bufferData(context.ARRAY_BUFFER, new Float32Array([
+			-1.0, -1.0,
+			+1.0, -1.0,
+			+1.0, +1.0,
+			-1.0, +1.0
+		]), context.STATIC_DRAW);
+
+		// Bind the position buffer to the position attribute.
+		var positionAttribute = context.getAttribLocation(program, "a_position");
+		context.enableVertexAttribArray(positionAttribute);
+		context.vertexAttribPointer(positionAttribute, 2, context.FLOAT, false, 0, 0);
+
+		// Extract the projection parameters.
+		translateUniform = context.getUniformLocation(program, "u_translate");
+		scaleUniform = context.getUniformLocation(program, "u_scale");
+		rotateUniform = context.getUniformLocation(program, "u_rotate");
+
+		context.uniform1f(scaleUniform, radius);
+
+		texture = context.createTexture();
+		context.bindTexture(context.TEXTURE_2D, texture);
+		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
+		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR_MIPMAP_LINEAR);
+
+		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.CLAMP_TO_EDGE);
+		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_T, context.CLAMP_TO_EDGE);
+		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR);
+	}
 }
 
 
@@ -114,59 +169,3 @@ void main(void) {
 	}
 }
 `;
-
-function initWebgl(canvas) {
-	// Create the WebGL context, with fallback for experimental support.
-	context = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-
-	// Compile the vertex shader.
-	var vertexShader = context.createShader(context.VERTEX_SHADER);
-	context.shaderSource(vertexShader, vertexShaderScript);
-	context.compileShader(vertexShader);
-	if (!context.getShaderParameter(vertexShader, context.COMPILE_STATUS)) throw new Error(context.getShaderInfoLog(vertexShader));
-
-	// Compile the fragment shader.
-	var fragmentShader = context.createShader(context.FRAGMENT_SHADER);
-	context.shaderSource(fragmentShader, fragmentShaderScript);
-	context.compileShader(fragmentShader);
-	if (!context.getShaderParameter(fragmentShader, context.COMPILE_STATUS)) throw new Error(context.getShaderInfoLog(fragmentShader));
-
-	// Link and use the program.
-	var program = context.createProgram();
-	context.attachShader(program, vertexShader);
-	context.attachShader(program, fragmentShader);
-	context.linkProgram(program);
-	if (!context.getProgramParameter(program, context.LINK_STATUS)) throw new Error(context.getProgramInfoLog(program));
-	context.useProgram(program);
-
-	// Define the positions (as vec2) of the square that covers the canvas.
-	var positionBuffer = context.createBuffer();
-	context.bindBuffer(context.ARRAY_BUFFER, positionBuffer);
-	context.bufferData(context.ARRAY_BUFFER, new Float32Array([
-		-1.0, -1.0,
-		+1.0, -1.0,
-		+1.0, +1.0,
-		-1.0, +1.0
-	]), context.STATIC_DRAW);
-
-	// Bind the position buffer to the position attribute.
-	var positionAttribute = context.getAttribLocation(program, "a_position");
-	context.enableVertexAttribArray(positionAttribute);
-	context.vertexAttribPointer(positionAttribute, 2, context.FLOAT, false, 0, 0);
-
-	// Extract the projection parameters.
-	translateUniform = context.getUniformLocation(program, "u_translate");
-	scaleUniform = context.getUniformLocation(program, "u_scale");
-	rotateUniform = context.getUniformLocation(program, "u_rotate");
-
-	context.uniform1f(scaleUniform, projection.scale());
-
-	texture = context.createTexture();
-	context.bindTexture(context.TEXTURE_2D, texture);
-	context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
-	context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR_MIPMAP_LINEAR);
-
-	context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.CLAMP_TO_EDGE);
-	context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_T, context.CLAMP_TO_EDGE);
-	context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR);
-}

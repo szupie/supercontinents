@@ -1,12 +1,13 @@
 import { select, selectAll, pointer } from './d3-modules.js';
 import { bisector } from './d3-modules.js';
 
-import { setTexture } from './globe/webgl-globe.js';
-
 export {
 	init,
 	currentMya,
-	mapsReadyPromise
+	mapsReadyPromise,
+	getClosestResolution,
+	getImg,
+	isCached
 }
 
 let selectedMapIndex;
@@ -23,6 +24,13 @@ const mapsReadyPromise = fetch('./assets/data/map-dates.json')
 	});
 
 let mapsListNode;
+const resolutions = [
+	256, 
+	512, 
+	1024, 
+	2048,
+	3600
+];
 
 
 let updateCallback = ()=>{};
@@ -160,43 +168,46 @@ function setMap(newIndex) {
 	if (selectedMapIndex != newIndex) { // avoid redraw if no change
 		selectedMapIndex = newIndex;
 
-		loadMapImage(mapDates[selectedMapIndex]['file']).then(()=>{
-			currentMya = mapDates[selectedMapIndex]['mya'];
-			updateCallback();
-		});
+		currentMya = mapDates[selectedMapIndex]['mya'];
+		updateCallback();
 
 		// highlight indicator for current map
 		resetClassForAllMaps('selected', newIndex);
 	}
 }
 
-function getTexturePath(name) {
-	return `./assets/map-textures/${name}.jpg`;
+function getTexturePath(name, resolution) {
+	return `./assets/map-textures/${resolution}/${name}.jpg`;
 }
 
-function loadMapImage(name) {
+const resBisector = bisector(val => val);
+function getClosestResolution(target) {
+	return resolutions[resBisector.center(resolutions, target)];
+}
+
+function getImg(resolution) {
 	return new Promise((resolve, reject) => {
 		const image = new Image;
-		const requestTime = Date.now();
 		image.onload = e=>{
-			updateTexture(image, requestTime);
-			resolve();
+			resolve(image);
 		};
 		image.onerror = reject;
-		image.src = getTexturePath(name);
+		image.src = getTexturePath(
+			mapDates[selectedMapIndex]['file'], 
+			resolution
+		);
 	});
 }
 
-let lastUpdate = 0;
-function updateTexture(image, requestTime) {
-	// Multiple textures may be loading simultaneously.
-	// Show textures as they become available, 
-	// dropping any texture that were requested earlier than the last loaded one
-	if (requestTime > lastUpdate) {
-		lastUpdate = requestTime;
-
-		setTexture(image);
-	}
+function isCached(resolution) {
+	const image = new Image;
+	image.src = getTexturePath(
+		mapDates[selectedMapIndex]['file'], 
+		resolution
+	);
+	const cached = image.complete;
+	image.src = '';
+	return cached;
 }
 
 
