@@ -1,4 +1,5 @@
 import { pointer } from '../d3-modules.js';
+import { clampAbs, clamp, easeInOut } from '../common-utils.js';
 
 export {
 	init,
@@ -46,7 +47,7 @@ function transitionToCoord(geoCoord) {
 			(Date.now() - startTime)/transitionDuration,
 			0, 1
 		);
-		const eased = (Math.sin((percentage-0.5)*Math.PI) + 1) / 2;
+		const eased = easeInOut(percentage);
 		const newRotation = rotationDiff.map((val,i)=>val*eased+start[i]);
 		redrawGlobe(newRotation);
 
@@ -329,14 +330,6 @@ function calculateRecentSpeed(history) {
 
 
 // Helper functions
-
-function clampAbs(val, abs) {
-	return clamp(val, -abs, abs);
-}
-
-function clamp(val, min, max) {
-	return Math.min(Math.max(val, min), max);
-}
 
 // returns equivalent 0° ≤ degree < 360°
 function normDegree(degree) {

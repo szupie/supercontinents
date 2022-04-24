@@ -47,7 +47,7 @@ const resolutions = {
 	'hi': mapSelector.getClosestResolution(radius*12),
 	'lo': mapSelector.getClosestResolution(radius*2)
 }
-function handleMapUpdate() {
+function handleMapUpdate(prevMya, newMya) {
 	document.getElementById('mya-value').textContent = mapSelector.currentMya;
 
 
@@ -76,7 +76,7 @@ function handleMapUpdate() {
 			lastUpdate = requestTime;
 			updateTexture(globeTexture, img);
 			updateTexture(reverseTexture, img);
-			globeOverlays.handleMapUpdate();
+			globeOverlays.handleMapUpdate(prevMya, newMya);
 		}
 	});
 }

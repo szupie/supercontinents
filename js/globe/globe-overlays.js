@@ -3,7 +3,8 @@ import {
 	geoPath,
 	geoGraticule,
 	geoDistance,
-	geoCircle
+	geoCircle,
+	geoInterpolate
 } from '../d3-modules.js';
 
 import {
@@ -13,6 +14,8 @@ import {
 	getDragCoords
 } from './rotation-control.js';
 import * as mapSelector from '../map-selector.js';
+
+import { clamp, easeInOut } from '../common-utils.js';
 
 export {
 	init,
@@ -28,6 +31,10 @@ let radius;
 
 const svgPathGenerator = geoPath().pointRadius(5);
 const dragCircleGen = geoCircle().radius(3);
+
+let overlayTweenStartMya;
+let overlayTweenStartTime = false;
+const overlayTweenDuration = 300;
 
 function init(theProjection, overlayNode, theRadius) {
 	projection = theProjection;
@@ -46,7 +53,9 @@ function setRadius(newRadius) {
 	radius = newRadius;
 }
 
-function handleMapUpdate() {
+function handleMapUpdate(prevMya, newMya) {
+	overlayTweenStartMya = prevMya;
+	overlayTweenStartTime = Date.now();
 	updateContinentPositions();
 
 	if (trackedContinent) {
@@ -100,14 +109,38 @@ function createGlobeOverlays() {
 }
 
 function updateContinentPositions() {
-	overlay.selectAll('.continent')
-		.attr('visibility', d=>{
-			return coordsVisible(getCoordsFromData(d), 0.8) ? 'visible' : 'hidden';
-		})
-		.attr('transform', d=>`translate(${projection(getCoordsFromData(d))})`);
+	let percentage = 1;
+	if (overlayTweenStartTime) {
+		const elapsed = Date.now() - overlayTweenStartTime;
+		percentage = clamp(elapsed/overlayTweenDuration, 0, 1);
+	}
+	overlay.selectAll('.continent').each(function (d) {
+		let coord;
+		if (percentage < 1) {
+			coord = geoInterpolate(
+				getCoordsFromData(d, overlayTweenStartMya),
+				getCoordsFromData(d)
+			)(easeInOut(percentage));
+		} else {
+			coord = getCoordsFromData(d);
+		}
+		this.setAttribute('visibility', 
+			coordsVisible(coord, 0.8) ? 'visible' : 'hidden'
+		)
+		this.setAttribute('transform', `translate(${projection(coord)})`);
+	});
+	
+	if (percentage < 1) {
+		window.requestAnimationFrame(updateContinentPositions);
+	} else {
+		overlayTweenStartTime = false;
+	}
 }
-function getCoordsFromData(d) {
-	let coords = d.properties['coords-by-mya'][mapSelector.currentMya];
+function getCoordsFromData(d, mya=false) {
+	if (!mya) {
+		mya = mapSelector.currentMya;
+	}
+	let coords = d.properties['coords-by-mya'][mya];
 	if (!coords) {
 		if (mapSelector.currentMya == 0) {
 			coords = d.geometry.coordinates;

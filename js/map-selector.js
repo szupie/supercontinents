@@ -168,8 +168,9 @@ function setMap(newIndex) {
 	if (selectedMapIndex != newIndex) { // avoid redraw if no change
 		selectedMapIndex = newIndex;
 
+		const prevMya = currentMya;
 		currentMya = mapDates[selectedMapIndex]['mya'];
-		updateCallback();
+		updateCallback(prevMya, currentMya);
 
 		// highlight indicator for current map
 		resetClassForAllMaps('selected', newIndex);
