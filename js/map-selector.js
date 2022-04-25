@@ -91,7 +91,9 @@ const yBisector = bisector(node => node.offsetTop).right;
 // for each major event, show corresponding map when scrolled to story
 // between stories, interpolate target year based on percentage scrolled
 function setMapToScrollPosition() {
-	const prevStoryIndex = yBisector(storyNodes, Math.round(window.scrollY))-1;
+	const correctedScrollY = window.scrollY +
+		Number.parseFloat(getComputedStyle(storyNodes[0]).scrollMarginTop);
+	const prevStoryIndex = yBisector(storyNodes, correctedScrollY)-1;
 	if (prevStoryIndex < 0) {
 		setMapToMya(0);
 	} else if (prevStoryIndex+1 >= storyNodes.length) {
@@ -101,7 +103,7 @@ function setMapToScrollPosition() {
 		const nextStory = storyNodes[prevStoryIndex+1];
 
 		const storiesDiffY = nextStory.offsetTop - prevStory.offsetTop;
-		const scrollPastPrev = window.scrollY - prevStory.offsetTop;
+		const scrollPastPrev = correctedScrollY - prevStory.offsetTop;
 
 		const prevMya = Number.parseFloat(prevStory.getAttribute('data-mya'));
 		const nextMya = Number.parseFloat(nextStory.getAttribute('data-mya'));
@@ -122,9 +124,10 @@ function setScrollToMya(mya) {
 	const prevMya = Number.parseFloat(prevStory.getAttribute('data-mya'));
 	const nextMya = Number.parseFloat(nextStory.getAttribute('data-mya'));
 
-	const percent = (mya - prevMya) / (nextMya - prevMya)
+	const percent = (mya - prevMya) / (nextMya - prevMya);
+	const scrollMargin = Number.parseFloat(getComputedStyle(storyNodes[0]).scrollMarginTop);
 	window.scrollTo({
-		top: prevStory.offsetTop + percent*(nextStory.offsetTop - prevStory.offsetTop),
+		top: prevStory.offsetTop - scrollMargin + percent*(nextStory.offsetTop - prevStory.offsetTop),
 		behavior: 'instant'
 	});
 }
@@ -237,18 +240,17 @@ function setUpKeyboardHandler() {
 	});
 }
 
-let draggingMapsList = false;
 function setUpPointerHandler() {
-	document.addEventListener('mouseup', e=>{
-		draggingMapsList = false;
+	document.addEventListener('pointerup', e=>{
+		mapsListNode.classList.remove('scrubbing');
 	});
-	mapsListNode.addEventListener('mousedown', e=>{
+	mapsListNode.addEventListener('pointerdown', e=>{
 		e.preventDefault();
-		draggingMapsList = true;
+		mapsListNode.classList.add('scrubbing');
 		handleDrag(e);
 	});
-	document.addEventListener('mousemove', e=>{
-		if (draggingMapsList) {
+	document.addEventListener('pointermove', e=>{
+		if (mapsListNode.classList.contains('scrubbing')) {
 			handleDrag(e);
 		}
 	});

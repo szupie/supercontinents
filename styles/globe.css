@@ -18,6 +18,8 @@
 }
 #globe-texture {
 	border-radius: 100%;
+	pointer-events: auto;
+	touch-action: none;
 	cursor: grab;
 }
 #globe.dragging #globe-texture {
@@ -30,7 +32,7 @@
 	width: 58px;
 	height: 60px;
 	padding: 0;
-	border: 1px solid #666666;
+	border: 1px solid var(--action-colour);
 	border-radius: 4px;
 	color: #919191;
 	background: var(--page-bg);
@@ -118,5 +120,14 @@
 @keyframes dash {
 	to {
 		stroke-dashoffset: -2%;
+	}
+}
+
+@media (max-width: 700px) {
+	#globe-group {
+		top: 0;
+		margin-right: calc(var(--scrubber-width) + var(--life-events-list-margin));
+		padding-top: var(--globe-top-padding);
+		background-color: var(--page-bg);
 	}
 }

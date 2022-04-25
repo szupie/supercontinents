@@ -37,13 +37,28 @@ html {
 	--white-shade-1: #E5E5E5;
 	--white-shade-2: #C4C4C4;
 	--page-bg: #121212;
+	--action-colour: #A58A45;
+	--story-padding: 2.5rem;
 	--globe-size: calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width));
 	--globe-margin: 5rem;
 	--current-map-label-size: 1.25rem;
 	--scrubber-width: 64px;
+	--life-events-list-margin: 32px;
 	font-family: "CMU Serif";
 	font-size: 16px;
 }
+@media (max-width: 700px) {
+	html {
+		--story-padding: 1rem;
+		--globe-size: min(calc(100vh - 20rem), calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width)));
+		--globe-top-padding: 3rem;
+		--globe-margin: 1.5rem;
+		--scrubber-width: 24px;
+		--life-events-list-margin: 10px;
+		--current-map-label-size: 0.875rem;
+	}
+}
+
 body {
 	margin: 0;
 	overflow-x: hidden;
@@ -68,8 +83,15 @@ button {
 	font-size: 1.25rem;
 	line-height: 1em;
 	text-align: center;
-	margin: 0;
+	margin: 0 auto;
 	padding: 1em 0;
+}
+@media (max-width: 700px) {
+	#current-map-label {
+		font-size: var(--current-map-label-size);
+		width: 61.8%; /* 1 / 1.618 */
+		border-bottom: 1px solid #666;
+	}
 }
 
 #stories {
@@ -82,11 +104,10 @@ button {
 	line-height: 1em;
 }
 #stories article {
-	margin: 50vh 0;
+	min-height: 100vh;
 	color: var(--white-shade-1);
-	padding: 2.5rem;
+	padding: var(--story-padding);
 	position: relative;
-	background-color: #3219;
 }
 #stories .time {
 	font-family: "CMU Serif";
@@ -105,6 +126,15 @@ button {
 	line-height: 20px;
 	word-spacing: -2px;
 	hyphens: manual;
+}
+@media (max-width: 700px) {
+	#stories {
+		max-width: 35rem;
+	}
+	#stories article {
+		scroll-margin-top: calc(var(--globe-size) + var(--globe-top-padding) + var(--current-map-label-size)*3);
+		margin-right: calc(var(--scrubber-width) + var(--life-events-list-margin));
+	}
 }
 
 @media not (prefers-reduced-motion) {

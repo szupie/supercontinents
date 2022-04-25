@@ -10,6 +10,7 @@
 	color: var(--white-shade-1);
 	z-index: 3;
 	pointer-events: none;
+	touch-action: none;
 
 	transition: transform var(--expansion-duration) var(--expansion-easing);
 }
@@ -39,6 +40,7 @@
 	width: var(--scrubber-expanded-width);
 	background-color: #fff2;
 	pointer-events: auto;
+	touch-action: none;
 }
 #maps-list::before, #maps-list::after {
 	content: '';
@@ -54,9 +56,6 @@
 #maps-list::after {
 	top: 100%;
 }
-#maps-list:not(:hover) {
-	opacity: 0.8;
-}
 #maps-list li {
 	height: 0;
 	width: 100%;
@@ -70,19 +69,33 @@
 	display: block;
 	height: 0;
 	width: 100%;
-	border-bottom: 1px solid #fff;
+	right: 0;
+	border-bottom: 1.5px solid var(--page-bg);
 }
-#maps-list a:not(.selected) {
-	opacity: 0.2;
+#maps-list a.selected {
+	border-color: var(--action-colour);
+	/* selected indicator should appear above others */
+	position: relative;
+	z-index: 1;
 }
-#maps-list:hover a.hovering:not(.selected) {
-	opacity: 0.5;
+@media (hover: hover) {
+	#maps-list:hover a.hovering:not(.selected) {
+		opacity: 0.5;
+		border-color: var(--action-colour);
+	}
+}
+@media (pointer: coarse) {
+	/* lengthen indicator so it is not covered by fingers */
+	#maps-list.scrubbing a.selected {
+		width: calc(100% + 40px);
+		margin-left: -40px;
+	}
 }
 
 /* List of events next to timeline */
 #timeline #life-events-list {
 	width: 12em;
-	margin-right: calc(var(--scrubber-width) + 32px);
+	margin-right: calc(var(--scrubber-width) + var(--life-events-list-margin));
 	position: relative;
 
 	font-family: "CMU Classical Serif";
@@ -96,11 +109,15 @@
 	right: 0;
 }
 #timeline #life-events-list a {
+	--marker-size: 6px;
+	--marker-padding: 6px;
 	text-decoration: none;
 	color: inherit;
 	display: block;
 	padding: 5px 10px;
-	margin-right: -10px;
+	padding-right: calc(var(--marker-size) + var(--marker-padding)*2);
+	white-space: nowrap;
+	overflow: hidden;
 	pointer-events: auto;
 }
 #timeline #life-events-list a:hover {
@@ -110,11 +127,19 @@
 #timeline #life-events-list a::after {
 	content: '';
 	display: inline-block;
-	height: 6px;
-	width: 6px;
-	background-color: #fff;
+	height: var(--marker-size);
+	width: var(--marker-size);
+	background-color: var(--action-colour);
 	border-radius: 100%;
-	margin-left: 6px;
+	position: absolute;
+	right: var(--marker-padding);
+	margin-top: calc((1em - var(--marker-size))/2);
+}
+@media (max-width: 700px) {
+	#timeline #life-events-list a {
+		text-indent: calc(100% + var(--marker-size) + var(--marker-padding)*2);
+		width: 0;
+	}
 }
 
 /* MYA labels */
@@ -147,6 +172,11 @@
 }
 #timeline #maps-list:hover~.axis-labels .label.title.obscured {
 	transform: translateY(75%);
+}
+@media (max-width: 700px) {
+	#timeline .axis-labels .label {
+		opacity: 0;
+	}
 }
 
 #supercontinents-list, #periods-list {
@@ -201,6 +231,11 @@ ol#supercontinents-list {
 	top: 0;
 	transform: none;
 }
+@media (max-width: 700px) {
+	ol#supercontinents-list {
+		margin-left: 0;
+	}
+}
 
 /* Geological periods */
 ol#periods-list {
@@ -208,7 +243,16 @@ ol#periods-list {
 	padding-right: var(--padding-right); /* padding instead of margin, to detect hovers at viewport edge */
 	width: 16px; /* width for hover detection */
 	transition: transform var(--expansion-duration) var(--expansion-easing);
-	pointer-events: auto;
+}
+@media (hover: hover) {
+	ol#periods-list {
+		pointer-events: auto;
+	}
+}
+@media (max-width: 700px) {
+	ol#periods-list {
+		transform: translateX(100%);
+	}
 }
 #periods-list li {
 	width: 2px;
