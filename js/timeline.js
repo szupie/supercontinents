@@ -9,6 +9,7 @@ const mapsListNode = document.getElementById('maps-list');
 const lifeEventsNode = document.getElementById('life-events-list');
 const supercontinentsNode = document.getElementById('supercontinents-list');
 const periodsNode = document.getElementById('periods-list');
+const expansionButton = document.getElementById('timeline-toggle');
 
 let mapsSelector;
 
@@ -23,7 +24,7 @@ function init() {
 		positionLifeEvents();
 	});
 
-	setUpExpansionListeners();
+	setUpListeners();
 }
 
 function createMyaLabels() {
@@ -127,40 +128,81 @@ function positionLifeEvents() {
 			setTimeout(e=>{
 				document.querySelector('#stories').classList.remove('switching');
 			}, 300);
+			setTimelineExpandedOverlay(false);
 		});
 	});
 }
 
-let expansionDelayTimer;
-function setUpExpansionListeners() {
-	function cancelExpansionTimer() {
-		clearTimeout(expansionDelayTimer);
-		expansionDelayTimer = false;
+let periodsDragDelayTimer;
+let eventsHoverDelayTimer;
+function setUpListeners() {
+	// Show/hide full-width timeline with periods
+	function cancelPeriodsTimer() {
+		clearTimeout(periodsDragDelayTimer);
+		periodsDragDelayTimer = false;
 	}
-	function expand() {
-		timelineNode.classList.add('expanded');
-		cancelExpansionTimer();
+	function showPeriods() {
+		timelineNode.classList.add('show-periods');
+		cancelPeriodsTimer();
 	}
-	function collapse() {
-		timelineNode.classList.remove('expanded');
-		cancelExpansionTimer();
+	function hidePeriods() {
+		timelineNode.classList.remove('show-periods');
+		cancelPeriodsTimer();
 	}
-	periodsNode.addEventListener('mouseenter', expand);
+	periodsNode.addEventListener('mouseenter', showPeriods);
 	mapsListNode.addEventListener('mousedown', e=>{
-		if (!expansionDelayTimer) {
-			expansionDelayTimer = setTimeout(expand, 500);
+		if (!periodsDragDelayTimer) {
+			periodsDragDelayTimer = setTimeout(showPeriods, 500);
 		}
+		setTimelineExpandedOverlay(false);
 	});
 
 	timelineNode.addEventListener('mouseleave', e=>{
-		// expand if cursor moves past edge (Fitts law)
+		// show periods if cursor moves past edge (Fitts law)
 		if (e.clientX >= document.documentElement.clientWidth) {
-			expand();
+			showPeriods();
 		} else {
-			collapse();
+			hidePeriods();
 		}
 	});
 	document.addEventListener('mouseup', e=>{
-		cancelExpansionTimer();
+		cancelPeriodsTimer();
 	});
+
+	// Show life events on hover
+	// use mouseenter instead of :hover for better timing control
+	// and more accurate hover feature detection
+	lifeEventsNode.addEventListener('mouseenter', e=>{
+		if (window.matchMedia('(hover: hover)').matches) {
+			lifeEventsNode.classList.add('hovering');
+			clearTimeout(eventsHoverDelayTimer);
+		}
+	})
+	lifeEventsNode.addEventListener('mouseleave', e=>{
+		eventsHoverDelayTimer = setTimeout(e=>{
+			lifeEventsNode.classList.remove('hovering');
+		}, 1000);
+	})
+
+	// Expand/collapse timeline overlay on narrow screens
+	expansionButton.addEventListener('click', e=>{
+		if (!timelineNode.classList.contains('expanded-overlay')) {
+			setTimelineExpandedOverlay(true);
+		} else {
+			setTimelineExpandedOverlay(false);
+		}
+	});
+}
+
+function setTimelineExpandedOverlay(expand) {
+	if (expand) {
+		timelineNode.classList.add('expanded-overlay');
+	} else {
+		timelineNode.classList.remove('expanded-overlay');
+	}
+	expansionButton.setAttribute('aria-expanded', expand);
+	expansionButton.querySelector('.expand-label')
+		.setAttribute('aria-hidden', expand);
+	expansionButton.querySelector('.collapse-label')
+		.setAttribute('aria-hidden', !expand);
 }

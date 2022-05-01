@@ -37,6 +37,7 @@ html {
 	--white-shade-1: #E5E5E5;
 	--white-shade-2: #C4C4C4;
 	--page-bg: #121212;
+	--page-bg-rgb: 18, 18, 18;
 	--action-colour: #A58A45;
 	--story-padding: 2.5rem;
 	--globe-size: calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width));
@@ -63,7 +64,7 @@ body {
 	margin: 0;
 	overflow-x: hidden;
 	background-color: var(--page-bg);
-	color: #fff;
+	color: var(--white-shade-1);
 }
 
 h1, h2, #current-map-label {
@@ -76,6 +77,7 @@ button {
 	font-weight: bold;
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
+	color: inherit;
 }
 
 
@@ -132,8 +134,10 @@ button {
 		max-width: 35rem;
 	}
 	#stories article {
-		scroll-margin-top: calc(var(--globe-size) + var(--globe-top-padding) + var(--current-map-label-size)*3);
+		--scroll-margin: var(--globe-size) + var(--globe-top-padding) + var(--current-map-label-size)*3;
+		scroll-margin-top: calc(var(--scroll-margin));
 		margin-right: calc(var(--scrubber-width) + var(--life-events-list-margin));
+		min-height: calc(100vh - var(--scroll-margin));
 	}
 }
 

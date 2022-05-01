@@ -1,8 +1,10 @@
 #timeline {
 	--vert-margin: 3rem;
-	--scrubber-expanded-width: 140px;
+	--scrubber-full-width: 140px;
 	--expansion-duration: 150ms;
 	--expansion-easing: ease-in-out;
+	--bg-rgb: 62, 62, 62;
+	--expanded-opacity: 0.8;
 	height: calc(100vh - 2*var(--vert-margin));
 	position: fixed;
 	top: var(--vert-margin);
@@ -30,6 +32,114 @@
 	text-transform: uppercase;
 	line-height: 1em;
 }
+@media (max-width: 700px) {
+	#timeline {
+		--vert-margin: 4.5rem;
+	}
+}
+
+#timeline-toggle {
+	--button-diameter: 4.5em;
+	--expand-text-width: 8.5em;
+	background-color: rgb(var(--bg-rgb));
+	border: none;
+	height: var(--button-diameter);
+	border-radius: var(--button-diameter);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+	position: absolute;
+	top: calc(8px - var(--vert-margin)); /* 8px from screen top */
+	left: calc(-1 * var(--scrubber-width) - var(--button-diameter)/2);
+	width: calc(var(--scrubber-full-width) + var(--button-diameter));
+	padding: 0;
+	z-index: 1;
+	transition: transform var(--expansion-duration) var(--expansion-easing);
+	pointer-events: auto;
+	cursor: pointer;
+
+	display: none;
+}
+/* border inset from edge */
+#timeline-toggle::before {
+	--padding: 2px;
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: var(--padding);
+	box-sizing: border-box;
+	width: calc(100% - var(--padding)*2);
+	height: calc(100% - var(--padding)*2);
+	border: 1px solid var(--action-colour);
+	border-radius: inherit;
+}
+#timeline-toggle span {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: opacity var(--expansion-duration) var(--expansion-easing);
+}
+#timeline-toggle .expand-label {
+	left: 0;
+	text-align: right;
+	width: var(--expand-text-width);
+	word-spacing: 100vw; /* hack to break every word into own line */
+}
+#timeline-toggle .collapse-label {
+	right: 0;
+	text-align: right;
+	margin-right: calc(var(--button-diameter)/2);
+	padding-right: 16px;
+}
+#timeline-toggle .expand-label::before, 
+#timeline-toggle .collapse-label::after {
+	background-color: var(--action-colour);
+	content: '';
+	display: inline-block;
+	mask-image: url("data:image/svg+xml,%3Csvg width='6' height='27' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 13.25 6 0 3 13.25 6 26.5 0 13.25Z'/%3E%3C/svg%3E");
+	width: 6px;
+	height: 27px;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+#timeline-toggle .expand-label::before {
+	left: 8px;
+} 
+#timeline-toggle .collapse-label::after {
+	right: 5px;
+	transform: translateY(-50%) rotate(180deg);
+}
+#timeline-toggle [aria-hidden="true"] {
+	opacity: 0;
+}
+
+@media (max-width: 700px) {
+	#timeline.expanded-overlay {
+		transform: translateX(calc(var(--scrubber-width) - var(--scrubber-full-width)));
+	}
+	/* shaded overlay behind life events */
+	#timeline::before {
+		content: '';
+		position: absolute;
+		right: 0;
+		top: calc(-1 * var(--vert-margin));
+		width: calc(100vw - var(--scrubber-width));
+		height: 100vh;
+		background-color: var(--page-bg);
+		opacity: var(--expanded-opacity);
+		transition: opacity var(--expansion-duration) var(--expansion-easing);
+	}
+	#timeline:not(.expanded-overlay)::before {
+		opacity: 0;
+	}
+	#timeline-toggle {
+		display: block;
+	}
+	/* expand button position in collapsed state */
+	#timeline:not(.expanded-overlay) #timeline-toggle {
+		transform: translateX(calc(-6px + var(--button-diameter)/2 + var(--scrubber-width) - var(--expand-text-width)));
+	}
+}
 
 /* Map selector */
 #maps-list {
@@ -37,10 +147,13 @@
 	top: 0;
 	left: calc(100% - var(--scrubber-width));
 	cursor: pointer;
-	width: var(--scrubber-expanded-width);
-	background-color: #fff2;
+	width: var(--scrubber-full-width);
+	background-color: rgb(var(--bg-rgb));
 	pointer-events: auto;
 	touch-action: none;
+}
+#timeline.expanded-overlay #maps-list {
+	background-color: rgba(var(--bg-rgb), var(--expanded-opacity));
 }
 #maps-list::before, #maps-list::after {
 	content: '';
@@ -86,7 +199,7 @@
 }
 @media (pointer: coarse) {
 	/* lengthen indicator so it is not covered by fingers */
-	#maps-list.scrubbing a.selected {
+	#timeline:not(.expanded-overlay) #maps-list.scrubbing a.selected {
 		width: calc(100% + 40px);
 		margin-left: -40px;
 	}
@@ -94,9 +207,8 @@
 
 /* List of events next to timeline */
 #timeline #life-events-list {
-	width: 12em;
-	margin-right: calc(var(--scrubber-width) + var(--life-events-list-margin));
-	position: relative;
+	right: calc(var(--scrubber-width) + var(--life-events-list-margin));
+	position: absolute;
 
 	font-family: "CMU Classical Serif";
 	font-size: 14px;
@@ -107,22 +219,28 @@
 #timeline #life-events-list li {
 	transform: translateY(-50%);
 	right: 0;
+	pointer-events: auto;
 }
 #timeline #life-events-list a {
 	--marker-size: 6px;
 	--marker-padding: 6px;
-	text-decoration: none;
-	color: inherit;
+	text-decoration: underline;
+	text-decoration-color: var(--action-colour);
+	color: var(--white-shade-2);
 	display: block;
 	padding: 5px 10px;
 	padding-right: calc(var(--marker-size) + var(--marker-padding)*2);
 	white-space: nowrap;
 	overflow: hidden;
-	pointer-events: auto;
+	max-width: 12em;
+	transition: all var(--expansion-duration) var(--expansion-easing);
+	transition-property: max-width, text-indent, padding, color;
+}
+#timeline:not(.expanded-overlay) #life-events-list a {
+	background-color: rgb(var(--page-bg-rgb), 0.75);
 }
 #timeline #life-events-list a:hover {
 	color: #fff;
-	text-decoration: underline;
 }
 #timeline #life-events-list a::after {
 	content: '';
@@ -136,9 +254,11 @@
 	margin-top: calc((1em - var(--marker-size))/2);
 }
 @media (max-width: 700px) {
-	#timeline #life-events-list a {
+	#timeline:not(.expanded-overlay) #life-events-list:not(.hovering) a {
 		text-indent: calc(100% + var(--marker-size) + var(--marker-padding)*2);
-		width: 0;
+		max-width: 0;
+		color: transparent;
+		padding-right: 10px;
 	}
 }
 
@@ -242,17 +362,8 @@ ol#periods-list {
 	--padding-right: 4px;
 	padding-right: var(--padding-right); /* padding instead of margin, to detect hovers at viewport edge */
 	width: 16px; /* width for hover detection */
+	transform: translateX(calc(var(--scrubber-full-width) - var(--scrubber-width)));
 	transition: transform var(--expansion-duration) var(--expansion-easing);
-}
-@media (hover: hover) {
-	ol#periods-list {
-		pointer-events: auto;
-	}
-}
-@media (max-width: 700px) {
-	ol#periods-list {
-		transform: translateX(100%);
-	}
 }
 #periods-list li {
 	width: 2px;
@@ -273,15 +384,23 @@ ol#periods-list {
 	transition-timing-function: var(--expansion-easing);
 }
 
-/* Expanded state with geological periods */
-#timeline.expanded {
-	transform: translateX(calc(var(--scrubber-width) - var(--scrubber-expanded-width)));
-}
-#timeline.expanded #periods-list {
-	transform: translateX(calc(var(--scrubber-expanded-width) - var(--scrubber-width)));
-	pointer-events: none;
-}
-#timeline:not(.expanded) #periods-list li .label {
-	opacity: 0;
-	transform: translateX(100%);
+@media (min-width: 701px) {
+	/* Wide screen with geological periods hidden */
+	#timeline:not(.show-periods) #periods-list {
+		transform: none;
+	}
+	#timeline:not(.show-periods) #periods-list li .label {
+		opacity: 0;
+		transform: translateX(100%);
+	}
+	@media (hover: hover) {
+		#timeline:not(.show-periods) ol#periods-list {
+			pointer-events: auto;
+		}
+	}
+
+	/* Full-width state with geological periods */
+	#timeline.show-periods {
+		transform: translateX(calc(var(--scrubber-width) - var(--scrubber-full-width)));
+	}
 }

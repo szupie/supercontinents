@@ -245,7 +245,6 @@ function setUpPointerHandler() {
 		mapsListNode.classList.remove('scrubbing');
 	});
 	mapsListNode.addEventListener('pointerdown', e=>{
-		e.preventDefault();
 		mapsListNode.classList.add('scrubbing');
 		handleDrag(e);
 	});
