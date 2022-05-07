@@ -45,12 +45,12 @@ function init(containerNode, mapUpdateCallback) {
 
 		document.addEventListener('scroll', setMapToScrollPosition);
 		setMapToScrollPosition();
+	
+		setUpKeyboardHandler();
+		setUpPointerHandler();
 
 		// requestReconstructedPositions([-6,17]);
 	});
-	
-	setUpKeyboardHandler();
-	setUpPointerHandler();
 }
 function requestReconstructedPositions(coord) {
 	const queries = [];
