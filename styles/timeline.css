@@ -229,6 +229,10 @@
 	position: absolute;
 	right: var(--marker-padding);
 	margin-top: calc((1em - var(--marker-size))/2);
+	transition: background-color 100ms ease-in-out;
+}
+#timeline #life-events-list li.current a::after {
+	background-color: var(--white-shade-1);
 }
 @media (max-width: 700px) {
 	#timeline:not(.expanded-overlay) #life-events-list:not(.hovering) a {

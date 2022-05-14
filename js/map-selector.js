@@ -43,8 +43,8 @@ function init(containerNode, mapUpdateCallback) {
 		createMapIndicators();
 		setMap(0);
 
-		document.addEventListener('scroll', setMapToScrollPosition);
-		setMapToScrollPosition();
+		document.addEventListener('scroll', handleScrollChange);
+		handleScrollChange();
 	
 		setUpKeyboardHandler();
 		setUpPointerHandler();
@@ -85,15 +85,20 @@ function setMapToMya(targetMya) {
 }
 
 
-const storyNodes = document.querySelectorAll('#stories article');
-const yBisector = bisector(node => node.offsetTop).right;
+const storyNodes = document.getElementById('stories').children;
+const timelineEventNodes = document.getElementById('life-events-list').children;
+const yBisector = bisector(node => node.offsetTop);
 
-// for each major event, show corresponding map when scrolled to story
-// between stories, interpolate target year based on percentage scrolled
-function setMapToScrollPosition() {
+// For each major event, show corresponding map when scrolled to story
+// Between stories, interpolate target year based on percentage scrolled
+function handleScrollChange() {
 	const correctedScrollY = window.scrollY +
 		Number.parseFloat(getComputedStyle(storyNodes[0]).scrollMarginTop);
-	const prevStoryIndex = yBisector(storyNodes, correctedScrollY)-1;
+	setMapToScroll(correctedScrollY);
+	highlightTimelineEvent(correctedScrollY);
+}
+function setMapToScroll(scrollY) {
+	const prevStoryIndex = yBisector.right(storyNodes, scrollY)-1;
 	if (prevStoryIndex < 0) {
 		setMapToMya(0);
 	} else if (prevStoryIndex+1 >= storyNodes.length) {
@@ -103,7 +108,7 @@ function setMapToScrollPosition() {
 		const nextStory = storyNodes[prevStoryIndex+1];
 
 		const storiesDiffY = nextStory.offsetTop - prevStory.offsetTop;
-		const scrollPastPrev = correctedScrollY - prevStory.offsetTop;
+		const scrollPastPrev = scrollY - prevStory.offsetTop;
 
 		const prevMya = Number.parseFloat(prevStory.getAttribute('data-mya'));
 		const nextMya = Number.parseFloat(nextStory.getAttribute('data-mya'));
@@ -111,6 +116,16 @@ function setMapToScrollPosition() {
 
 		const targetMya = prevMya + storiesDiffMya*scrollPastPrev/storiesDiffY;
 		setMapToMya(targetMya);
+	}
+}
+// highlight life event in timeline corresponding to current scroll position
+function highlightTimelineEvent(scrollY) {
+	for (let node of timelineEventNodes) {
+		node.classList.remove('current');
+	}
+	const closestIndex = yBisector.center(storyNodes, scrollY);
+	if (Math.abs(storyNodes[closestIndex].offsetTop - scrollY) < 200) {
+		timelineEventNodes[closestIndex].classList.add('current');
 	}
 }
 
