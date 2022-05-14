@@ -19,7 +19,7 @@
 #globe-texture {
 	border-radius: 100%;
 	pointer-events: auto;
-	touch-action: none;
+	touch-action: pinch-zoom;
 	cursor: grab;
 }
 #globe.dragging #globe-texture {

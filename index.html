@@ -3,32 +3,10 @@
 	<head>
 		<title>Supercontinents</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="viewport" content="width=device-width">
 		<link href="styles/style.css" rel="stylesheet">
 	</head>
 	<body>
-		<figure id="globe-group">
-			<div id="globe">
-				<canvas id="globe-texture"></canvas>
-				<svg id="globe-overlay">
-					<defs>
-						<marker id="pole-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
-							<circle cx="5" cy="5" r="5"/>
-						</marker>
-					</defs>
-					<g class="graticule">
-						<text class="label">
-							<textPath href="#equator" startOffset="90%">Equator</textPath>
-						</text>
-					</g>
-				</svg>
-			</div>
-			<button id="reverse-globe">
-				<canvas id="reverse-texture"></canvas>
-				Reverse
-			</button>
-			<figcaption id="current-map-label"><span id="mya-value">0</span> million years ago</figcaption>
-		</figure>
 		<div id="timeline">
 			<button id="timeline-toggle" aria-expanded="false" aria-controls="timeline"><span class="expand-label">Expand timeline</span><span class="collapse-label" aria-hidden="true">Back to map</span></button>
 			<ol id="life-events-list">
@@ -124,6 +102,28 @@
 			<ol id="maps-list">
 			</ol>
 		</div>
+		<figure id="globe-group">
+			<div id="globe">
+				<canvas id="globe-texture"></canvas>
+				<svg id="globe-overlay">
+					<defs>
+						<marker id="pole-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+							<circle cx="5" cy="5" r="5"/>
+						</marker>
+					</defs>
+					<g class="graticule">
+						<text class="label">
+							<textPath href="#equator" startOffset="90%">Equator</textPath>
+						</text>
+					</g>
+				</svg>
+			</div>
+			<button id="reverse-globe">
+				<canvas id="reverse-texture"></canvas>
+				Reverse
+			</button>
+			<figcaption id="current-map-label"><span id="mya-value">0</span> million years ago</figcaption>
+		</figure>
 		<div id="stories">
 			<article data-mya="0.3" id="humans">
 				<h2>Humans</h2>

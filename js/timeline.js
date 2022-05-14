@@ -154,7 +154,6 @@ function setUpListeners() {
 		if (!periodsDragDelayTimer) {
 			periodsDragDelayTimer = setTimeout(showPeriods, 500);
 		}
-		setTimelineExpandedOverlay(false);
 	});
 
 	timelineNode.addEventListener('mouseleave', e=>{
@@ -184,7 +183,10 @@ function setUpListeners() {
 		}, 1000);
 	})
 
-	// Expand/collapse timeline overlay on narrow screens
+
+	// Expand/collapse timeline overlay on narrow screens:
+
+	// toggle button
 	expansionButton.addEventListener('click', e=>{
 		if (!timelineNode.classList.contains('expanded-overlay')) {
 			setTimelineExpandedOverlay(true);
@@ -192,14 +194,99 @@ function setUpListeners() {
 			setTimelineExpandedOverlay(false);
 		}
 	});
+
+	// drag handling: on down, up, and move
+	let dragStartX, dragStartExpansion;
+	const expandThreshold = 0.5;
+	const snappingDistance = 10;
+	function handleDragStart(e) {
+		timelineNode.classList.add('dragging');
+		dragStartExpansion = timelineNode.style.getPropertyValue('--expansion-percent');
+		dragStartX = e.clientX;
+		e.preventDefault();
+	}
+	mapsListNode.addEventListener('pointerdown', handleDragStart);
+	expansionButton.addEventListener('pointerdown', handleDragStart);
+	document.addEventListener('pointerup', e=>{
+		if (timelineNode.classList.contains('dragging')) {
+			timelineNode.classList.remove('dragging');
+			if (timelineNode.classList.contains('expanded-overlay')) {
+				setTimelineExpandedOverlay(true);
+			} else {
+				setTimelineExpandedOverlay(false);
+			}
+		} else if (e.target === timelineNode) {
+			// since timeline node has pointer-events: none,
+			// this can only be triggered by shade pseudoelement
+			setTimelineExpandedOverlay(false);
+		}
+	});
+	document.addEventListener('pointermove', e=>{
+		if (timelineNode.classList.contains('dragging')) {
+			const dragChange = dragStartX - e.clientX;
+			const newOffset = dragChange + getExpansionX()*dragStartExpansion;
+			let dragPercentage = newOffset / getExpansionX();
+
+			// snap to edges
+			if (Math.abs(dragChange) < snappingDistance) {
+				dragPercentage = Math.round(dragPercentage);
+			}
+			// clamp position to edges
+			// reset dragStartX to regain grip upon reversing direction
+			if (dragPercentage > 1) {
+				dragPercentage = 1;
+				dragStartExpansion = 1;
+				dragStartX = Math.max(
+					e.clientX, 
+					document.documentElement.clientWidth - mapsListNode.offsetWidth
+				);
+			} else if (dragPercentage < 0) {
+				dragPercentage = 0;
+				dragStartExpansion = 0;
+				dragStartX = e.clientX;
+			}
+
+			// set expansion state
+			if (dragPercentage > expandThreshold) {
+				setTimelineExpandedOverlay(true, { preventPercentReset: true });
+			} else {
+				setTimelineExpandedOverlay(false, {preventPercentReset: true});
+			}
+			timelineNode.style.setProperty(
+				'--expansion-percent', dragPercentage
+			);
+			e.preventDefault();
+		}
+	});
+	
+	// collapse on selecting a life event
+	lifeEventsNode.addEventListener('mouseup', e=>{
+		setTimelineExpandedOverlay(false);
+	});
 }
 
-function setTimelineExpandedOverlay(expand) {
-	if (expand) {
-		timelineNode.classList.add('expanded-overlay');
-	} else {
-		timelineNode.classList.remove('expanded-overlay');
+// returns change in x position in expanded state
+function getExpansionX() {
+	return mapsListNode.offsetWidth + 
+		parseInt(getComputedStyle(mapsListNode).left, 10);
+}
+
+function setTimelineExpandedOverlay(expand, {preventPercentReset=false}={} ) {
+	if (!preventPercentReset) {
+		timelineNode.style.setProperty('--expansion-percent', expand ? 1 : 0);
 	}
+	// only update classes and attributes if state changed
+	if (timelineNode.classList.contains('expanded-overlay') !== expand) {
+		if (expand) {
+			timelineNode.classList.add('expanded-overlay');
+		} else {
+			timelineNode.classList.remove('expanded-overlay');
+		}
+		setExpansionButtonState(expand);
+	}
+}
+
+function setExpansionButtonState(expand) {
 	expansionButton.setAttribute('aria-expanded', expand);
 	expansionButton.querySelector('.expand-label')
 		.setAttribute('aria-hidden', expand);

@@ -241,15 +241,11 @@ function setUpKeyboardHandler() {
 }
 
 function setUpPointerHandler() {
-	document.addEventListener('pointerup', e=>{
-		mapsListNode.classList.remove('scrubbing');
-	});
 	mapsListNode.addEventListener('pointerdown', e=>{
-		mapsListNode.classList.add('scrubbing');
 		handleDrag(e);
 	});
 	document.addEventListener('pointermove', e=>{
-		if (mapsListNode.classList.contains('scrubbing')) {
+		if (mapsListNode.parentNode.classList.contains('dragging')) {
 			handleDrag(e);
 		}
 	});
