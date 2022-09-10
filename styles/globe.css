@@ -50,6 +50,40 @@
 	border-radius: 100%;
 	box-shadow: inset 0em 0em 30px 5px #0008;
 }
+
+
+/* vector map */
+.reconstruction .countries path {
+	pointer-events: none;
+	 /* temporary style */
+	fill: none;
+	stroke: #666;
+	stroke-width: 1px;
+}
+.reconstruction .craton-path {
+	pointer-events: auto;
+	fill: #654030; /* temporary style */
+}
+.reconstruction g.craton:hover .countries {
+	clip-path: none;
+}
+.reconstruction g.craton:hover .countries path {
+	stroke: #fff; /* temporary style */
+}
+
+body:not([data-map-type="vector"]) .reconstruction {
+	display: none;
+}
+
+[data-map-type="vector"] #globe-texture {
+	opacity: 0;
+}
+[data-map-type="vector"] #globe #globe-overlay {
+	background-color: #333; /* temporary style */
+}
+
+
+/* labels and indicators */
 #globe-overlay .label {
 	fill: var(--white-shade-1);
 	font-family: "CMU Serif";

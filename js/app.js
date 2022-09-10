@@ -47,23 +47,37 @@ const resolutions = {
 	'hi': mapSelector.getClosestResolution(radius*12),
 	'lo': mapSelector.getClosestResolution(radius*2)
 }
-function handleMapUpdate(prevMya, newMya) {
+
+async function handleMyaUpdate(prevMya, newMya) {
 	document.getElementById('mya-value').textContent = mapSelector.currentMya;
 
+	if (mapSelector.currentMapType == mapSelector.MapTypes.TEXTURE) {
+		document.body.setAttribute('data-map-type', 'texture');
+		await loadAndUpdateTexture();
+	} else {
+		document.body.setAttribute('data-map-type', 'vector');
+	}
+	globeOverlays.handleMyaUpdate(prevMya, newMya);
+}
 
+// Make an asynchronous request to load the current map texture,
+// dropping all older requests if a more recent one loads first
+// to avoid jumping back and forth in time in case of many concurrent requests
+function loadAndUpdateTexture() {
 	const requestTime = Date.now();
 	clearTimeout(hiResDelayTimer);
 
-	let imgPromise;
+	let firstAvailableImgPromise;
 	if (mapSelector.isCached(resolutions['hi'])) {
 		// use high resolution if already loaded
-		imgPromise = mapSelector.getImg(resolutions['hi']);
+		firstAvailableImgPromise = mapSelector.getImg(resolutions['hi']);
 	} else {
 		// otherwise use preview resolution
-		imgPromise = mapSelector.getImg(resolutions['lo']);
+		firstAvailableImgPromise = mapSelector.getImg(resolutions['lo']);
 		// debounce request for high res image
 		hiResDelayTimer = setTimeout(() => {
 			mapSelector.getImg(resolutions['hi']).then(img=>{
+				// drop texture if a later request was fulfilled
 				if (requestTime >= lastUpdate) {
 					lastUpdate = requestTime;
 					updateTexture(globeTexture, img);
@@ -71,12 +85,11 @@ function handleMapUpdate(prevMya, newMya) {
 			})
 		}, hiResDelay);
 	}
-	imgPromise.then(img=>{
+	return firstAvailableImgPromise.then(img=>{
 		if (requestTime > lastUpdate) {
 			lastUpdate = requestTime;
 			updateTexture(globeTexture, img);
 			updateTexture(reverseTexture, img);
-			globeOverlays.handleMapUpdate(prevMya, newMya);
 		}
 	});
 }
@@ -97,8 +110,10 @@ function redrawGlobe(rotation = false) {
 		projection.rotate(rotation);
 		reverseProjection.rotate([rotation[0]+180, -rotation[1]]);
 	}
-	globeTexture.redraw(projection.rotate());
-	reverseTexture.redraw(reverseProjection.rotate());
+	if (mapSelector.currentMapType == mapSelector.MapTypes.TEXTURE) {
+		globeTexture.redraw(projection.rotate());
+		reverseTexture.redraw(reverseProjection.rotate());
+	}
 	globeOverlays.redraw();
 }
 
@@ -107,7 +122,7 @@ initRotationControl(projection, textureCanvas, redrawGlobe);
 
 globeOverlays.init(projection, overlayNode, radius);
 
-mapSelector.init(document.getElementById('maps-list'), handleMapUpdate);
+mapSelector.init(document.getElementById('maps-list'), handleMyaUpdate);
 initTimeline();
 
 redrawGlobe();

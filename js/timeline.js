@@ -1,4 +1,7 @@
-import { mapsReadyPromise } from './map-selector.js';
+import { 
+	mapsReadyPromise, currentMapType, MapTypes, EARTH_FORMATION_MYA 
+} from './map-selector.js';
+import { clamp } from './common-utils.js';
 
 export {
 	init
@@ -11,11 +14,11 @@ const supercontinentsNode = document.getElementById('supercontinents-list');
 const periodsNode = document.getElementById('periods-list');
 const expansionButton = document.getElementById('timeline-toggle');
 
-let mapsSelector;
+let mapsSelectorData;
 
 function init() {
 	mapsReadyPromise.then(funcs=>{
-		mapsSelector = funcs;
+		mapsSelectorData = funcs;
 
 		createMyaLabels();
 
@@ -34,14 +37,14 @@ function createMyaLabels() {
 	// create labels at intervals
 	const interval = 200;
 	const allLabelNodes = [];
-	for (let mya=0; mapsSelector.myaToPercent(mya)<=100; mya+=interval) {
+	for (let mya=0; mapsSelectorData.myaToPercent(mya)<=100; mya+=interval) {
 		const labelNode = document.createElement('span');
 		labelNode.classList.add('label');
 
 		labelNode.textContent = mya;
 
 		labelsContainerNode.appendChild(labelNode);
-		labelNode.style.top = `${mapsSelector.myaToPercent(mya)}%`;
+		labelNode.style.top = `${mapsSelectorData.myaToPercent(mya)}%`;
 
 		allLabelNodes.push(labelNode);
 	}
@@ -63,20 +66,33 @@ function createMyaLabels() {
 	// update cursor label text and position
 	mapsListNode.addEventListener('mousemove', e=>{
 		if (e.target == mapsListNode) {
-			const mya = mapsSelector.oldestMya*e.offsetY/e.target.clientHeight;
-			if (mya > 0 && mya < mapsSelector.oldestMya) {
-				const threshold = 20;
-				const intervalDist = Math.min(mya%interval, interval-mya%interval);
-				const bottomDist = mapsSelector.oldestMya-mya;
-
-				allLabelNodes.forEach(node => node.classList.remove('obscured'));
-				if (intervalDist < threshold || bottomDist < threshold) {
-					const nearestLabelIndex = Math.round(mya/interval);
-					allLabelNodes[nearestLabelIndex].classList.add('obscured');
-				}
-				cursorNode.textContent = Math.round(mya/10)*10; // round to 10s
-				cursorNode.style.transform = `translateY(calc(${e.offsetY}px - 50%))`;
+			// clamp timeline cursor to current min/max
+			let cursorMaxY = mapsListNode.clientHeight;
+			if (currentMapType == MapTypes.VECTOR) {
+				cursorMaxY *=
+					EARTH_FORMATION_MYA / mapsSelectorData.myaAt100Percent;
 			}
+			const cursorClamped = clamp(e.offsetY, 0, cursorMaxY);
+			
+			const mya = cursorClamped *
+				mapsSelectorData.myaAt100Percent / mapsListNode.clientHeight;
+
+			const threshold = 20;
+			const intervalDist = Math.min(mya%interval, interval-mya%interval);
+			const bottomDist = mapsSelectorData.myaAt100Percent - mya;
+
+			const nearestLabelIndex = Math.round(mya/interval);
+			allLabelNodes.forEach(node => node.classList.remove('obscured'));
+
+			if (
+				(intervalDist < threshold || bottomDist < threshold) &&
+				nearestLabelIndex < allLabelNodes.length
+			) {
+				allLabelNodes[nearestLabelIndex].classList.add('obscured');
+			}
+			cursorNode.textContent = Math.round(mya/10)*10; // round to 10s
+			cursorNode.style.transform = 
+				`translateY(calc(${cursorClamped}px - 50%))`;
 		}
 	});
 
@@ -89,8 +105,9 @@ function positionSupercontinents() {
 	for (let i=0; i<nodes.length; i++) {
 		const end = nodes[i].getAttribute('data-break-mya');
 		const start = nodes[i].getAttribute('data-form-mya');
-		nodes[i].style.top = `${mapsSelector.myaToPercent(end)}%`;
-		nodes[i].style.bottom = `${100 - mapsSelector.myaToPercent(start)}%`;
+		nodes[i].style.top = `${mapsSelectorData.myaToPercent(end)}%`;
+		nodes[i].style.bottom = 
+			`${100 - mapsSelectorData.myaToPercent(start)}%`;
 
 		const prestart = nodes[i].getAttribute('data-form-start-mya');
 		if (prestart) {
@@ -109,10 +126,10 @@ function positionPeriods() {
 	const nodes = periodsNode.children;
 
 	for (let i=0; i<nodes.length; i++) {
-		nodes[i].style.top = `${mapsSelector.myaToPercent(
+		nodes[i].style.top = `${mapsSelectorData.myaToPercent(
 			nodes[i].getAttribute('data-end-mya')
 		)}%`;
-		nodes[i].style.bottom = `${100 - mapsSelector.myaToPercent(
+		nodes[i].style.bottom = `${100 - mapsSelectorData.myaToPercent(
 			nodes[i].getAttribute('data-start-mya')
 		)}%`;
 	}
@@ -120,7 +137,8 @@ function positionPeriods() {
 
 function positionLifeEvents() {
 	lifeEventsNode.querySelectorAll('li').forEach(node=>{
-		node.style.top = `${mapsSelector.myaToPercent(node.getAttribute('data-mya'))}%`;
+		node.style.top = 
+			`${mapsSelectorData.myaToPercent(node.getAttribute('data-mya'))}%`;
 		node.addEventListener('click', e=>{
 			document.querySelector(e.target.hash).scrollIntoView();
 			e.preventDefault();

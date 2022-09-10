@@ -1,0 +1,99 @@
+[
+	{
+		"name": "Laurentia",
+		"countries": ["United States of America", "Canada", "Greenland"],
+		"extended-mask": { "lon":-87, "lat":55, "r":28 },
+		"country-rotations": {"Greenland": [-12.87, -4.32, 3.02]}
+	},
+	{
+		"name": "Superior",
+		"countries": ["Canada"],
+		"extended-mask": { "lon":-81, "lat":49, "r":15 }
+	},
+	{
+		"name": "Slave",
+		"countries": ["Canada"],
+		"extended-mask": { "lon":-111, "lat":68, "r":3 }
+	},
+	{
+		"name": "Rae & Hearne",
+		"countries": ["Canada"],
+		"extended-mask": { "lon":-86, "lat":66, "r":8 }
+	},
+	{
+		"name": "Amazonia",
+		"countries": ["Bolivia", "Brazil", "Colombia", "Ecuador", "Guyana", "Peru", "Suriname", "Venezuela"],
+		"extended-mask": { "lon":-60, "lat":-2, "r":20 }
+	},
+	{
+		"name": "Rio Plata",
+		"countries": ["Argentina", "Uruguay", "Paraguay", "Chile"]
+	},
+	{
+		"name": "São Francisco",
+		"countries": ["Brazil"]
+	},
+	{
+		"name": "West Africa",
+		"countries": ["Algeria", "Mauritania", "Mali", "Morocco", "Niger", "Nigeria", "Benin", "Togo", "Ghana", "Côte d'Ivoire", "Burkina Faso", "Liberia", "Sierra Leone", "Guinea", "Guinea-Bissau", "Gambia", "Senegal"],
+		"extended-mask": { "lon":-6, "lat":18, "r":20 }
+	},
+	{
+		"name": "Congo",
+		"countries": ["Congo", "Gabon", "Eq. Guinea", "Cameroon", "Central African Rep.", "Sudan", "S. Sudan", "Dem. Rep. Congo", "Zambia", "Angola", "Uganda", "Rwanda", "Burundi", "Kenya", "Tanzania", "Ethiopia", "Eritrea", "Djibouti", "Somalia", "Nigeria", "Niger", "Chad"]
+	},
+	{
+		"name": "Kalahari",
+		"countries": ["Namibia", "Botswana", "Zimbabwe", "Mozambique", "Eswatini", "Lesotho", "South Africa"]
+	},
+	{
+		"name": "Baltica",
+		"countries": ["Finland", "Norway", "Sweden", "Romania", "Moldova", "Ukraine", "Belarus", "Bulgaria", "Greece", "Turkey", "Georgia", "Poland", "Lithuania", "Estonia", "Latvia", "Russia"]
+	},
+	{
+		"name": "Fennoscandia",
+		"countries": ["Finland", "Norway", "Sweden"]
+	},
+	{
+		"name": "Sarmatia & Volgo-Uralia",
+		"countries": ["Romania", "Moldova", "Ukraine", "Belarus", "Bulgaria", "Greece", "Turkey", "Georgia", "Poland", "Lithuania", "Estonia", "Latvia", "Russia"],
+		"extended-mask": { "lon":33, "lat":52, "r":10 }
+	},
+	{
+		"name": "Siberia",
+		"countries": ["Russia"],
+		"extended-mask": { "lon":108, "lat":65, "r":17 }
+	},
+	{
+		"name": "India",
+		"countries": ["India"],
+		"extended-mask": { "lon":78, "lat":22, "r":20 }
+	},
+	{
+		"name": "North China",
+		"countries": ["South Korea", "North Korea", "China", "Mongolia"],
+		"extended-mask": { "lon":122, "lat":38, "r":10 }
+	},
+	{
+		"name": "North Australia",
+		"countries": ["Australia"],
+		"extended-mask": { "lon":137, "lat":-10, "r":15 }
+	},
+	{
+		"name": "West Australia",
+		"countries": ["Australia"],
+		"extended-mask": { "lon":117, "lat":-28, "r":10 }
+	},
+	{
+		"name": "South Australia",
+		"countries": ["Australia", "Antarctica"],
+		"extended-mask": { "lon":138, "lat":-33, "r":8 },
+		"country-rotations": {"Antarctica": [-5.47, -18.90, 25.66]}
+	},
+	{
+		"name": "Australia",
+		"countries": ["Australia", "Antarctica"],
+		"extended-mask": { "lon":126, "lat":-44, "r":25 },
+		"country-rotations": {"Antarctica": [-5.47, -18.90, 25.66]}
+	}
+]

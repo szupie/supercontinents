@@ -8,21 +8,56 @@ export {
 	mapsReadyPromise,
 	getClosestResolution,
 	getImg,
-	isCached
+	isCached,
+	MapTypes,
+	currentMapType,
+	getCurrentReconstructionData,
+	EARTH_FORMATION_MYA
 }
 
-let selectedMapIndex;
+const EARTH_FORMATION_MYA = 4600;
+
+let currentMapIndex;
 let currentMya = 0;
 
-let mapDates, oldestMya;
-const mapsReadyPromise = fetch('./assets/data/map-dates.json')
+const MapTypes = Object.freeze({
+	TEXTURE: 1,
+	VECTOR: 2
+});
+let currentMapType = MapTypes.TEXTURE;
+
+/*
+  Fetch map data
+*/
+let textureMapDates, oldestTextureMya;
+const textureMapListRequest = fetch('./assets/data/map-dates.json')
 	.then(response=>response.json())
 	.then(data=>{
-		mapDates = data;
-		oldestMya = mapDates[mapDates.length-1]['mya'];
-
-		return {myaToPercent, setMapToMya, oldestMya};
+		textureMapDates = data;
+		oldestTextureMya = Math.max(...textureMapDates.map(d=>d['mya']));
+		document.body.style.setProperty(
+			'--zoomed-timeline-proportion', 
+			`${oldestTextureMya/EARTH_FORMATION_MYA*100}%`
+		);
 	});
+
+let reconstructionsData, oldestVectorMya;
+const cratonRotationsRequest = fetch('./assets/data/craton-rotations.json')
+	.then(response=>response.json())
+	.then(data=>{
+		reconstructionsData = data;
+		oldestVectorMya = Math.max(...reconstructionsData.map(d=>d['mya']));
+	});
+
+let allMapsList;
+const mapsReadyPromise = Promise.all(
+	[textureMapListRequest, cratonRotationsRequest]
+).then(()=>{
+	allMapsList = textureMapDates.concat(reconstructionsData);
+
+	const myaAt100Percent = oldestTextureMya;
+	return {myaToPercent, setMapToMya, myaAt100Percent};
+});
 
 let mapsListNode;
 const resolutions = [
@@ -33,7 +68,6 @@ const resolutions = [
 	3600
 ];
 
-
 let updateCallback = ()=>{};
 function init(containerNode, mapUpdateCallback) {
 	mapsListNode = containerNode;
@@ -41,7 +75,6 @@ function init(containerNode, mapUpdateCallback) {
 
 	mapsReadyPromise.then(()=>{
 		createMapIndicators();
-		setMap(0);
 
 		document.addEventListener('scroll', handleScrollChange);
 		handleScrollChange();
@@ -52,11 +85,14 @@ function init(containerNode, mapUpdateCallback) {
 		// requestReconstructedPositions([-6,17]);
 	});
 }
+
+// dev util function to fetch reconstructed positions at the time of each map
+// for a given modern coordinate
 function requestReconstructedPositions(coord) {
 	const queries = [];
 	const results = {};
-	mapDates.slice(-5).forEach(item=>{ // test oldest 5 only
-	// mapDates.forEach(item=>{
+	textureMapDates.slice(-5).forEach(item=>{ // test oldest 5 only
+	// textureMapDates.forEach(item=>{
 		queries.push(fetch(`https://gws.gplates.org/reconstruct/reconstruct_points/?points=${coord[0]},${coord[1]}&time=${item.mya}&model=PALEOMAP`)
 			.then(response=>response.json())
 			.then(data=>{
@@ -71,21 +107,56 @@ function requestReconstructedPositions(coord) {
 	});
 }
 
+/*
+  MYA calculations
+*/
 function myaToPercent(mya) {
-	return mya/oldestMya*100;
+	return mya/oldestTextureMya*100;
+}
+
+function getCurrentMaxMya() {
+	if (currentMapType == MapTypes.TEXTURE) {
+		return oldestTextureMya;
+	} else {
+		return oldestVectorMya;
+	}
 }
 
 const myaBisector = bisector(d=>d['mya']);
 function getClosestMapAtMya(mya) {
-	return myaBisector.center(mapDates, mya);
+	return myaBisector.center(allMapsList, mya);
 }
 
 function setMapToMya(targetMya) {
-	setMap(getClosestMapAtMya(targetMya));
+	const closestIndex = getClosestMapAtMya(targetMya);
+	if (currentMapIndex != closestIndex) { // avoid redraw if no change
+		currentMapIndex = closestIndex;
+
+		const prevMya = currentMya;
+
+		if (currentMapIndex < textureMapDates.length) {
+			currentMapType = MapTypes.TEXTURE;
+			currentMya = textureMapDates[currentMapIndex]['mya'];
+		} else {
+			currentMapType = MapTypes.VECTOR;
+			currentMya = reconstructionsData[
+				getVectorMapIndex(currentMapIndex)
+			]['mya'];
+		}
+
+		// highlight indicator for current map
+		resetClassForAllMaps('selected', currentMapIndex);
+
+		// trigger redraw
+		updateCallback(prevMya, currentMya);	
+	}
 }
 
 
-const storyNodes = document.getElementById('stories').children;
+/*
+  Scroll sync calculations
+*/
+const storyNodes = document.getElementById('stories').querySelectorAll('[data-mya]');
 const timelineEventNodes = document.getElementById('life-events-list').children;
 const yBisector = bisector(node => node.offsetTop);
 
@@ -102,7 +173,7 @@ function setMapToScroll(scrollY) {
 	if (prevStoryIndex < 0) {
 		setMapToMya(0);
 	} else if (prevStoryIndex+1 >= storyNodes.length) {
-		setMapToMya(oldestMya);
+		setMapToMya(oldestVectorMya);
 	} else {
 		const prevStory = storyNodes[prevStoryIndex];
 		const nextStory = storyNodes[prevStoryIndex+1];
@@ -124,7 +195,10 @@ function highlightTimelineEvent(scrollY) {
 		node.classList.remove('current');
 	}
 	const closestIndex = yBisector.center(storyNodes, scrollY);
-	if (Math.abs(storyNodes[closestIndex].offsetTop - scrollY) < 200) {
+	if (
+		Math.abs(storyNodes[closestIndex].offsetTop - scrollY) < 200 &&
+		timelineEventNodes[closestIndex]
+	) {
 		timelineEventNodes[closestIndex].classList.add('current');
 	}
 }
@@ -153,12 +227,12 @@ function setScrollToMya(mya) {
 */
 function createMapIndicators() {
 	select(mapsListNode)
-		.selectAll(null).data(mapDates).enter()
-		.append('li')
+		.selectAll('li').data(allMapsList).join('li')
 			.style('top', d=>`${myaToPercent(d['mya'])}%`)
 			.append('a')
 				.text(d=>`${d['mya']} MYA`)
-				.classed('map-link', true)
+				.classed('map-indicator', true)
+				.classed('texture-map', d=>(d['mya']<=oldestTextureMya))
 				.attr('href', d=>getTexturePath(d['file']))
 				.on('click', e=>{
 					if (!e.ctrlKey && !e.metaKey) {
@@ -170,34 +244,25 @@ function createMapIndicators() {
 // removes specified className from all map indicator nodes
 // if an index is provided, that indicator becomes only node with className
 function resetClassForAllMaps(className, index) {
-	const indicatorNodes = mapsListNode.querySelectorAll('.map-link');
+	const indicatorNodes = mapsListNode.querySelectorAll('.map-indicator');
 	indicatorNodes.forEach(node=>{
 		node.classList.remove(className)
 	});
-	if (typeof index !== 'undefined') {
+	if (typeof indicatorNodes[index] !== 'undefined') {
 		indicatorNodes[index].classList.add(className);
 	}
 }
 
 
 /*
-  Update map texture
+  Texture map
 */
-function setMap(newIndex) {
-	if (selectedMapIndex != newIndex) { // avoid redraw if no change
-		selectedMapIndex = newIndex;
-
-		const prevMya = currentMya;
-		currentMya = mapDates[selectedMapIndex]['mya'];
-		updateCallback(prevMya, currentMya);
-
-		// highlight indicator for current map
-		resetClassForAllMaps('selected', newIndex);
-	}
-}
-
 function getTexturePath(name, resolution) {
-	return `./assets/map-textures/${resolution}/${name}.jpg`;
+	if (name) {
+		return `./assets/map-textures/${resolution}/${name}.jpg`;
+	} else {
+		return null;
+	}
 }
 
 const resBisector = bisector(val => val);
@@ -207,13 +272,16 @@ function getClosestResolution(target) {
 
 function getImg(resolution) {
 	return new Promise((resolve, reject) => {
+		if (currentMapIndex >= textureMapDates.length) {
+			reject('requested texture map out of bounds');
+		}
 		const image = new Image;
 		image.onload = e=>{
 			resolve(image);
 		};
 		image.onerror = reject;
 		image.src = getTexturePath(
-			mapDates[selectedMapIndex]['file'], 
+			textureMapDates[currentMapIndex]['file'], 
 			resolution
 		);
 	});
@@ -222,12 +290,24 @@ function getImg(resolution) {
 function isCached(resolution) {
 	const image = new Image;
 	image.src = getTexturePath(
-		mapDates[selectedMapIndex]['file'], 
+		textureMapDates[currentMapIndex]['file'], 
 		resolution
 	);
 	const cached = image.complete;
 	image.src = '';
 	return cached;
+}
+
+
+/*
+  Vector map
+*/
+function getCurrentReconstructionData() {
+	return reconstructionsData[getVectorMapIndex(currentMapIndex)]['rotations'];
+}
+
+function getVectorMapIndex(index) {
+	return index - textureMapDates.length;
 }
 
 
@@ -245,11 +325,11 @@ function setUpKeyboardHandler() {
 		}
 		if (direction !== 0) {
 			// increment/decrement
-			const newIndex = selectedMapIndex + direction;
-			if (newIndex >= 0 && newIndex < mapDates.length) {
-				setScrollToMya(mapDates[newIndex]['mya']);
+			const newIndex = currentMapIndex + direction;
+			if (newIndex >= 0 && newIndex < textureMapDates.length) {
+				setScrollToMya(textureMapDates[newIndex]['mya']);
 				// also update map manually in case scroll distance is too small
-				setMap(newIndex);
+				setTextureMap(newIndex);
 			}
 		}
 	});
@@ -272,12 +352,12 @@ function setUpPointerHandler() {
 }
 function getClosestMapAtPointerEvent(e) {
 	const yPercent = pointer(e, mapsListNode)[1] / mapsListNode.clientHeight;
-	const mya = yPercent*oldestMya;
+	const mya = yPercent*oldestTextureMya;
 	return getClosestMapAtMya(mya);
 }
 function handleDrag(e) {
 	const yPercent = pointer(e, mapsListNode)[1] / mapsListNode.clientHeight;
-	const targetMya = yPercent*oldestMya;
+	const targetMya = yPercent*oldestTextureMya;
 	setScrollToMya(targetMya);
-	// setMap(getClosestMapAtPointerEvent(e));
+	// setTextureMap(getClosestMapAtPointerEvent(e));
 }

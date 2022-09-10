@@ -134,6 +134,7 @@
 	content: '';
 	display: block;
 	position: absolute;
+	z-index: -1; /* do not cover map indicators */
 	background-color: inherit;
 	height: var(--vert-margin);
 	width: inherit;
@@ -143,6 +144,7 @@
 }
 #maps-list::after {
 	top: 100%;
+	height: 100vh; /* extend background beyond 100% for unzoomed timeline */
 }
 #maps-list li {
 	height: 0;
@@ -244,6 +246,10 @@
 }
 
 /* MYA labels */
+#timeline .axis-labels {
+	position: absolute;
+	height: 100%;
+}
 #timeline .axis-labels .label {
 	position: absolute;
 	transform: translateY(-50%);
@@ -255,8 +261,8 @@
 	font-size: 9px;
 	word-spacing: 100vw; /* hack to break every word into own line */
 	text-transform: none;
-	transform: none;
-	bottom: calc(32px - var(--vert-margin)); /* 32px from bottom of viewport */
+	transform: translateY(-100%);
+	top: calc(100vh - var(--vert-margin) - 32px); /* 32px from bottom of viewport */
 }
 #timeline .axis-labels .label:not(.cursor) {
 	transition-property: opacity, transform;
@@ -272,7 +278,7 @@
 	opacity: 0;
 }
 #timeline #maps-list:hover~.axis-labels .label.title.obscured {
-	transform: translateY(75%);
+	transform: translateY(-25%);
 }
 @media (max-width: 700px) {
 	#timeline:not(.expanded-overlay) .axis-labels .label {
@@ -328,9 +334,9 @@ ol#supercontinents-list {
 	left: calc(var(--indicator-width) + 2px);
 	transform: translateY(-50%);
 }
-#supercontinents-list li:last-child .label {
+body:not([data-map-type='vector']) #supercontinents-list li:nth-child(3) .label {
 	top: 0;
-	transform: none;
+	transform: translateY(-100%);
 }
 @media (max-width: 700px) {
 	ol#supercontinents-list {
@@ -364,6 +370,35 @@ ol#periods-list {
 	transition-duration: var(--expansion-duration);
 	transition-timing-function: var(--expansion-easing);
 }
+
+/* Timeline since formation of Earth */
+#timeline ol, 
+#timeline .axis-labels {
+	transition: height 200ms ease-in-out;
+}
+[data-map-type="vector"] #timeline ol, 
+[data-map-type="vector"] #timeline .axis-labels {
+	height: var(--zoomed-timeline-proportion, 16%);
+}
+/* hide post-rodinian items when unzoomed */
+[data-map-type="vector"] #timeline #life-events-list li:not(.pre-rodinian) {
+	opacity: 0;
+}
+[data-map-type="vector"] #timeline #periods-list {
+	opacity: 0;
+}
+[data-map-type="vector"] #timeline .map-indicator.texture-map {
+	opacity: 0;
+	border-bottom-width: 0.25px;
+	border-bottom-color: rgba(var(--page-bg-rgb), 0.5);
+}
+[data-map-type="vector"] #supercontinents-list .megacontinent .label {
+	opacity: 0;
+}
+body:not([data-map-type="vector"]) #timeline .map-indicator:not(.texture-map) {
+	opacity: 0;
+}
+
 
 @media (min-width: 701px) {
 	/* Wide screen with geological periods hidden */

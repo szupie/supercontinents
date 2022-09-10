@@ -1,0 +1,22 @@
+{"type":"FeatureCollection", "features": [
+{"properties": {"name": "Laurentia"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-81.5,35.5],[-112.5,30.5],[-135,69],[-86,74],[-30,75],[-33,60],[-81.5,35.5]]]}},
+{"properties": {"name": "Superior"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-70,58],[-70,50],[-88,46],[-92,49],[-107,45],[-105,54],[-98,57],[-90,50],[-84,50.5],[-79,59],[-70,58]]]}},
+{"properties": {"name": "Rae & Hearne"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-95,59],[-106,56],[-111,59],[-85,74.5],[-67,69],[-95,59]]]}},
+{"properties": {"name": "Slave"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-116,63],[-115,68],[-105,68.5],[-109,63],[-113,62]]]}},
+{"properties": {"name": "Rio Plata"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-57,-40],[-66,-35],[-61.5,-25.5],[-55,-29],[-57,-40]]]}},
+{"properties": {"name": "Amazonia"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-52,-9.5],[-64.5,-12.5],[-73,-2],[-67.5,5.5],[-58.5,7.5],[-58.5,4],[-52,5],[-49.5,-4.5],[-52,-9.5]]]}},
+{"properties": {"name": "Congo"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[12,-21],[9,1],[25.5,12],[39,2],[37.5,-8],[12,-21]]]}},
+{"properties": {"name": "São Francisco"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-49,-12],[-40,-8.5],[-36.5,-12],[-38.5,-16],[-43.5,-16.5],[-42.5,-21],[-47,-21],[-49,-12]]]}},
+{"properties": {"name": "Baltica"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[49,65],[58,56],[48,47.5],[29.5,45.5],[4.5,60],[27,70.5],[49,65]]]}},
+{"properties": {"name": "Fennoscandia"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[49,65],[20.5,51.5],[4.5,60],[27,70.5],[49,65]]]}},
+{"properties": {"name": "Sarmatia & Volgo-Uralia"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[51,63],[58,56],[48,47.5],[29.5,45.5],[23,50],[51,63]]]}},
+{"properties": {"name": "India"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[89,24],[77.5,8],[70.5,23],[77,28.5],[89,24]]]}},
+{"properties": {"name": "North China"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[131,36],[116,31.5],[99.5,40.5],[131,44],[131,36]]]}},
+{"properties": {"name": "Kalahari"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[35.5,-24],[26.5,-33.5],[18,-33.5],[14.5,-25],[26.5,-19],[35,-20],[35.5,-24]]]}},
+{"properties": {"name": "West Africa"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-1.5,25],[1.5,11.5],[0.5,5.5],[-8.5,4.5],[-13.5,11.5],[-14.5,21],[-9.5,25],[-1.5,25]]]}},
+{"properties": {"name": "North Australia"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[137.5,-25],[129,-25],[121.5,-14.5],[139.5,-6.5],[149,-18],[137.5,-25]]]}},
+{"properties": {"name": "West Australia"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[119,-20],[123.5,-24],[124.5,-34],[116,-35.5],[114.5,-21.5],[119,-20]]]}},
+{"properties": {"name": "South Australia"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[143,-27],[131.5,-60.5],[114,-40],[124.5,-30],[130,-27],[143,-27]]]}},
+{"properties": {"name": "Australia"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[143,-27],[131.5,-60.5],[113,-21],[120.5,-18],[127,-26],[143,-27]]]}},
+{"properties": {"name": "Siberia"},"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[83.5,73],[127.5,73.5],[125.5,63.5],[137,63.5],[136,56],[121,54.5],[120,62],[104.5,52],[83,61],[83.5,73]]]}}
+]}
