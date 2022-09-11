@@ -88,25 +88,24 @@ function setRadius(newRadius) {
 	radius = newRadius;
 }
 
-function handleMyaUpdate(prevMya, newMya) {
+async function handleMyaUpdate(prevMya, newMya) {
 	overlayTweenStartMya = prevMya;
 	overlayTweenStartTime = Date.now();
 
 	// attach as attribute to persist over data() updates
 	overlay.selectAll('.continent-labels .label')
-	.attr('data-last-lat', d=>d['coordinates'][1])
-	.attr('data-last-lon', d=>d['coordinates'][0]);
+		.attr('data-last-lat', d=>d['coordinates'][1])
+		.attr('data-last-lon', d=>d['coordinates'][0]);
 
 	if (mapSelector.currentMapType == mapSelector.MapTypes.TEXTURE) {
 		if (textureContinentLabelsData) {
 			bindDataToCratonLabels(getTextureLabelsDataForMya(newMya));
 		}
 	} else {
-		vectorMapPromise.then(()=>{
-			setReconstructionData(mapSelector.getCurrentReconstructionData());
-			redrawReconstruction();
-			bindDataToCratonLabels(getCratonCenters());
-		});
+		await vectorMapPromise;
+		setReconstructionData(mapSelector.getCurrentReconstructionData());
+		redrawReconstruction();
+		bindDataToCratonLabels(getCratonCenters());
 	}
 
 	if (trackedCratonLabel) {
