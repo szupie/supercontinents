@@ -158,7 +158,7 @@ function setMapToMya(targetMya) {
 */
 const storyNodes = document.getElementById('stories').querySelectorAll('[data-mya]');
 const timelineEventNodes = document.getElementById('life-events-list').children;
-const yBisector = bisector(node => node.offsetTop);
+const yBisector = bisector(node => getViewY(node)+window.scrollY);
 
 // For each major event, show corresponding map when scrolled to story
 // Between stories, interpolate target year based on percentage scrolled
@@ -178,8 +178,8 @@ function setMapToScroll(scrollY) {
 		const prevStory = storyNodes[prevStoryIndex];
 		const nextStory = storyNodes[prevStoryIndex+1];
 
-		const storiesDiffY = nextStory.offsetTop - prevStory.offsetTop;
-		const scrollPastPrev = scrollY - prevStory.offsetTop;
+		const storiesDiffY = getViewY(nextStory) - getViewY(prevStory);
+		const scrollPastPrev = scrollY - (getViewY(prevStory)+window.scrollY);
 
 		const prevMya = Number.parseFloat(prevStory.getAttribute('data-mya'));
 		const nextMya = Number.parseFloat(nextStory.getAttribute('data-mya'));
@@ -194,12 +194,14 @@ function highlightTimelineEvent(scrollY) {
 	for (let node of timelineEventNodes) {
 		node.classList.remove('current');
 	}
-	const closestIndex = yBisector.center(storyNodes, scrollY);
-	if (
-		Math.abs(storyNodes[closestIndex].offsetTop - scrollY) < 200 &&
-		timelineEventNodes[closestIndex]
-	) {
-		timelineEventNodes[closestIndex].classList.add('current');
+
+	const closestStoryNode = storyNodes[yBisector.center(storyNodes, scrollY)];
+	const offset = getViewY(closestStoryNode)+window.scrollY - scrollY;
+	const correspondingTimelineLinkNode = document.querySelector(
+		`a[href="#${closestStoryNode.id}"]`
+	);
+	if (Math.abs(offset) < 200 && correspondingTimelineLinkNode) {
+		correspondingTimelineLinkNode.parentNode.classList.add('current');
 	}
 }
 
@@ -215,10 +217,15 @@ function setScrollToMya(mya) {
 
 	const percent = (mya - prevMya) / (nextMya - prevMya);
 	const scrollMargin = Number.parseFloat(getComputedStyle(storyNodes[0]).scrollMarginTop);
+	const newScroll = window.scrollY + getViewY(prevStory) - scrollMargin + 
+		percent*(getViewY(nextStory) - getViewY(prevStory));
 	window.scrollTo({
-		top: prevStory.offsetTop - scrollMargin + percent*(nextStory.offsetTop - prevStory.offsetTop),
+		top: newScroll,
 		behavior: 'instant'
 	});
+}
+function getViewY(node) {
+	return node.getBoundingClientRect().y;
 }
 
 
