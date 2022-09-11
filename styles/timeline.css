@@ -256,6 +256,7 @@
 	right: calc(var(--scrubber-width) + 2px);
 	color: #919191;
 	text-align: right;
+	pointer-events: auto;
 }
 #timeline .axis-labels .title {
 	font-size: 9px;
@@ -265,7 +266,7 @@
 	top: calc(100vh - var(--vert-margin) - 32px); /* 32px from bottom of viewport */
 }
 #timeline .axis-labels .label:not(.cursor) {
-	transition-property: opacity, transform;
+	transition-property: opacity, margin-top;
 	transition-duration: 200ms;
 }
 #timeline .axis-labels .label.cursor {
@@ -278,7 +279,7 @@
 	opacity: 0;
 }
 #timeline #maps-list:hover~.axis-labels .label.title.obscured {
-	transform: translateY(-25%);
+	margin-top: 2em;
 }
 @media (max-width: 700px) {
 	#timeline:not(.expanded-overlay) .axis-labels .label {
@@ -392,10 +393,17 @@ ol#periods-list {
 	border-bottom-width: 0.25px;
 	border-bottom-color: rgba(var(--page-bg-rgb), 0.5);
 }
+[data-map-type="vector"] #timeline .axis-labels .label:not(.title):not(.cursor):not(:nth-child(5n+1)) {
+	opacity: 0;
+}
 [data-map-type="vector"] #supercontinents-list .megacontinent .label {
 	opacity: 0;
 }
+/* hide pre-rodinian elements when zoomed */
 body:not([data-map-type="vector"]) #timeline .map-indicator:not(.texture-map) {
+	opacity: 0;
+}
+body:not([data-map-type="vector"]) #timeline .axis-labels .label.full-timeline {
 	opacity: 0;
 }
 

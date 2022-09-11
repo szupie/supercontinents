@@ -37,9 +37,13 @@ function createMyaLabels() {
 	// create labels at intervals
 	const interval = 200;
 	const allLabelNodes = [];
-	for (let mya=0; mapsSelectorData.myaToPercent(mya)<=100; mya+=interval) {
+	for (let mya=0; mya<=EARTH_FORMATION_MYA; mya+=interval) {
 		const labelNode = document.createElement('span');
 		labelNode.classList.add('label');
+		
+		if (mya > mapsSelectorData.myaAt100Percent) {
+			labelNode.classList.add('full-timeline');
+		}
 
 		labelNode.textContent = mya;
 
@@ -73,23 +77,31 @@ function createMyaLabels() {
 					EARTH_FORMATION_MYA / mapsSelectorData.myaAt100Percent;
 			}
 			const cursorClamped = clamp(e.offsetY, 0, cursorMaxY);
-			
+
+			// calculate mya at cursor
 			const mya = cursorClamped *
 				mapsSelectorData.myaAt100Percent / mapsListNode.clientHeight;
 
-			const threshold = 20;
+			// check if any labels are being covered
+			const threshold = (currentMapType == MapTypes.TEXTURE) ? 20 : 100;
 			const intervalDist = Math.min(mya%interval, interval-mya%interval);
-			const bottomDist = mapsSelectorData.myaAt100Percent - mya;
 
 			const nearestLabelIndex = Math.round(mya/interval);
-			allLabelNodes.forEach(node => node.classList.remove('obscured'));
+			const labelIndexInBounds = nearestLabelIndex < allLabelNodes.length;
 
-			if (
-				(intervalDist < threshold || bottomDist < threshold) &&
-				nearestLabelIndex < allLabelNodes.length
-			) {
+			allLabelNodes.forEach(node => node.classList.remove('obscured'));
+			if (intervalDist < threshold && labelIndexInBounds) {
 				allLabelNodes[nearestLabelIndex].classList.add('obscured');
 			}
+
+			// check if cursor covers mya scale label at bottom
+			const vertMargin = (window.innerHeight - timelineNode.getBoundingClientRect().height)/2;
+			const bottomDist = window.innerHeight-vertMargin - e.clientY;
+			if (bottomDist < 16) {
+				axisTitleNode.classList.add('obscured');
+			}
+
+			// set label text and position
 			cursorNode.textContent = Math.round(mya/10)*10; // round to 10s
 			cursorNode.style.transform = 
 				`translateY(calc(${cursorClamped}px - 50%))`;
