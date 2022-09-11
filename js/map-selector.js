@@ -4,15 +4,18 @@ import { clamp } from './common-utils.js';
 
 export {
 	init,
-	currentMya,
-	mapsReadyPromise,
-	getClosestResolution,
-	getImg,
-	isCached,
+	mapsReadyPromise, // when ready, returns: myaToPercent, setMapToMya, myaAt100Percent
 	MapTypes,
+	EARTH_FORMATION_MYA,
+	
+	currentMya,
 	currentMapType,
-	getCurrentReconstructionData,
-	EARTH_FORMATION_MYA
+
+	getCurrentTexture,
+	currentTextureIsCached,
+	getClosestResolution,
+
+	getCurrentReconstructionData
 }
 
 const EARTH_FORMATION_MYA = 4600;
@@ -277,7 +280,7 @@ function getClosestResolution(target) {
 	return resolutions[resBisector.center(resolutions, target)];
 }
 
-function getImg(resolution) {
+function getCurrentTexture(resolution) {
 	return new Promise((resolve, reject) => {
 		if (currentMapIndex >= textureMapDates.length) {
 			reject('requested texture map out of bounds');
@@ -294,7 +297,7 @@ function getImg(resolution) {
 	});
 }
 
-function isCached(resolution) {
+function currentTextureIsCached(resolution) {
 	const image = new Image;
 	image.src = getTexturePath(
 		textureMapDates[currentMapIndex]['file'], 

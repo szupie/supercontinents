@@ -67,16 +67,16 @@ function loadAndUpdateTexture() {
 	const requestTime = Date.now();
 	clearTimeout(hiResDelayTimer);
 
-	let firstAvailableImgPromise;
-	if (mapSelector.isCached(resolutions['hi'])) {
+	let firstAvailImgPromise;
+	if (mapSelector.currentTextureIsCached(resolutions['hi'])) {
 		// use high resolution if already loaded
-		firstAvailableImgPromise = mapSelector.getImg(resolutions['hi']);
+		firstAvailImgPromise = mapSelector.getCurrentTexture(resolutions['hi']);
 	} else {
 		// otherwise use preview resolution
-		firstAvailableImgPromise = mapSelector.getImg(resolutions['lo']);
+		firstAvailImgPromise = mapSelector.getCurrentTexture(resolutions['lo']);
 		// debounce request for high res image
 		hiResDelayTimer = setTimeout(() => {
-			mapSelector.getImg(resolutions['hi']).then(img=>{
+			mapSelector.getCurrentTexture(resolutions['hi']).then(img=>{
 				// drop texture if a later request was fulfilled
 				if (requestTime >= lastUpdate) {
 					lastUpdate = requestTime;
@@ -85,7 +85,7 @@ function loadAndUpdateTexture() {
 			})
 		}, hiResDelay);
 	}
-	return firstAvailableImgPromise.then(img=>{
+	return firstAvailImgPromise.then(img=>{
 		if (requestTime > lastUpdate) {
 			lastUpdate = requestTime;
 			updateTexture(globeTexture, img);
