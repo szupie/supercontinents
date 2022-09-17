@@ -103,9 +103,12 @@ async function handleMyaUpdate(prevMya, newMya) {
 		}
 	} else {
 		await vectorMapPromise;
-		setReconstructionData(mapSelector.getCurrentReconstructionData());
-		redrawReconstruction();
-		bindDataToCratonLabels(getCratonCenters());
+		const data = mapSelector.getCurrentReconstructionData();
+		if (data) {
+			setReconstructionData(data);
+			redrawReconstruction();
+			bindDataToCratonLabels(getCratonCenters());
+		}
 	}
 
 	if (trackedCratonLabel) {

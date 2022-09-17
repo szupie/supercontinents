@@ -127,17 +127,28 @@ function getCurrentMaxMya() {
 
 const myaBisector = bisector(d=>d['mya']);
 function getClosestMapAtMya(mya) {
-	return myaBisector.center(allMapsList, mya);
+	if (mya > oldestVectorMya + 200) {
+		return allMapsList.length;
+	} else {
+		return myaBisector.center(allMapsList, mya);
+	}
 }
 
 function setMapToMya(targetMya) {
 	const closestIndex = getClosestMapAtMya(targetMya);
-	if (currentMapIndex != closestIndex) { // avoid redraw if no change
+	const noMap = (closestIndex >= allMapsList.length);
+
+	if (currentMapIndex != closestIndex || noMap) { // avoid redraw if no change
 		currentMapIndex = closestIndex;
 
 		const prevMya = currentMya;
 
-		if (currentMapIndex < textureMapDates.length) {
+		if (noMap) {
+			currentMapType = MapTypes.VECTOR;
+			currentMya = Math.round(targetMya/100)*100;
+			document.getElementById('no-map-indicator').style.top = 
+				`${myaToPercent(targetMya)}%`;
+		} else if (currentMapIndex < textureMapDates.length) {
 			currentMapType = MapTypes.TEXTURE;
 			currentMya = textureMapDates[currentMapIndex]['mya'];
 		} else {
@@ -174,9 +185,11 @@ function handleScrollChange() {
 function setMapToScroll(scrollY) {
 	const prevStoryIndex = yBisector.right(storyNodes, scrollY)-1;
 	if (prevStoryIndex < 0) {
+		// clamp date to most recent event
 		setMapToMya(0);
 	} else if (prevStoryIndex+1 >= storyNodes.length) {
-		setMapToMya(oldestVectorMya);
+		// clamp date to oldest event
+		setMapToMya(storyNodes[storyNodes.length-1].getAttribute('data-mya'));
 	} else {
 		const prevStory = storyNodes[prevStoryIndex];
 		const nextStory = storyNodes[prevStoryIndex+1];
@@ -249,6 +262,12 @@ function createMapIndicators() {
 						e.preventDefault();
 					}
 				});
+
+	// create indicator for oldest times when no map is available
+	const indicatorNode = document.createElement('li');
+	indicatorNode.id = 'no-map-indicator';
+	indicatorNode.classList.add('map-indicator');
+	mapsListNode.appendChild(indicatorNode);
 }
 
 // removes specified className from all map indicator nodes
@@ -313,7 +332,12 @@ function currentTextureIsCached(resolution) {
   Vector map
 */
 function getCurrentReconstructionData() {
-	return reconstructionsData[getVectorMapIndex(currentMapIndex)]['rotations'];
+	const index = getVectorMapIndex(currentMapIndex);
+	if (index < reconstructionsData.length) {
+		return reconstructionsData[index]['rotations'];
+	} else {
+		return null;
+	}
 }
 
 function getVectorMapIndex(index) {
