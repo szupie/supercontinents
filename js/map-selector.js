@@ -24,6 +24,7 @@ let currentMapIndex;
 let currentMya = 0;
 
 const MapTypes = Object.freeze({
+	NONE: 0,
 	TEXTURE: 1,
 	VECTOR: 2
 });
@@ -144,7 +145,7 @@ function setMapToMya(targetMya) {
 		const prevMya = currentMya;
 
 		if (noMap) {
-			currentMapType = MapTypes.VECTOR;
+			currentMapType = MapTypes.NONE;
 			currentMya = Math.round(targetMya/100)*100;
 			document.getElementById('no-map-indicator').style.top = 
 				`${myaToPercent(targetMya)}%`;

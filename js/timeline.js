@@ -72,7 +72,7 @@ function createMyaLabels() {
 		if (e.target == mapsListNode) {
 			// clamp timeline cursor to current min/max
 			let cursorMaxY = mapsListNode.clientHeight;
-			if (currentMapType == MapTypes.VECTOR) {
+			if (currentMapType != MapTypes.TEXTURE) {
 				cursorMaxY *=
 					EARTH_FORMATION_MYA / mapsSelectorData.myaAt100Percent;
 			}

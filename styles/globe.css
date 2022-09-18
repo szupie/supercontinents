@@ -75,10 +75,10 @@ body:not([data-map-type="vector"]) .reconstruction {
 	display: none;
 }
 
-[data-map-type="vector"] #globe-texture {
+body:not([data-map-type="texture"]) #globe-texture {
 	opacity: 0;
 }
-[data-map-type="vector"] #globe #globe-overlay {
+body:not([data-map-type="texture"]) #globe #globe-overlay {
 	background-color: #333; /* temporary style */
 }
 
@@ -155,6 +155,27 @@ body:not([data-map-type="vector"]) .reconstruction {
 	to {
 		stroke-dashoffset: -2%;
 	}
+}
+
+/* no map available */
+#globe-overlay #no-map-message {
+	font-family: "CMU Classical Serif";
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 100%;
+	word-spacing: -2px; /* CMU Classical has wide spaces between words */
+	fill: var(--white-shade-2);
+	text-anchor: middle;
+}
+body:not([data-map-type="none"]) #globe-overlay #no-map-message {
+	display: none;
+}
+body[data-map-type="none"] #globe-texture,
+body[data-map-type="none"] #globe-overlay .reconstruction,
+body[data-map-type="none"] #globe-overlay .poles,
+body[data-map-type="none"] #globe-overlay .graticule,
+body[data-map-type="none"] #globe-overlay .continent-labels {
+	display: none;
 }
 
 @media (max-width: 700px) {

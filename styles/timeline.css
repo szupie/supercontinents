@@ -363,7 +363,8 @@ ol#supercontinents-list {
 	left: calc(var(--indicator-width) + 2px);
 	transform: translateY(-50%);
 }
-body:not([data-map-type='vector']) #supercontinents-list li:nth-child(3) .label {
+/* move Rodinia label on screen for zoomed timeline */
+body[data-map-type='texture'] #supercontinents-list li:nth-child(3) .label {
 	top: 0;
 	transform: translateY(-100%);
 }
@@ -405,33 +406,33 @@ ol#periods-list {
 #timeline .axis-labels {
 	transition: height 200ms ease-in-out;
 }
-[data-map-type="vector"] #timeline ol, 
-[data-map-type="vector"] #timeline .axis-labels {
+body:not([data-map-type="texture"]) #timeline ol, 
+body:not([data-map-type="texture"]) #timeline .axis-labels {
 	height: var(--zoomed-timeline-proportion, 16%);
 }
 /* hide post-rodinian items when unzoomed */
-[data-map-type="vector"] #timeline #life-events-list li:not(.pre-rodinian) {
+body:not([data-map-type="texture"]) #timeline #life-events-list li:not(.pre-rodinian) {
 	opacity: 0;
 }
-[data-map-type="vector"] #timeline #periods-list {
+body:not([data-map-type="texture"]) #timeline #periods-list {
 	opacity: 0;
 }
-[data-map-type="vector"] #timeline .map-indicator.texture-map {
+body:not([data-map-type="texture"]) #timeline .map-indicator.texture-map {
 	opacity: 0;
 	border-bottom-width: 0.25px;
 	border-bottom-color: rgba(var(--page-bg-rgb), 0.5);
 }
-[data-map-type="vector"] #timeline .axis-labels .label:not(.title):not(.cursor):not(:nth-child(5n+1)) {
+body:not([data-map-type="texture"]) #timeline .axis-labels .label:not(.title):not(.cursor):not(:nth-child(5n+1)) {
 	opacity: 0;
 }
-[data-map-type="vector"] #supercontinents-list .megacontinent .label {
+body:not([data-map-type="texture"]) #supercontinents-list .megacontinent .label {
 	opacity: 0;
 }
 /* hide pre-rodinian elements when zoomed */
-body:not([data-map-type="vector"]) #timeline .map-indicator:not(.texture-map) {
+body[data-map-type="texture"] #timeline .map-indicator:not(.texture-map) {
 	opacity: 0;
 }
-body:not([data-map-type="vector"]) #timeline .axis-labels .label.full-timeline {
+body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 	opacity: 0;
 }
 

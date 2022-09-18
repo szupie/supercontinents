@@ -51,11 +51,17 @@ const resolutions = {
 async function handleMyaUpdate(prevMya, newMya) {
 	document.getElementById('mya-value').textContent = mapSelector.currentMya;
 
-	if (mapSelector.currentMapType == mapSelector.MapTypes.TEXTURE) {
-		document.body.setAttribute('data-map-type', 'texture');
-		await loadAndUpdateTexture();
-	} else {
-		document.body.setAttribute('data-map-type', 'vector');
+	switch (mapSelector.currentMapType) {
+		case mapSelector.MapTypes.TEXTURE:
+			document.body.setAttribute('data-map-type', 'texture');
+			await loadAndUpdateTexture();
+			break;
+		case mapSelector.MapTypes.VECTOR:
+			document.body.setAttribute('data-map-type', 'vector');
+			break;
+		default:
+			document.body.setAttribute('data-map-type', 'none');
+			break;
 	}
 	globeOverlays.handleMyaUpdate(prevMya, newMya);
 }

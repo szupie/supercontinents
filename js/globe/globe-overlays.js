@@ -97,18 +97,18 @@ async function handleMyaUpdate(prevMya, newMya) {
 		.attr('data-last-lat', d=>d['coordinates'][1])
 		.attr('data-last-lon', d=>d['coordinates'][0]);
 
-	if (mapSelector.currentMapType == mapSelector.MapTypes.TEXTURE) {
-		if (textureContinentLabelsData) {
-			bindDataToCratonLabels(getTextureLabelsDataForMya(newMya));
-		}
-	} else {
-		await vectorMapPromise;
-		const data = mapSelector.getCurrentReconstructionData();
-		if (data) {
-			setReconstructionData(data);
+	switch (mapSelector.currentMapType) {
+		case mapSelector.MapTypes.TEXTURE:
+			if (textureContinentLabelsData) {
+				bindDataToCratonLabels(getTextureLabelsDataForMya(newMya));
+			}
+			break;
+		case mapSelector.MapTypes.VECTOR:
+			await vectorMapPromise;
+			setReconstructionData(mapSelector.getCurrentReconstructionData());
 			redrawReconstruction();
 			bindDataToCratonLabels(getCratonCenters());
-		}
+			break;
 	}
 
 	if (trackedCratonLabel) {
@@ -160,6 +160,11 @@ function createGlobeOverlays() {
 	updatePoles();
 
 	overlay.append('path').attr('id', "drag-indicator");
+
+	overlay.append('text').attr('id', 'no-map-message')
+		.attr('x', '50%')
+		.attr('y', '50%')
+		.text('Insufficient data for reconstruction');
 }
 
 function updateContinentLabelPositions() {
