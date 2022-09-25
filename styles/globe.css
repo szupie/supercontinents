@@ -39,11 +39,17 @@
 	cursor: pointer;
 	pointer-events: auto;
 }
-#reverse-texture {
+#reverse-texture, #reverse-vector {
 	width: 40px;
 	height: 40px;
 	opacity: 0.7;
 	border-radius: 100%;
+}
+#reverse-vector {
+	position: absolute;
+	left: 50%;
+	margin: auto;
+	transform: translateX(-50%);
 }
 #globe #globe-overlay {
 	overflow: visible;
@@ -75,7 +81,8 @@ body:not([data-map-type="vector"]) .reconstruction {
 	display: none;
 }
 
-body:not([data-map-type="texture"]) #globe-texture {
+body:not([data-map-type="texture"]) #globe-texture,
+body:not([data-map-type="texture"]) #reverse-texture {
 	opacity: 0;
 }
 body:not([data-map-type="texture"]) #globe #globe-overlay {

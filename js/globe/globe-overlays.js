@@ -16,7 +16,8 @@ import {
 import * as mapSelector from '../map-selector.js';
 
 import { 
-	initInstance as initVectorMapInstance
+	initInstance as initVectorMapInstance,
+	bindReconstructionDataToSelection
 } from './craton-drawer.js';
 
 import { clamp, easeInOut } from '../common-utils.js';
@@ -26,12 +27,15 @@ export {
 	setRadius,
 	handleMyaUpdate,
 	redraw,
+	bindReverseMapToNode,
 }
 
 
 let overlay;
-let projection;
+let projection, reverseProjection;
 let radius;
+
+let reverseVectorMapNode;
 
 const svgPathGenerator = geoPath().pointRadius(5);
 const dragCircleGen = geoCircle().radius(3);
@@ -40,7 +44,6 @@ let overlayTweenStartMya;
 let overlayTweenStartTime = false;
 const overlayTweenDuration = 300;
 
-let setReconstructionData = ()=>{};
 let redrawReconstruction = ()=>{};
 let getCratonCenters = ()=>{};
 
@@ -75,10 +78,9 @@ function init(theProjection, overlayNode, theRadius) {
 
 
 	vectorMapPromise = initVectorMapInstance(
-		projection, svgPathGenerator, overlayNode
+		svgPathGenerator, overlayNode
 	);
 	vectorMapPromise.then(methods=>{
-		setReconstructionData = methods.setReconstructionData;
 		redrawReconstruction = methods.redrawReconstruction;
 		getCratonCenters = methods.getCratonCenters;
 	});
@@ -105,8 +107,16 @@ async function handleMyaUpdate(prevMya, newMya) {
 			break;
 		case mapSelector.MapTypes.VECTOR:
 			await vectorMapPromise;
-			setReconstructionData(mapSelector.getCurrentReconstructionData());
+			bindReconstructionDataToSelection(
+				mapSelector.getCurrentReconstructionData(),
+				overlay
+			);
+			bindReconstructionDataToSelection(
+				mapSelector.getCurrentReconstructionData(),
+				select(reverseVectorMapNode)
+			);
 			redrawReconstruction();
+			redrawReverseVectorMap();
 			bindDataToCratonLabels(getCratonCenters());
 			break;
 	}
@@ -121,7 +131,22 @@ function redraw() {
 	updateContinentLabelPositions();
 	if (mapSelector.currentMapType == mapSelector.MapTypes.VECTOR) {
 		redrawReconstruction();
+		redrawReverseVectorMap();
 	}
+}
+
+let redrawReverseVectorMap = ()=>{};
+
+function bindReverseMapToNode(node, theProjection) {
+	reverseProjection = theProjection;
+	reverseVectorMapNode = node;
+	initVectorMapInstance(
+		geoPath().projection(reverseProjection), 
+		reverseVectorMapNode, 
+		{simple: true}
+	).then(methods=>{
+		redrawReverseVectorMap = methods.redrawReconstruction;
+	});
 }
 
 

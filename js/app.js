@@ -127,6 +127,9 @@ function redrawGlobe(rotation = false) {
 initRotationControl(projection, textureCanvas, redrawGlobe);
 
 globeOverlays.init(projection, overlayNode, radius);
+globeOverlays.bindReverseMapToNode(
+	document.getElementById('reverse-vector'), reverseProjection
+);
 
 mapSelector.init(document.getElementById('maps-list'), handleMyaUpdate);
 initTimeline();

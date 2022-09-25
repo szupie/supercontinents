@@ -8,7 +8,8 @@ import { versor } from '../d3-modules.js';
 
 
 export {
-	initInstance
+	initInstance,
+	bindReconstructionDataToSelection
 }
 
 const cratonsRequest = fetch('./assets/data/craton-shapes.json')
@@ -23,39 +24,36 @@ const hintsRequest = fetch('./assets/data/craton-hints.json')
 	.then(response=>response.json());
 
 
-function initInstance(theProjection, thePathGen, svgNode) {
+function bindReconstructionDataToSelection(rotations, selection) {
+	const cratons = selection.selectAll('.reconstruction > .craton');
+
+	// hide all cratons
+	cratons.attr('visibility', 'hidden');
+
+	// update rotation parameters for cratons included in reconstruction
+	Object.keys(rotations).forEach(cratonName=>{
+		const craton = cratons.filter(d=>(d['name'] == cratonName));
+		if (!craton.empty()) {
+			craton.datum()['rotation'] = rotations[cratonName];
+			craton.attr('visibility', null);
+		}
+	});
+}
+
+function initInstance(pathGen, svgNode, {simple=false}={}) {
 	const svg = select(svgNode);
-	const projection = theProjection;
-	const pathGen = thePathGen;
+	const projection = pathGen.projection();
 
 	return Promise.all([cratonsRequest, countriesRequest, hintsRequest])
 		.then(([cratonShapesData, countryShapesData, hintsData])=>{
 			initDom(cratonShapesData, countryShapesData, hintsData);
 
 			return {
-				setReconstructionData: setReconstructionData,
 				getCratonCenters: getCratonCenters,
 				redrawReconstruction: drawCratons
 			}
 		});
 
-
-
-	function setReconstructionData(rotations) {
-		const cratons = svg.selectAll('.reconstruction > .craton');
-
-		// hide all cratons
-		cratons.attr('visibility', 'hidden');
-
-		// update rotation parameters for cratons included in reconstruction
-		Object.keys(rotations).forEach(cratonName=>{
-			const craton = cratons.filter(d=>(d['name'] == cratonName));
-			if (!craton.empty()) {
-				craton.datum()['rotation'] = rotations[cratonName];
-				craton.attr('visibility', null);
-			}
-		});
-	}
 
 	function getCratonCenters() {
 		const reconstructionData = svg
@@ -157,6 +155,11 @@ function initInstance(theProjection, thePathGen, svgNode) {
 					d=>d.properties.name == cratonData['name']
 				)[0])
 				.attr('d', pathGen);
+
+			if (simple) {
+				return;
+				// for simple maps, skip masking and labels
+			}
 
 			// create clip-path referencing craton path
 			clipsGroup.append('clipPath')
