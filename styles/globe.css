@@ -68,12 +68,15 @@
 }
 .reconstruction .craton-path {
 	pointer-events: auto;
+	cursor: pointer;
 	fill: #654030; /* temporary style */
 }
-.reconstruction g.craton:hover .countries {
+.reconstruction g.craton:hover .countries,
+.reconstruction g.craton.hovering .countries {
 	clip-path: none;
 }
-.reconstruction g.craton:hover .countries path {
+.reconstruction g.craton:hover .countries path,
+.reconstruction g.craton.hovering .countries path {
 	stroke: #fff; /* temporary style */
 }
 
@@ -115,6 +118,7 @@ body:not([data-map-type="texture"]) #globe #globe-overlay {
 	pointer-events: auto;
 }
 #globe-overlay .continent.label:hover,
+#globe-overlay .continent.label.hovering,
 #globe-overlay .continent.label.tracked {
 	fill: #fff;
 	stroke: #000d;

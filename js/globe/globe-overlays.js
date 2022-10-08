@@ -84,6 +84,37 @@ function init(theProjection, overlayNode, theRadius) {
 		redrawReconstruction = methods.redrawReconstruction;
 		getCratonCenters = methods.getCratonCenters;
 	});
+
+
+	// handle pointer events
+	overlay.on('click', e=>{
+		const name = getTargetCratonName(e);
+		if (name != null) {
+			setTrackingToLabel(overlayNode.querySelector(
+				`.continent-labels [data-craton-name="${name}"]`
+			));
+		}
+	});
+	overlay.on('mousemove', e=>{
+		overlay.selectAll('[data-craton-name]').classed('hovering', false);
+
+		const name = getTargetCratonName(e);
+		if (name != null) {
+			overlay.selectAll(`[data-craton-name="${name}"]`)
+				.classed('hovering', true);
+		}
+	});
+	overlay.on('mouseout', e=>{
+		overlay.selectAll('[data-craton-name]').classed('hovering', false);
+	});
+
+	function getTargetCratonName(e) {
+		const targetCratonParent = e.target.closest('[data-craton-name]');
+		if (targetCratonParent) {
+			return targetCratonParent.getAttribute('data-craton-name');
+		}
+		return null;
+	}
 }
 
 function setRadius(newRadius) {
@@ -192,6 +223,11 @@ function createGlobeOverlays() {
 		.text('Insufficient data for reconstruction');
 }
 
+
+/* 
+  Continent labels
+*/
+
 function updateContinentLabelPositions() {
 	let percentage = 1;
 	if (overlayTweenStartTime) {
@@ -212,9 +248,11 @@ function updateContinentLabelPositions() {
 						d['coordinates']
 					)(easeInOut(percentage));
 				}
-			this.setAttribute('visibility', 
-				coordsVisible(coords, 0.8) ? null : 'hidden'
-			);
+			if (coordsVisible(coords, 0.8)) {
+				this.removeAttribute('visibility'); 
+			} else {
+				this.setAttribute('visibility', 'hidden'); 
+			}
 			this.setAttribute('transform', `translate(${projection(coords)})`);
 		}
 	});
@@ -250,15 +288,22 @@ function bindDataToCratonLabels(data) {
 		.selectAll('text').data(data, d=>d['name']).join('text')
 			.text(d=>d['name'])
 			.classed('continent label', true)
-			.on('click', function(e, d) {
-				trackedCratonLabel = this;
-				trackedCratonLabel.classList.add('tracked');
-				transitionToCoord(d['coordinates']);
-				// TO DO: prevent tracking on drag
-			});
+			.attr('data-craton-name', d=>d['name']);
 
 	updateContinentLabelPositions();
 }
+
+function setTrackingToLabel(labelNode) {
+	trackedCratonLabel = labelNode;
+	trackedCratonLabel.classList.add('tracked');
+	transitionToCoord(select(trackedCratonLabel).datum()['coordinates']);
+	// TO DO: prevent tracking on drag
+}
+
+
+/*
+  Graticules and poles
+*/
 
 function updateConstantOverlays() {
 	overlay.selectAll('.graticule path').attr('d', svgPathGenerator);
@@ -330,6 +375,7 @@ function positionPoles(d) {
 		);
 }
 
+// helpers
 function coordsVisible(coords, threshold=1) {
 	if (coords == null) return false;
 	const currentCenter = getCurrentRotation().map(val=>-val);
