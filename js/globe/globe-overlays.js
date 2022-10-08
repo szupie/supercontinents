@@ -24,7 +24,6 @@ import { clamp, easeInOut } from '../common-utils.js';
 
 export {
 	init,
-	setRadius,
 	handleMyaUpdate,
 	redraw,
 	bindReverseMapToNode,
@@ -33,7 +32,6 @@ export {
 
 let overlay;
 let projection, reverseProjection;
-let radius;
 
 let reverseVectorMapNode;
 
@@ -51,11 +49,10 @@ let textureContinentLabelsData;
 let trackedCratonLabel;
 
 let vectorMapPromise;
-function init(theProjection, overlayNode, theRadius) {
+function init(theProjection, overlayNode) {
 	projection = theProjection;
 	svgPathGenerator.projection(projection);
 	overlay = select(overlayNode);
-	setRadius(theRadius);
 
 	overlay.append('g').attr('class', 'continent-labels');
 	fetch('./assets/data/craton-label-positions.json')
@@ -115,10 +112,6 @@ function init(theProjection, overlayNode, theRadius) {
 		}
 		return null;
 	}
-}
-
-function setRadius(newRadius) {
-	radius = newRadius;
 }
 
 async function handleMyaUpdate(prevMya, newMya) {
@@ -361,6 +354,7 @@ function updatePoles() {
 }
 function positionPoles(d) {
 	const polePoint = projection(d.coordinates);
+	const radius = projection.scale();
 	const axisLength = (polePoint[1]-radius)*0.06;
 	const labelOffset = (polePoint[1] > radius) ? 16 : -8;
 	const tipPoint = [radius, axisLength + polePoint[1]];
