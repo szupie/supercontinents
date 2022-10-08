@@ -361,11 +361,20 @@ function setUpKeyboardHandler() {
 		if (direction !== 0) {
 			// increment/decrement
 			const newIndex = currentMapIndex + direction;
-			if (newIndex >= 0 && newIndex < textureMapDates.length) {
-				setScrollToMya(textureMapDates[newIndex]['mya']);
-				// also update map manually in case scroll distance is too small
-				setTextureMap(newIndex);
+			if (newIndex < 0 || newIndex >= allMapsList.length) {
+				// do nothing if out of bounds
+				return;
 			}
+
+			let newMya;
+			if (newIndex < textureMapDates.length) {
+				newMya = textureMapDates[newIndex]['mya'];
+			} else {
+				newMya = reconstructionsData[getVectorMapIndex(newIndex)]['mya'];
+			}
+			setScrollToMya(newMya);
+			// also update map manually in case scroll distance is too small
+			setMapToMya(newMya);
 		}
 	});
 }
