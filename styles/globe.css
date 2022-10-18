@@ -3,13 +3,19 @@
 	top: var(--globe-margin);
 	margin: 0 auto;
 	z-index: 2;
+	touch-action: none;
 }
 #globe {
 	position: relative;
 	width: var(--globe-size);
 	height: var(--globe-size);
 	margin: 0 auto;
-	pointer-events: none;
+	border-radius: 100%;
+	touch-action: pinch-zoom;
+	cursor: grab;
+}
+#globe.dragging {
+	cursor: grabbing;
 }
 #globe canvas, #globe svg {
 	position: absolute;
@@ -18,12 +24,6 @@
 }
 #globe-texture {
 	border-radius: 100%;
-	pointer-events: auto;
-	touch-action: pinch-zoom;
-	cursor: grab;
-}
-#globe.dragging #globe-texture {
-	cursor: grabbing;
 }
 #reverse-globe {
 	position: absolute;
@@ -180,6 +180,9 @@ body:not([data-map-type="texture"]) #globe #globe-overlay {
 }
 body:not([data-map-type="none"]) #globe-overlay #no-map-message {
 	display: none;
+}
+body[data-map-type="none"] #globe {
+	pointer-events: none;
 }
 body[data-map-type="none"] #globe-texture,
 body[data-map-type="none"] #globe-overlay .reconstruction,

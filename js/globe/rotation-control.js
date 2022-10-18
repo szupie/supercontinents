@@ -11,21 +11,17 @@ export {
 }
 
 let projection;
-let canvasNode;
 let redrawGlobe = ()=>{};
 let dragHandlerNode;
 
 
-function init(theProjection, theCanvasNode, redrawFunction) {
+function init(theProjection, theHandlerNode, redrawFunction) {
 	projection = theProjection;
-	canvasNode = theCanvasNode;
 	redrawGlobe = redrawFunction;
 
-	// attach listener to container node so dragging works on overlaid items
-	dragHandlerNode = canvasNode.parentNode;
+	dragHandlerNode = theHandlerNode;
 	dragHandlerNode.addEventListener('pointerdown', handleDragStart);
-	document.addEventListener('pointermove', handleDragMove);
-	document.addEventListener('pointerup', handleDragEnd);
+	dragHandlerNode.addEventListener('pointerup', handleDragEnd);
 }
 
 
@@ -65,20 +61,20 @@ function cancelTransition() {
 // Handle drag events
 
 let startingGeoCoord;
-let draggingGlobe = false;
 let hemisphereOrientation = 1;
 let lastY;
 
 function handleDragStart(e) {
 	cancelTransition();
 
-	startingGeoCoord = projection.invert(pointer(e, canvasNode));
+	startingGeoCoord = projection.invert(pointer(e, dragHandlerNode));
 	if (!isNaN(startingGeoCoord[0]) && !isNaN(startingGeoCoord[1])) {
-		draggingGlobe = true;
 		dragHandlerNode.classList.add('dragging');
+		dragHandlerNode.setPointerCapture(e.pointerId);
+		dragHandlerNode.addEventListener('pointermove', handleDragMove);
 
 		const radius = projection.scale();
-		lastY = pointer(e, canvasNode)[1]-radius;
+		lastY = pointer(e, dragHandlerNode)[1]-radius;
 		hemisphereOrientation = getHemisphereOrientation(
 			startingGeoCoord, getCurrentRotation()[0]
 		);
@@ -88,48 +84,47 @@ function handleDragStart(e) {
 }
 
 function handleDragMove(e) {
-	if (draggingGlobe) {
-		cancelTransition();
+	cancelTransition();
 
-		const radius = projection.scale();
+	const radius = projection.scale();
 
-		let pointerOffset = pointer(e, canvasNode).map(val=>val-radius);
+	let pointerOffset = pointer(e, dragHandlerNode).map(val=>val-radius);
 
-		// clamp to closest point on globe circumference
-		const pointerDistanceFromCenter = Math.sqrt(
-			pointerOffset.map(val=>Math.pow(val, 2))
-			.reduce((sum, current)=>sum+current)
+	// clamp to closest point on globe circumference
+	const pointerDistanceFromCenter = Math.sqrt(
+		pointerOffset.map(val=>Math.pow(val, 2))
+		.reduce((sum, current)=>sum+current)
+	);
+	if (pointerDistanceFromCenter > radius) {
+		pointerOffset = pointerOffset.map(
+			val=>val/pointerDistanceFromCenter*radius
 		);
-		if (pointerDistanceFromCenter > radius) {
-			pointerOffset = pointerOffset.map(
-				val=>val/pointerDistanceFromCenter*radius
-			);
-		}
-
-		const [lambda, phi] = calcRotation(
-			startingGeoCoord, pointerOffset, radius
-		);
-		if (!isNaN(lambda) && !isNaN(phi)) {
-			const direction = lastY - pointerOffset[1];
-			hemisphereOrientation = getHemisphereOrientation(
-				startingGeoCoord, lambda, direction
-			);
-			lastY = pointerOffset[1];
-
-			initInertia();
-			redrawGlobe([lambda, phi]);
-		}
-		// debugGeometry(startingGeoCoord, pointer(e, canvasNode), lambda, phi, radius);
 	}
+
+	const [lambda, phi] = calcRotation(
+		startingGeoCoord, pointerOffset, radius
+	);
+	if (!isNaN(lambda) && !isNaN(phi)) {
+		const direction = lastY - pointerOffset[1];
+		hemisphereOrientation = getHemisphereOrientation(
+			startingGeoCoord, lambda, direction
+		);
+		lastY = pointerOffset[1];
+
+		initInertia();
+		redrawGlobe([lambda, phi]);
+	}
+	// debugGeometry(startingGeoCoord, pointer(e, dragHandlerNode), lambda, phi, radius);
 }
 
 function handleDragEnd(e) {
-	draggingGlobe = false;
-		dragHandlerNode.classList.remove('dragging');
+	dragHandlerNode.classList.remove('dragging');
+	dragHandlerNode.releasePointerCapture(e.pointerId);
+	dragHandlerNode.removeEventListener('pointermove', handleDragMove);
 }
 
 function getDragCoords() {
-	if (draggingGlobe) {
+	if (dragHandlerNode.classList.contains('dragging')) {
 		return startingGeoCoord;
 	} else {
 		return false;
@@ -285,7 +280,7 @@ function inertiaUpdateLoop() {
 		rotationHistories[axis].length = inertiaWindowSize;
 	});
 
-	if (!draggingGlobe) {
+	if (!dragHandlerNode.classList.contains('dragging')) {
 		const newRotation = currentRotation.slice();
 
 		currentRotation.forEach((rotation, axis)=>{
