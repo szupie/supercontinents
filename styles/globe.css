@@ -32,9 +32,9 @@
 	width: 58px;
 	height: 60px;
 	padding: 0;
-	border: 1px solid var(--action-colour);
+	border: 1px solid var(--action-rgb);
 	border-radius: 4px;
-	color: #919191;
+	color: var(--grey-on-black);
 	background: var(--page-bg);
 	cursor: pointer;
 	pointer-events: auto;
@@ -69,7 +69,7 @@
 .reconstruction .craton-path {
 	pointer-events: auto;
 	cursor: pointer;
-	fill: #654030; /* temporary style */
+	fill: var(--land-dark-hex);
 }
 .reconstruction g.craton:hover .countries,
 .reconstruction g.craton.hovering .countries {

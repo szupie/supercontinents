@@ -4,7 +4,9 @@
 	--scrubber-offscreen-width: (var(--scrubber-full-width) - var(--scrubber-width));
 	--expansion-duration: 150ms;
 	--expansion-easing: ease-in-out;
-	--bg-rgb: 62, 62, 62;
+	--timeline-bg-rgb: 62, 62, 62;
+	--marker-size: 6px;
+	--marker-padding: 6px;
 	--swiping-opacity: 0.5;
 	--expanded-opacity: 0.8;
 	--expansion-percent: 0;
@@ -12,7 +14,7 @@
 	position: fixed;
 	top: var(--vert-margin);
 	left: 100%;
-	color: var(--white-shade-1);
+	color: var(--white-shade-2);
 	z-index: 3;
 	pointer-events: none;
 	touch-action: pinch-zoom;
@@ -44,7 +46,7 @@
 #timeline-toggle {
 	--button-diameter: 4.5em;
 	--expand-text-width: 8.5em;
-	background-color: rgb(var(--bg-rgb));
+	background-color: rgb(var(--timeline-bg-rgb));
 	border: none;
 	height: var(--button-diameter);
 	border-radius: var(--button-diameter);
@@ -72,7 +74,7 @@
 	box-sizing: border-box;
 	width: calc(100% - var(--padding)*2);
 	height: calc(100% - var(--padding)*2);
-	border: 1px solid var(--action-colour);
+	border: 1px solid var(--action-rgb);
 	border-radius: inherit;
 }
 #timeline-toggle span {
@@ -95,7 +97,7 @@
 }
 #timeline-toggle .expand-label::before, 
 #timeline-toggle .collapse-label::after {
-	background-color: var(--action-colour);
+	background-color: var(--action-rgb);
 	content: '';
 	display: inline-block;
 	mask-image: url("data:image/svg+xml,%3Csvg width='6' height='27' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 13.25 6 0 3 13.25 6 26.5 0 13.25Z'/%3E%3C/svg%3E");
@@ -123,9 +125,6 @@
 	left: calc(-1 * var(--scrubber-width));
 	cursor: pointer;
 	width: var(--scrubber-full-width);
-	background-color: rgba(var(--bg-rgb), calc(
-		1 - (var(--expansion-percent) * (1 - var(--expanded-opacity)))
-	));
 	pointer-events: auto;
 	touch-action: pinch-zoom;
 	user-select: none; /* prevent text selection on drag */
@@ -135,9 +134,18 @@
 	display: block;
 	position: absolute;
 	z-index: -1; /* do not cover map indicators */
-	background-color: inherit;
 	height: var(--vert-margin);
 	width: inherit;
+}
+#maps-list, #maps-list::before, #maps-list::after {
+	--section-bg-rgb: var(--timeline-bg-rgb);
+	background-color: rgba(var(--section-bg-rgb), calc(
+		1 - (var(--expansion-percent) * (1 - var(--expanded-opacity)))
+	));
+}
+body[data-map-type="texture"] #maps-list::after,
+body:not([data-map-type="texture"]) #maps-list {
+	--section-bg-rgb: var(--action-extradark-rgb);
 }
 #maps-list::before {
 	bottom: 100%;
@@ -160,19 +168,19 @@
 	height: 0;
 	width: 100%;
 	right: 0;
-	border-bottom: 1.5px solid var(--page-bg);
+	border-bottom: 1.5px solid var(--action-dark-hex);
 	pointer-events: none;
 }
 #maps-list .map-indicator.selected {
-	border-color: var(--action-colour);
+	border-color: var(--action-light-hex);
 	/* selected indicator should appear above others */
 	position: relative;
 	z-index: 1;
 }
 #maps-list #no-map-indicator {
 	height: 10%;
-	background-color: var(--action-colour);
-	opacity: 50%;
+	background-color: var(--white-shade-2);
+	opacity: 30%;
 	z-index: 0;
 	overflow: visible;
 	transform: translateY(-50%);
@@ -187,20 +195,19 @@
 	background-image: linear-gradient(var(--gradient));
 }
 #maps-list #no-map-indicator::before {
-	--gradient: #0000, var(--action-colour);
+	--gradient: #0000, var(--white-shade-2);
 	bottom: 100%;
 }
 #maps-list #no-map-indicator::after {
-	--gradient: var(--action-colour), #0000;
+	--gradient: var(--white-shade-2), #0000;
 	top: 100%;
 }
 #maps-list #no-map-indicator:not(.selected) {
 	display: none;
 }
 @media (hover: hover) {
-	#maps-list:hover a.hovering:not(.selected) {
-		opacity: 0.5;
-		border-color: var(--action-colour);
+	#maps-list:hover a.hovering {
+		border-color: var(--action-extralight-hex);
 	}
 }
 @media (pointer: coarse) {
@@ -215,7 +222,8 @@
 #timeline #life-events-list {
 	right: calc(var(--scrubber-width) + var(--life-events-list-margin));
 	position: absolute;
-
+}
+#timeline #life-events-list, #cambrian-anchor {
 	font-family: "CMU Classical Serif";
 	font-size: 14px;
 	font-weight: 300;
@@ -228,25 +236,26 @@
 	pointer-events: auto;
 }
 #timeline #life-events-list a {
-	--marker-size: 6px;
-	--marker-padding: 6px;
-	text-decoration: underline;
-	text-decoration-color: var(--action-colour);
-	color: var(--white-shade-2);
-	display: block;
 	padding: 5px 10px;
-	padding-right: calc(var(--marker-size) + var(--marker-padding)*2);
-	white-space: nowrap;
 	overflow: hidden;
-	max-width: 12em;
 	transition: all var(--expansion-duration) var(--expansion-easing);
 	transition-property: max-width, text-indent, padding, color, background-color, transform;
+}
+#timeline #life-events-list a, #cambrian-anchor span {
+	display: block;
+	text-decoration: underline;
+	text-decoration-color: var(--action-rgb);
+	color: var(--white-shade-2);
+	padding-right: calc(var(--marker-size) + var(--marker-padding)*2);
+	max-width: 12em;
+	white-space: nowrap;
 }
 #timeline:not(.expanded-overlay):not(.dragging) #life-events-list a {
 	background-color: rgb(var(--page-bg-rgb), 0.75);
 }
 #timeline #life-events-list a:hover,
-#timeline.expanded-overlay:not(.dragging) #life-events-list a {
+#timeline.expanded-overlay:not(.dragging) #life-events-list a,
+#cambrian-anchor:hover span {
 	color: #fff;
 }
 #timeline #life-events-list a::after {
@@ -254,7 +263,7 @@
 	display: inline-block;
 	height: var(--marker-size);
 	width: var(--marker-size);
-	background-color: var(--action-colour);
+	background-color: var(--action-rgb);
 	border-radius: 100%;
 	position: absolute;
 	right: var(--marker-padding);
@@ -262,7 +271,7 @@
 	transition: background-color 100ms ease-in-out;
 }
 #timeline #life-events-list li.current a::after {
-	background-color: var(--white-shade-1);
+	background-color: var(--action-extralight-hex);
 }
 @media (max-width: 700px) {
 	#timeline:not(.expanded-overlay) #life-events-list:not(.hovering) a {
@@ -282,9 +291,10 @@
 	position: absolute;
 	transform: translateY(-50%);
 	right: calc(var(--scrubber-width) + 2px);
-	color: #919191;
+	color: var(--grey-on-black);
 	text-align: right;
 	pointer-events: auto;
+	z-index: -1;
 }
 #timeline .axis-labels .title {
 	font-size: 9px;
@@ -329,11 +339,16 @@ ol#supercontinents-list {
 }
 /* indicator strip */
 #supercontinents-list li {
-	--indicator-rgb: 101, 64, 48;
+	--indicator-rgb: var(--land-light-rgb);
 	--indicator-width: 4px;
 	--default-fade-height: 0.7em;
 	width: var(--indicator-width);
 	background-color: rgb(var(--indicator-rgb));
+}
+/* alternate colour for higher contrast on action region */
+body[data-map-type="texture"] #supercontinents-list li:nth-child(n+3),
+body:not([data-map-type="texture"]) #supercontinents-list li:nth-child(-n+2) {
+	--indicator-rgb: var(--land-light-on-action-rgb);
 }
 #supercontinents-list li::before, 
 #supercontinents-list li::after {
@@ -355,6 +370,7 @@ ol#supercontinents-list {
 }
 
 #supercontinents-list li .label {
+	color: #fff;
 	letter-spacing: 0.3em;
 	font-style: normal;
 	writing-mode: vertical-lr;
@@ -394,7 +410,6 @@ ol#periods-list {
 	position: absolute;
 	right: 7px;
 	bottom: 0;
-	color: var(--white-shade-2);
 	letter-spacing: 0.05em;
 	transition-property: transform, opacity;
 	transition-duration: var(--expansion-duration);
@@ -407,20 +422,96 @@ ol#periods-list {
 	transition: height 200ms ease-in-out;
 }
 body:not([data-map-type="texture"]) #timeline ol, 
-body:not([data-map-type="texture"]) #timeline .axis-labels {
+body:not([data-map-type="texture"]) #timeline .axis-labels,
+body:not([data-map-type="texture"]) #cambrian-anchor {
 	height: var(--zoomed-timeline-proportion, 16%);
 }
-/* hide post-rodinian items when unzoomed */
+/* anchor link back up to zoomed timeline */
+#cambrian-anchor {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	right: var(--scrubber-width);
+	padding: 0 var(--life-events-list-margin);
+	text-decoration-color: var(--action-rgb);
+	pointer-events: auto;
+	cursor: pointer;
+}
+#cambrian-anchor span {
+	position: relative;
+	transition: all var(--expansion-duration) var(--expansion-easing);
+	transition-property: opacity, max-width, padding;
+}
+@media (max-width: 700px) {
+	#timeline:not(.expanded-overlay) #cambrian-anchor:not(:hover) span {
+		transform: translateX(calc(100% + var(--marker-size) + var(--marker-padding)*2));
+		max-width: 0;
+		padding: 0;
+		opacity: 0;
+	}
+	#timeline:not(.expanded-overlay) #cambrian-anchor:not(:hover) span::after {
+		opacity: 0;
+	}
+}
+#cambrian-anchor span::after {
+	content: '↑';	
+	position: absolute;
+	font-size: 26px;
+	line-height: 1em;
+	font-family: "Arial", "Times New Roman";
+	font-style: normal;
+	font-weight: normal;
+	mask: url("data:image/svg+xml,%3Csvg width='9' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.786 24V4.18C3.061 4.79 1.973 5.448.522 6.15V4.96a18.085 18.085 0 0 0 2.176-2.21A12.29 12.29 0 0 0 4.194.473h.612c.385.77.884 1.53 1.496 2.278a18.085 18.085 0 0 0 2.176 2.21v1.19a27.545 27.545 0 0 1-1.87-.986 13.254 13.254 0 0 1-1.394-.986V24H3.786Z'/%3E%3C/svg%3E") no-repeat center;
+	background-color: currentColor;
+	right: calc(var(--marker-size) + var(--marker-padding)*2);
+	bottom: calc(100% + 5px);
+}
+body[data-map-type="texture"] #cambrian-anchor {
+	display: none;
+}
+#cambrian-anchor::before, #cambrian-anchor::after {
+	content: '';
+	display: block;
+	position: absolute;
+	left: calc(100% - var(--life-events-list-margin) - var(--marker-padding) + 2px);
+	width: 8px;
+	height: 8px;
+	border: 1px solid var(--grey-on-black);
+}
+#cambrian-anchor::before {
+	top: 0;
+	border-bottom: none;
+	border-right: none;
+}
+#cambrian-anchor::after {
+	bottom: 0;
+	border-top: none;
+	border-right: none;
+}
+/* shrink and collapse life event indicators */
 body:not([data-map-type="texture"]) #timeline #life-events-list li:not(.pre-rodinian) {
+	right: -4px;
+	pointer-events: none;
+}
+body:not([data-map-type="texture"]) #timeline #life-events-list li:not(.pre-rodinian) a {
+	--marker-size: 3px;
+	text-indent: calc(100% + var(--marker-size) + var(--marker-padding)*2);
+	background: none;
+}
+body:not([data-map-type="texture"]) #timeline #life-events-list li:not(.pre-rodinian):nth-child(-n+2) {
 	opacity: 0;
 }
+/* disable expanded state */
+body:not([data-map-type="texture"]) #timeline.show-periods {
+	transform: none;
+}
+/* hide post-rodinian items when unzoomed */
 body:not([data-map-type="texture"]) #timeline #periods-list {
 	opacity: 0;
 }
 body:not([data-map-type="texture"]) #timeline .map-indicator.texture-map {
 	opacity: 0;
-	border-bottom-width: 0.25px;
-	border-bottom-color: rgba(var(--page-bg-rgb), 0.5);
 }
 body:not([data-map-type="texture"]) #timeline .axis-labels .label:not(.title):not(.cursor):not(:nth-child(5n+1)) {
 	opacity: 0;
@@ -500,7 +591,7 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 		top: calc(-1 * var(--vert-margin));
 		right: 0;
 		height: 100vh;
-		border-right: 1px solid var(--action-colour);
+		border-right: 1px solid var(--action-rgb);
 		border-width: calc(1px + var(--expansion-percent) * 4px);
 		z-index: 1;
 		transform: translateX(calc( var(--expansion-percent) * var(--scrubber-offscreen-width) ));
@@ -525,7 +616,8 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 	}
 
 
-	#timeline.expanded-overlay #life-events-list {
+	#timeline.expanded-overlay #life-events-list,
+	#timeline.expanded-overlay #cambrian-anchor {
 		transform: translateX(-1.25em);
 	}
 

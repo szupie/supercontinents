@@ -36,9 +36,17 @@
 html {
 	--white-shade-1: #E5E5E5;
 	--white-shade-2: #C4C4C4;
+	--grey-on-black: #919191;
 	--page-bg: #121212;
 	--page-bg-rgb: 18, 18, 18;
-	--action-colour: #A58A45;
+	--action-rgb: #A58A45;
+	--action-extradark-rgb: 87, 71, 33;
+	--action-dark-hex: #6B5A34;
+	--action-light-hex: #C9A432;
+	--action-extralight-hex: #F5CB55;
+	--land-dark-hex: #6B3F2C;
+	--land-light-rgb: 146, 88, 63;
+	--land-light-on-action-rgb: 166, 99, 60;
 	--story-padding: 2.5rem;
 	--globe-size: calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width));
 	--globe-margin: 5rem;
