@@ -14,7 +14,6 @@
 	position: fixed;
 	top: var(--vert-margin);
 	left: 100%;
-	color: var(--white-shade-2);
 	z-index: 3;
 	pointer-events: none;
 	touch-action: pinch-zoom;
@@ -222,6 +221,7 @@ body:not([data-map-type="texture"]) #maps-list {
 #timeline #life-events-list {
 	right: calc(var(--scrubber-width) + var(--life-events-list-margin));
 	position: absolute;
+	z-index: 1; /* appear above precambrian anchor */
 }
 #timeline #life-events-list, #cambrian-anchor {
 	font-family: "CMU Classical Serif";
@@ -235,26 +235,26 @@ body:not([data-map-type="texture"]) #maps-list {
 	right: 0;
 	pointer-events: auto;
 }
-#timeline #life-events-list a {
-	padding: 5px 10px;
-	overflow: hidden;
-	transition: all var(--expansion-duration) var(--expansion-easing);
-	transition-property: max-width, text-indent, padding, color, background-color, transform;
-}
 #timeline #life-events-list a, #cambrian-anchor span {
 	display: block;
 	text-decoration: underline;
 	text-decoration-color: var(--action-rgb);
 	color: var(--white-shade-2);
+	padding: 5px 10px;
 	padding-right: calc(var(--marker-size) + var(--marker-padding)*2);
 	max-width: 12em;
 	white-space: nowrap;
+	transition: all var(--expansion-duration) var(--expansion-easing);
+	transition-property: max-width, text-indent, padding, color, background-color, transform;
 }
-#timeline:not(.expanded-overlay):not(.dragging) #life-events-list a {
+#timeline #life-events-list a {
+	overflow: hidden;
+}
+#timeline:not(.dragging) #life-events-list a,
+#timeline:not(.dragging) #cambrian-anchor span {
 	background-color: rgb(var(--page-bg-rgb), 0.75);
 }
 #timeline #life-events-list a:hover,
-#timeline.expanded-overlay:not(.dragging) #life-events-list a,
 #cambrian-anchor:hover span {
 	color: #fff;
 }
@@ -279,6 +279,9 @@ body:not([data-map-type="texture"]) #maps-list {
 		max-width: 0;
 		color: transparent;
 		padding-right: 10px;
+	}
+	#timeline.expanded-overlay #life-events-list a {
+		color: #fff;
 	}
 }
 
@@ -426,6 +429,9 @@ body:not([data-map-type="texture"]) #timeline .axis-labels,
 body:not([data-map-type="texture"]) #cambrian-anchor {
 	height: var(--zoomed-timeline-proportion, 16%);
 }
+body:not([data-map-type="texture"]) #timeline {
+	--scrubber-full-width: 100px;
+}
 /* anchor link back up to zoomed timeline */
 #cambrian-anchor {
 	position: absolute;
@@ -440,8 +446,6 @@ body:not([data-map-type="texture"]) #cambrian-anchor {
 }
 #cambrian-anchor span {
 	position: relative;
-	transition: all var(--expansion-duration) var(--expansion-easing);
-	transition-property: opacity, max-width, padding;
 }
 @media (max-width: 700px) {
 	#timeline:not(.expanded-overlay) #cambrian-anchor:not(:hover) span {
@@ -465,7 +469,7 @@ body:not([data-map-type="texture"]) #cambrian-anchor {
 	mask: url("data:image/svg+xml,%3Csvg width='9' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.786 24V4.18C3.061 4.79 1.973 5.448.522 6.15V4.96a18.085 18.085 0 0 0 2.176-2.21A12.29 12.29 0 0 0 4.194.473h.612c.385.77.884 1.53 1.496 2.278a18.085 18.085 0 0 0 2.176 2.21v1.19a27.545 27.545 0 0 1-1.87-.986 13.254 13.254 0 0 1-1.394-.986V24H3.786Z'/%3E%3C/svg%3E") no-repeat center;
 	background-color: currentColor;
 	right: calc(var(--marker-size) + var(--marker-padding)*2);
-	bottom: calc(100% + 5px);
+	bottom: 100%;
 }
 body[data-map-type="texture"] #cambrian-anchor {
 	display: none;
@@ -501,10 +505,6 @@ body:not([data-map-type="texture"]) #timeline #life-events-list li:not(.pre-rodi
 }
 body:not([data-map-type="texture"]) #timeline #life-events-list li:not(.pre-rodinian):nth-child(-n+2) {
 	opacity: 0;
-}
-/* disable expanded state */
-body:not([data-map-type="texture"]) #timeline.show-periods {
-	transform: none;
 }
 /* hide post-rodinian items when unzoomed */
 body:not([data-map-type="texture"]) #timeline #periods-list {

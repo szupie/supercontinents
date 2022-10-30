@@ -235,7 +235,6 @@ function setUpListeners() {
 		timelineNode.classList.add('dragging');
 		dragStartExpansion = timelineNode.style.getPropertyValue('--expansion-percent');
 		dragStartX = e.clientX;
-		e.preventDefault();
 	}
 	mapsListNode.addEventListener('pointerdown', handleDragStart);
 	expansionButton.addEventListener('pointerdown', handleDragStart);
@@ -287,7 +286,6 @@ function setUpListeners() {
 			timelineNode.style.setProperty(
 				'--expansion-percent', dragPercentage
 			);
-			e.preventDefault();
 		}
 	});
 	
