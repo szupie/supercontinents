@@ -151,16 +151,18 @@ function positionLifeEvents() {
 	lifeEventsNode.querySelectorAll('li').forEach(node=>{
 		node.style.top = 
 			`${mapsSelectorData.myaToPercent(node.getAttribute('data-mya'))}%`;
-		node.addEventListener('click', e=>{
-			document.querySelector(e.target.hash).scrollIntoView();
-			e.preventDefault();
-			document.querySelector('#stories').classList.add('switching');
-			setTimeout(e=>{
-				document.querySelector('#stories').classList.remove('switching');
-			}, 300);
-			setTimelineExpandedOverlay(false);
-		});
+		node.firstElementChild.addEventListener('click', handleAnchorClick);
 	});
+}
+
+function handleAnchorClick(e) {
+	document.querySelector(e.currentTarget.hash).scrollIntoView();
+	e.preventDefault(); // prevent url change
+	document.querySelector('#stories').classList.add('switching');
+	setTimeout(e=>{
+		document.querySelector('#stories').classList.remove('switching');
+	}, 300);
+	setTimelineExpandedOverlay(false);
 }
 
 let periodsDragDelayTimer;
@@ -293,6 +295,9 @@ function setUpListeners() {
 	lifeEventsNode.addEventListener('mouseup', e=>{
 		setTimelineExpandedOverlay(false);
 	});
+
+	// anchor link to cambrian timeline: prevent URL change
+	document.getElementById('cambrian-anchor').addEventListener('click', handleAnchorClick);
 }
 
 // returns change in x position in expanded state
