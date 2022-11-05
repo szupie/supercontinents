@@ -60,11 +60,10 @@ html {
 	html {
 		--story-padding: 1rem;
 		--globe-size: min(calc(100vh - 20rem), calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width)));
-		--globe-top-padding: 3rem;
+		--globe-top-padding: 2rem;
 		--globe-margin: 1.5rem;
 		--scrubber-width: 24px;
 		--life-events-list-margin: 10px;
-		--current-map-label-size: 0.875rem;
 	}
 }
 
@@ -77,6 +76,7 @@ body {
 
 h1, h2, #current-map-label {
 	font-family: "Philibert Italic", "CMU Classical Serif";
+	word-spacing: -0.07em;
 }
 button {
 	font-family: "CMU Serif";
@@ -90,62 +90,182 @@ button {
 
 
 #current-map-label {
-	font-size: 1.25rem;
-	line-height: 1em;
+	font-size: var(--current-map-label-size);
+	line-height: var(--current-map-label-size);
 	text-align: center;
 	margin: 0 auto;
 	padding: 1em 0;
 }
 @media (max-width: 700px) {
 	#current-map-label {
-		font-size: var(--current-map-label-size);
 		width: 61.8%; /* 1 / 1.618 */
 		border-bottom: 1px solid #666;
 	}
 }
+@media (max-width: 410px) {
+	#current-map-label {
+		font-size: calc(9.5vw - 19px);
+	}
+}
 
 #stories {
+	--vert-rhythm: 20px;
+	--stroke-width: 2px;
+	--stroke-padding: 8px;
 	max-width: 22rem;
 	padding-bottom: 100vh;
 }
 #stories h2 {
 	font-size: 20px;
 	margin: 0;
-	line-height: 1em;
+	line-height: var(--vert-rhythm);
 }
 #stories article {
-	min-height: 100vh;
 	color: var(--white-shade-1);
-	padding: var(--story-padding);
 	position: relative;
+}
+#stories article.bio {
+	min-height: 100vh;
+	padding: var(--vert-rhythm) var(--story-padding);
 }
 #stories .time {
 	font-family: "CMU Serif";
 	font-size: 12px;
+	line-height: var(--vert-rhythm);
+	opacity: 0.8;
 }
-#stories .time abbr {
-	font-size: 8px;
-	font-weight: bold;
+#stories abbr {
+	font-variant-caps: all-small-caps;
+	font-size: 0.9em;
 	text-underline-offset: 0.3em;
 	text-decoration-color: var(--white-shade-2);
-	text-transform: uppercase;
 }
 #stories p {
 	font-family: "CMU Serif";
 	font-size: 15px;
-	line-height: 20px;
+	line-height: var(--vert-rhythm);
+	margin: var(--vert-rhythm) 0;
 	word-spacing: -2px;
 	hyphens: manual;
 }
+#stories strong {
+	color: #fff;
+}
+#stories hr {
+	width: 3em;
+	border-style: solid;
+	margin: var(--vert-rhythm) 0;
+}
+#stories aside.geological {
+	border-color: rgb(var(--land-light-rgb));
+	margin-left: var(--story-padding);
+	padding: calc(var(--vert-rhythm) / 2) var(--stroke-padding);
+	margin-bottom: calc(var(--vert-rhythm) / 2);
+}
+#stories aside.geological,
+#stories #boring-billion {
+	border-left-width: var(--stroke-width);
+	border-left-style: solid;
+	/* padding determines overhang distance of stroke */
+	padding-top: calc(var(--vert-rhythm) / 2);
+	padding-bottom: calc(var(--vert-rhythm) / 2);
+}
+#stories article aside.geological {
+	margin-left: 0;
+}
+#stories aside.geological h2 {
+	font-family: "CMU Serif";
+	text-transform: uppercase;
+	font-size: 11px;
+}
+#stories aside.geological h2 + p {
+	margin-top: calc(var(--vert-rhythm) / 2);
+}
+#stories aside.geological p:last-child {
+	margin-bottom: 0;
+}
+/* geological event related to previous artice */
+#stories article p + aside.geological {
+	margin-top: calc(var(--vert-rhythm) / -2);
+	padding-top: var(--vert-rhythm);
+}
+#stories .map-spacer {
+	/* extra space to keep last texture map on screen */
+	height: 200vh;
+}
+
+
+#stories #snowball-earth {
+	border-color: var(--white-shade-2);
+}
+
+
+#precambrian-intro {
+	width: 100vw;
+}
+#precambrian-intro div {
+	position: relative;
+	z-index: 2;
+	max-width: 30em;
+	margin: auto;
+	background-color: #222;
+	padding: 5em 6em;
+	transform: translateY(-80vh);
+}
+
+
+#stories #boring-billion {
+	border-left-style: dashed;
+	border-color: var(--grey-on-black);
+	margin-left: calc(var(--story-padding) - var(--stroke-padding) - var(--stroke-width));
+	padding: var(--stroke-padding);
+	padding-bottom: 0;
+}
+#stories #boring-billion .geological.end {
+	padding-bottom: 40vh;
+	margin-bottom: 0;
+}
+#stories #boring-billion #nuna-breakup {
+	padding-bottom: 85vh;
+}
+#stories #boring-billion .geological.end + .geological {
+	margin-top: 0;
+	margin-bottom: 120vh;
+}
+
+
 @media (max-width: 700px) {
 	#stories {
+		--top-panel-height: var(--globe-size) + var(--globe-top-padding) + var(--current-map-label-size)*3;
 		max-width: 35rem;
 	}
-	#stories article {
-		--scroll-margin: var(--globe-size) + var(--globe-top-padding) + var(--current-map-label-size)*3;
-		scroll-margin-top: calc(var(--scroll-margin));
+	#stories article, #stories aside {
+		scroll-margin-top: calc(var(--top-panel-height));
+	}
+	#stories > *, #stories #precambrian-intro {
 		margin-right: calc(var(--scrubber-width) + var(--life-events-list-margin));
-		min-height: calc(100vh - var(--scroll-margin));
+	}
+	#stories article.bio {
+		min-height: calc(100vh - var(--top-panel-height));
+	}
+	#stories p {
+		font-size: 1rem;
+	}
+	#stories .map-spacer {
+		height: 15em;
+	}
+	#precambrian-intro {
+		--curtain-offset: 480px;
+		min-height: 0;
+		margin-top: calc(var(--top-panel-height) + var(--curtain-offset));
+		margin-bottom: calc(5em - var(--curtain-offset));
+	}
+	#precambrian-intro div {
+		padding: 2em;
+		transform: translateY(calc(-1 * var(--curtain-offset) - (var(--top-panel-height))));
+	}
+	#stories #boring-billion .geological.end + .geological {
+		margin-bottom: 25em;
 	}
 }
 

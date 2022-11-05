@@ -4,6 +4,11 @@
 	margin: 0 auto;
 	z-index: 2;
 	touch-action: none;
+	/* prevent pointer capture over story text */
+	pointer-events: none;
+}
+#globe-group > * {
+	pointer-events: auto;
 }
 #globe {
 	position: relative;
@@ -36,32 +41,39 @@
 	border-radius: 4px;
 	color: var(--grey-on-black);
 	background: var(--page-bg);
+	z-index: 1; /* put above current map year label */
 	cursor: pointer;
 	pointer-events: auto;
 }
 #reverse-texture, #reverse-vector {
 	width: 40px;
 	height: 40px;
-	opacity: 0.7;
 	border-radius: 100%;
+}
+
+#reverse-globe:not(:hover) #reverse-texture, 
+#reverse-globe:not(:hover) #reverse-vector {
+	opacity: 0.7;
 }
 #reverse-vector {
 	position: absolute;
 	left: 50%;
 	margin: auto;
 	transform: translateX(-50%);
+	box-shadow: inset 0 0 5px 1px #0008;
 }
-#globe #globe-overlay {
+#globe-overlay {
+	--shadow-strength: 0.5;
 	overflow: visible;
 	border-radius: 100%;
-	box-shadow: inset 0em 0em 30px 5px #0008;
+	box-shadow: inset 0 0 30px 5px rgba(0,0,0, var(--shadow-strength));
 }
 
 
 /* vector map */
 .reconstruction .countries path {
 	pointer-events: none;
-	 /* temporary style */
+	/* temporary style */
 	fill: none;
 	stroke: #666;
 	stroke-width: 1px;
@@ -86,10 +98,17 @@ body:not([data-map-type="vector"]) .reconstruction {
 
 body:not([data-map-type="texture"]) #globe-texture,
 body:not([data-map-type="texture"]) #reverse-texture {
-	opacity: 0;
+	visibility: hidden;
 }
 body:not([data-map-type="texture"]) #globe #globe-overlay {
-	background-color: #333; /* temporary style */
+	--shadow-strength: 0.3;
+}
+body:not([data-map-type="texture"]) #globe #globe-overlay,
+body:not([data-map-type="texture"]) #reverse-vector {
+	background-color: #2B2B2B;
+}
+body:not([data-map-type="texture"]) #globe-overlay #meridian {
+	display: none;
 }
 
 
@@ -110,6 +129,7 @@ body:not([data-map-type="texture"]) #globe #globe-overlay {
 	font-family: "CMU Classical Serif";
 	font-size: 12px;
 	letter-spacing: 0;
+	word-spacing: -2px; /* CMU Classical has wide spaces between words */
 	text-transform: none;
 	stroke: #0009;
 	stroke-width: 3;
@@ -155,6 +175,7 @@ body:not([data-map-type="texture"]) #globe #globe-overlay {
 	stroke-dasharray: 2;
 	fill: #fff4;
 	filter: drop-shadow(0 0 2px #000c);
+	pointer-events: none;
 	animation: dash 2s linear infinite;
 	transition-property: opacity, stroke-width;
 	transition-duration: 100ms;
@@ -184,11 +205,17 @@ body:not([data-map-type="none"]) #globe-overlay #no-map-message {
 body[data-map-type="none"] #globe {
 	pointer-events: none;
 }
+body[data-map-type="none"] #globe-overlay {
+	box-shadow: none;
+}
 body[data-map-type="none"] #globe-texture,
 body[data-map-type="none"] #globe-overlay .reconstruction,
 body[data-map-type="none"] #globe-overlay .poles,
 body[data-map-type="none"] #globe-overlay .graticule,
 body[data-map-type="none"] #globe-overlay .continent-labels {
+	display: none;
+}
+body[data-map-type="none"] #reverse-globe {
 	display: none;
 }
 
@@ -197,6 +224,6 @@ body[data-map-type="none"] #globe-overlay .continent-labels {
 		top: 0;
 		margin-right: calc(var(--scrubber-width) + var(--life-events-list-margin));
 		padding-top: var(--globe-top-padding);
-		background-color: var(--page-bg);
+		background-color: inherit;
 	}
 }
