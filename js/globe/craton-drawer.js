@@ -5,6 +5,7 @@ import {
 
 import { topoToFeature } from '../d3-modules.js';
 import { versor } from '../d3-modules.js';
+import { roundCorners } from 'https://cdn.skypack.dev/svg-round-corners';
 
 
 export {
@@ -104,7 +105,14 @@ function initInstance(pathGen, svgNode, {simple=false}={}) {
 
 		// draw craton path
 		projection.rotate(versor.rotation(cratonViewQuaternion));
-		svg.select(`#path-${cratonId}`).attr('d', pathGen);
+		svg.select(`#path-${cratonId}`).attr('d', d=>{
+			const pathString = pathGen(d);
+			try {
+				return roundCorners(pathGen(d), 20).path;
+			} catch(e) {
+				return pathString;
+			}
+		});
 
 		// draw country outlines
 		svg.selectAll(
