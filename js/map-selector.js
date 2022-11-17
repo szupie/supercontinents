@@ -15,7 +15,8 @@ export {
 	currentTextureIsCached,
 	getClosestResolution,
 
-	getCurrentReconstructionData
+	getCurrentReconstructionData,
+	getCurrentMapCenter
 }
 
 const EARTH_FORMATION_MYA = 4600;
@@ -343,6 +344,44 @@ function getCurrentReconstructionData() {
 
 function getVectorMapIndex(index) {
 	return index - textureMapDates.length;
+}
+
+
+/*
+  Returns center coordinates of hemisphere with more land
+*/
+const textureCenters = [
+	{ minMya: 150, center: [37, 0] },
+	{ minMya: 280, center: [37, -33] },
+	{ minMya: 380, center: [73, -30] },
+	{ minMya: 405, center: [73, -62] },
+	{ minMya: 425, center: [129, -58] },
+	{ minMya: 435, center: [164, -41] },
+	{ minMya: 445, center: [180, -37] },
+	{ minMya: 600, center: [180, -20] },
+	{ minMya: 700, center: [180, 0] }
+]
+const minMyaBisector = bisector(entry => entry['minMya']).left;
+function getCurrentMapCenter() {
+	if (currentMapIndex < textureMapDates.length) {
+		// texture map (centers defined by time ranges)
+		const currentMya = textureMapDates[currentMapIndex]['mya'];
+
+		// no center for most recent maps
+		if (currentMya <= textureCenters[0]['minMya']) {
+			return null;
+		}
+
+		const index = minMyaBisector(textureCenters, currentMya) - 1;
+		return textureCenters[index]['center'].slice();
+	} else {
+		// vector map (centers defined per map)
+		const index = getVectorMapIndex(currentMapIndex);
+		if (index < reconstructionsData.length) {
+			return reconstructionsData[index]['map-center'].slice();
+		}
+	}
+	return null;
 }
 
 

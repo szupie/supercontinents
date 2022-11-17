@@ -69,6 +69,7 @@ function handleDragStart(e) {
 
 	startingGeoCoord = projection.invert(pointer(e, dragHandlerNode));
 	if (!isNaN(startingGeoCoord[0]) && !isNaN(startingGeoCoord[1])) {
+		dragHandlerNode.classList.add('user-rotated');
 		dragHandlerNode.classList.add('dragging');
 		dragHandlerNode.setPointerCapture(e.pointerId);
 		dragHandlerNode.addEventListener('pointermove', handleDragMove);

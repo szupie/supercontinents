@@ -9,7 +9,8 @@ import { versor } from '../d3-modules.js';
 
 export {
 	initInstance,
-	bindReconstructionDataToSelection
+	bindReconstructionDataToSelection,
+	offsetRotator
 }
 
 const cratonsRequest = fetch('./assets/data/craton-shapes.json')

@@ -17,7 +17,8 @@ import * as mapSelector from '../map-selector.js';
 
 import { 
 	initInstance as initVectorMapInstance,
-	bindReconstructionDataToSelection
+	bindReconstructionDataToSelection,
+	offsetRotator as vectorMapOffsetRotator
 } from './craton-drawer.js';
 
 import { clamp, easeInOut } from '../common-utils.js';
@@ -123,26 +124,38 @@ async function handleMyaUpdate(prevMya, newMya) {
 		.attr('data-last-lat', d=>d['coordinates'][1])
 		.attr('data-last-lon', d=>d['coordinates'][0]);
 
-	switch (mapSelector.currentMapType) {
-		case mapSelector.MapTypes.TEXTURE:
-			if (textureContinentLabelsData) {
-				bindDataToCratonLabels(getTextureLabelsDataForMya(newMya));
+	if (mapSelector.currentMapType == mapSelector.MapTypes.TEXTURE) {
+		if (textureContinentLabelsData) {
+			bindDataToCratonLabels(getTextureLabelsDataForMya(newMya));
+		}
+	} else if (mapSelector.currentMapType == mapSelector.MapTypes.VECTOR) {
+		await vectorMapPromise;
+		bindReconstructionDataToSelection(
+			mapSelector.getCurrentReconstructionData(),
+			overlay
+		);
+		bindReconstructionDataToSelection(
+			mapSelector.getCurrentReconstructionData(),
+			select(reverseVectorMapNode)
+		);
+		redrawReconstruction();
+		redrawReverseVectorMap();
+		bindDataToCratonLabels(getCratonCenters());
+	}
+
+	// Rotate map to center on hemisphere with more land
+	// (only if map exists, and not user-rotated)
+	if (
+		mapSelector.currentMapType != mapSelector.MapTypes.NONE &&
+		overlay.filter(':not(.user-rotated) > svg').size() > 0
+	) {
+		let center = mapSelector.getCurrentMapCenter();
+		if (center) {
+			if (mapSelector.currentMapType == mapSelector.MapTypes.VECTOR) {
+				center = vectorMapOffsetRotator(center);
 			}
-			break;
-		case mapSelector.MapTypes.VECTOR:
-			await vectorMapPromise;
-			bindReconstructionDataToSelection(
-				mapSelector.getCurrentReconstructionData(),
-				overlay
-			);
-			bindReconstructionDataToSelection(
-				mapSelector.getCurrentReconstructionData(),
-				select(reverseVectorMapNode)
-			);
-			redrawReconstruction();
-			redrawReverseVectorMap();
-			bindDataToCratonLabels(getCratonCenters());
-			break;
+			transitionToCoord(center);
+		}
 	}
 
 	if (trackedCratonLabel) {
