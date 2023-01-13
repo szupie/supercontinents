@@ -44,9 +44,11 @@ html {
 	--action-dark-hex: #6B5A34;
 	--action-light-hex: #C9A432;
 	--action-extralight-hex: #F5CB55;
+	--paper-white-hex: #FAF0DB;
 	--land-dark-hex: #6B3F2C;
 	--land-light-rgb: 146, 88, 63;
 	--land-light-on-action-rgb: 166, 99, 60;
+	--vert-rhythm: 20px;
 	--story-padding: 2.5rem;
 	--globe-size: calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width));
 	--globe-margin: 5rem;
@@ -74,7 +76,7 @@ body {
 	color: var(--white-shade-1);
 }
 
-h1, h2, h3, #current-map-label {
+h1, h2, h3, h4, #current-map-label {
 	font-family: "Philibert Italic", "CMU Classical Serif";
 	word-spacing: -0.07em;
 }
@@ -92,6 +94,15 @@ button {
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
 	color: inherit;
+}
+a {
+	color: var(--white-shade-2);
+	text-decoration-thickness: 1px;
+	text-decoration-color: var(--action-hex);
+}
+a:hover {
+	color: inherit;
+	text-decoration-thickness: 2px;
 }
 
 
@@ -115,7 +126,6 @@ button {
 }
 
 #stories {
-	--vert-rhythm: 20px;
 	--stroke-width: 2px;
 	--stroke-padding: 8px;
 	max-width: 22rem;
@@ -182,6 +192,7 @@ button {
 #stories aside.geological h3 {
 	font-family: "CMU Serif";
 	text-transform: uppercase;
+	letter-spacing: 0.04em;
 	font-size: 11px;
 }
 #stories aside.geological h3 + p {
@@ -240,10 +251,100 @@ button {
 }
 
 
+/* references */
+#references {
+	background-color: var(--paper-white-hex);
+	color: var(--page-bg);
+	line-height: var(--vert-rhythm);
+	/* add side padding to keep content width <40rem */
+	padding: max(var(--story-padding), (100vw - 40rem) / 2);
+	padding-top: var(--story-padding);
+	padding-bottom: calc(var(--story-padding) * 4);
+	/* position sticky and z-index to force above timeline */
+	position: sticky;
+	z-index: 4;
+}
+#references h2, #references h4 {
+	font-size: 20px;
+	font-weight: normal;
+	line-height: 2;
+	margin: 0;
+}
+/* references title */
+#references h2 {
+	border-bottom: 1.5px solid rgb(var(--action-extradark-rgb));
+}
+#references h2 a {
+	text-decoration: none;
+	display: inline-block;
+	width: 100%;
+}
+/* section dividers */
+#references h3 {
+	font-family: "CMU Serif";
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	font-size: 11px;
+	padding-top: var(--vert-rhythm);
+}
+#references section h3, #references summary {
+	margin-top: calc(var(--vert-rhythm) * 2);
+	margin-bottom: var(--vert-rhythm);
+	border-bottom: 1px solid var(--action-hex);
+}
+/* event titles */
+#references h4 {
+	padding-top: calc(var(--vert-rhythm) / 2);
+	margin-bottom: calc(var(--vert-rhythm) / 2);
+	border-bottom: 1px solid currentColor;
+}
+#references p {
+	margin: var(--vert-rhythm) 0;
+}
+#references a {
+	color: rgb(var(--action-extradark-rgb));
+}
+#references a:hover, #references summary:hover {
+	color: var(--action-dark-hex);
+}
+/* accordion title */
+#references summary {
+	cursor: pointer;
+	position: sticky;
+	top: 0;
+	background-color: var(--paper-white-hex);
+}
+#references summary h3 {
+	display: inline-block;
+	border-bottom: none;
+	margin: 0;
+}
+#references article {
+	margin-bottom: var(--vert-rhythm);
+}
+#references article:not(:first-of-type) {
+	margin-top: calc(var(--vert-rhythm) * 2);
+}
+#references ol {
+	margin: 0;
+	padding: 0;
+}
+#references li {
+	list-style: none;
+}
+#references .citation {
+	--hanging-indent: 1em;
+	display: block;
+	margin-left: var(--hanging-indent);
+	text-indent: calc(-1 * var(--hanging-indent));
+}
+
+
 @media (max-width: 700px) {
 	#stories {
 		--top-panel-height: var(--globe-size) + var(--globe-top-padding) + var(--current-map-label-size)*3;
 		max-width: 35rem;
+		padding-bottom: 0;
 	}
 	#stories article, #stories aside.geological {
 		scroll-margin-top: calc(var(--top-panel-height));
@@ -272,6 +373,10 @@ button {
 	}
 	#stories #boring-billion .geological.end + .geological {
 		margin-bottom: 25em;
+	}
+	#stories #eukaryotes ~ article:last-child {
+		/* push references section down until peeking at viewport bottom */
+		min-height: calc(100vh - (var(--top-panel-height)) - (var(--vert-rhythm) * 5));
 	}
 }
 

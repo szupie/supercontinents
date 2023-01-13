@@ -237,7 +237,7 @@ body:not([data-map-type="texture"]) #maps-list {
 }
 #timeline #life-events-list a, #cambrian-anchor span {
 	display: block;
-	text-decoration: underline;
+	text-decoration-line: underline;
 	text-decoration-color: var(--action-hex);
 	color: var(--white-shade-2);
 	padding: 5px 10px;
