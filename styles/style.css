@@ -39,7 +39,7 @@ html {
 	--grey-on-black: #919191;
 	--page-bg: #121212;
 	--page-bg-rgb: 18, 18, 18;
-	--action-rgb: #A58A45;
+	--action-hex: #A58A45;
 	--action-extradark-rgb: 87, 71, 33;
 	--action-dark-hex: #6B5A34;
 	--action-light-hex: #C9A432;
@@ -252,7 +252,7 @@ button {
 		margin-right: calc(var(--scrubber-width) + var(--life-events-list-margin));
 	}
 	#stories article.bio {
-		min-height: calc(100vh - var(--top-panel-height));
+		min-height: calc(100vh - (var(--top-panel-height)));
 	}
 	#stories p {
 		font-size: 1rem;

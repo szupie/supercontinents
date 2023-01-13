@@ -73,7 +73,7 @@
 	box-sizing: border-box;
 	width: calc(100% - var(--padding)*2);
 	height: calc(100% - var(--padding)*2);
-	border: 1px solid var(--action-rgb);
+	border: 1px solid var(--action-hex);
 	border-radius: inherit;
 }
 #timeline-toggle span {
@@ -96,7 +96,7 @@
 }
 #timeline-toggle .expand-label::before, 
 #timeline-toggle .collapse-label::after {
-	background-color: var(--action-rgb);
+	background-color: var(--action-hex);
 	content: '';
 	display: inline-block;
 	mask-image: url("data:image/svg+xml,%3Csvg width='6' height='27' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 13.25 6 0 3 13.25 6 26.5 0 13.25Z'/%3E%3C/svg%3E");
@@ -238,7 +238,7 @@ body:not([data-map-type="texture"]) #maps-list {
 #timeline #life-events-list a, #cambrian-anchor span {
 	display: block;
 	text-decoration: underline;
-	text-decoration-color: var(--action-rgb);
+	text-decoration-color: var(--action-hex);
 	color: var(--white-shade-2);
 	padding: 5px 10px;
 	padding-right: calc(var(--marker-size) + var(--marker-padding)*2);
@@ -263,7 +263,7 @@ body:not([data-map-type="texture"]) #maps-list {
 	display: inline-block;
 	height: var(--marker-size);
 	width: var(--marker-size);
-	background-color: var(--action-rgb);
+	background-color: var(--action-hex);
 	border-radius: 100%;
 	position: absolute;
 	right: var(--marker-padding);
@@ -440,7 +440,7 @@ body:not([data-map-type="texture"]) #timeline {
 	justify-content: center;
 	right: var(--scrubber-width);
 	padding: 0 var(--life-events-list-margin);
-	text-decoration-color: var(--action-rgb);
+	text-decoration-color: var(--action-hex);
 	pointer-events: auto;
 	cursor: pointer;
 }
@@ -591,7 +591,7 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 		top: calc(-1 * var(--vert-margin));
 		right: 0;
 		height: 100vh;
-		border-right: 1px solid var(--action-rgb);
+		border-right: 1px solid var(--action-hex);
 		border-width: calc(1px + var(--expansion-percent) * 4px);
 		z-index: 1;
 		transform: translateX(calc( var(--expansion-percent) * var(--scrubber-offscreen-width) ));

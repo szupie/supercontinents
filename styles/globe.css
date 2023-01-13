@@ -37,7 +37,7 @@
 	width: 58px;
 	height: 60px;
 	padding: 0;
-	border: 1px solid var(--action-rgb);
+	border: 1px solid var(--action-hex);
 	border-radius: 4px;
 	color: var(--grey-on-black);
 	background: var(--page-bg);
