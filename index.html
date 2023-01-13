@@ -7,58 +7,61 @@
 		<link href="styles/style.css" rel="stylesheet">
 	</head>
 	<body>
-		<div id="timeline">
+		<section id="timeline">
 			<button id="timeline-toggle" aria-expanded="false" aria-controls="timeline"><span class="expand-label">Expand timeline</span><span class="collapse-label" aria-hidden="true">Back to map</span></button>
-			<ol id="life-events-list">
-				<li data-mya="0.3">
-					<a href="#humans">Humans</a>
-				</li>
-				<li data-mya="65">
-					<a href="#k-pg-extinction">K–Pg Extinction</a>
-				</li>
-				<li data-mya="125">
-					<a href="#flowers">Flowers</a>
-				</li>
-				<li data-mya="230">
-					<a href="#dinosaurs-mammals">Dinosaurs & Mammals</a>
-				</li>
-				<li data-mya="251">
-					<a href="#great-dying">Great Dying</a>
-				</li>
-				<li data-mya="315">
-					<a href="#amniotes">Amniotes</a>
-				</li>
-				<li data-mya="365">
-					<a href="#seeds">Seeds</a>
-				</li>
-				<li data-mya="410">
-					<a href="#roots-leaves-stems">Roots, Leaves & Stems</a>
-				</li>
-				<li data-mya="470">
-					<a href="#land-plants-animals">Land Plants & Animals</a>
-				</li>
-				<li data-mya="541">
-					<a href="#animals-diversify">Animals Diversify</a>
-				</li>
-				<li data-mya="600">
-					<a href="#complex-multicellular-life">Complex Multicellular Life</a>
-				</li>
-				<li data-mya="1800" class="pre-rodinian">
-					<a href="#eukaryotes">Eukaryotes</a>
-				</li>
-				<li data-mya="2400" class="pre-rodinian">
-					<a href="#great-oxidation-event">Great Oxidation Event</a>
-				</li>
-				<li data-mya="2700" class="pre-rodinian">
-					<a href="#oxygenic-photosynthesis">Oxygenic Photosynthesis</a>
-				</li>
-				<li data-mya="3400" class="pre-rodinian">
-					<a href="#oldest-fossils">Oldest Fossils</a>
-				</li>
-				<li data-mya="4600" class="pre-rodinian">
-					<a href="#formation-of-earth">Formation of Earth</a>
-				</li>
-			</ol>
+			<nav>
+				<ol id="life-events-list">
+					<li data-mya="0.3">
+						<a href="#humans">Humans</a>
+					</li>
+					<li data-mya="65">
+						<a href="#k-pg-extinction">K–Pg Extinction</a>
+					</li>
+					<li data-mya="125">
+						<a href="#flowers">Flowers</a>
+					</li>
+					<li data-mya="230">
+						<a href="#dinosaurs-mammals">Dinosaurs & Mammals</a>
+					</li>
+					<li data-mya="251">
+						<a href="#great-dying">Great Dying</a>
+					</li>
+					<li data-mya="315">
+						<a href="#amniotes">Amniotes</a>
+					</li>
+					<li data-mya="365">
+						<a href="#seeds">Seeds</a>
+					</li>
+					<li data-mya="410">
+						<a href="#roots-leaves-stems">Roots, Leaves & Stems</a>
+					</li>
+					<li data-mya="470">
+						<a href="#land-plants-animals">Land Plants & Animals</a>
+					</li>
+					<li data-mya="541">
+						<a href="#animals-diversify">Animals Diversify</a>
+					</li>
+					<li data-mya="600">
+						<a href="#complex-multicellular-life">Complex Multicellular Life</a>
+					</li>
+					<li data-mya="1800" class="pre-rodinian">
+						<a href="#eukaryotes">Eukaryotes</a>
+					</li>
+					<li data-mya="2400" class="pre-rodinian">
+						<a href="#great-oxidation-event">Great Oxidation Event</a>
+					</li>
+					<li data-mya="2800" class="pre-rodinian">
+						<a href="#oxygenic-photosynthesis">Oxygenic Photosynthesis</a>
+					</li>
+					<li data-mya="3400" class="pre-rodinian">
+						<a href="#oldest-fossils">Oldest Fossils</a>
+					</li>
+					<li data-mya="4600" class="pre-rodinian">
+						<a href="#formation-of-earth">Formation of Earth</a>
+					</li>
+				</ol>
+				<a href="#complex-multicellular-life" id="cambrian-anchor"><span>Complex Multicellular Life</span></a>
+			</nav>
 			<ol id="supercontinents-list">
 				<li data-form-start-mya="320" data-form-mya="255" data-break-mya="225" data-break-end-mya="175">
 					<em class="label">Pangea</em>
@@ -122,8 +125,7 @@
 			</ol>
 			<ol id="maps-list">
 			</ol>
-			<a href="#complex-multicellular-life" id="cambrian-anchor"><span>Complex Multicellular Life</span></a>
-		</div>
+		</section>
 		<figure id="globe-group">
 			<div id="globe">
 				<canvas id="globe-texture"></canvas>
@@ -147,33 +149,34 @@
 			</button>
 			<figcaption id="current-map-label"><span id="mya-value">0</span> million years ago</figcaption>
 		</figure>
-		<div id="stories">
+		<main id="stories">
+			<h2 class="hidden">Timeline of evolutionary events</h2>
 			<article data-mya="0.3" id="humans" class="bio">
-				<h2>Humans</h2>
+				<h3>Humans</h3>
 				<span class="time">ca. 0.3 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta libero. Vivamus maximus blandit sem, blandit pharetra felis lobortis id. Nulla facilisi. Mauris tincidunt erat lorem, eu vestibulum lorem scelerisque at.</p>
 			</article>
 			<article data-mya="65" id="k-pg-extinction" class="bio">
-				<h2>K–Pg Extinction</h2>
+				<h3>K–Pg Extinction</h3>
 				<span class="time">ca. 65 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta.</p>
 			</article>
 			<article data-mya="125" id="flowers" class="bio">
-				<h2>Flowers</h2>
+				<h3>Flowers</h3>
 				<span class="time">ca. 125 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta li.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus ni.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, loborti.</p>
 			</article>
 			<aside data-mya="200" id="pangea-breakup" class="geological">
-				<h2>Pangea breaks up</h2>
+				<h3>Pangea breaks up</h3>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
 			</aside>
 			<article data-mya="230" id="dinosaurs-mammals" class="bio">
-				<h2>Dinosaurs & Mammals</h2>
+				<h3>Dinosaurs & Mammals</h3>
 				<span class="time">ca. 230 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arc.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta li.</p>
@@ -182,28 +185,28 @@
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien ar.</p>
 			</article>
 			<article data-mya="251" id="great-dying" class="bio">
-				<h2>Great Dying</h2>
+				<h3>Great Dying</h3>
 				<span class="time">ca. 26x–251 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique lig.</p>
 			</article>
 			<article data-mya="315" id="amniotes" class="bio">
-				<h2>Amniotes</h2>
+				<h3>Amniotes</h3>
 				<span class="time">ca. 315 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta libero. Vivamus maximus.</p>
 				<aside data-mya="320" id="pangea-formation" class="geological">
-					<h2>Pangea forms</h2>
+					<h3>Pangea forms</h3>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
 				</aside>
 			</article>
 			<article data-mya="365" id="seeds" class="bio">
-				<h2>Seeds</h2>
+				<h3>Seeds</h3>
 				<span class="time">ca. 365 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta libero. Vivamus maximus blandit sem, blandit pharetra felis.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu.</p>
 			</article>
 			<article data-mya="410" id="roots-leaves-stems" class="bio">
-				<h2>Roots, Leaves, and Stems</h2>
+				<h3>Roots, Leaves, and Stems</h3>
 				<span class="time">ca. 410 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien ar.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vi.</p>
@@ -211,87 +214,87 @@
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncu.</p>
 			</article>
 			<article data-mya="470" id="land-plants-animals" class="bio">
-				<h2>Land Plants and Animals</h2>
+				<h3>Land Plants and Animals</h3>
 				<span class="time">ca. 470 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringil.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facil.</p>
 			</article>
 			<article data-mya="541" id="animals-diversify" class="bio">
-				<h2>Animals Diversify</h2>
+				<h3>Animals Diversify</h3>
 				<span class="time">ca. 541 – 516 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla.</p>
 				<aside data-mya="600" id="pannotia-formation" class="geological">
-					<h2>Pannotia</h2>
+					<h3>Pannotia</h3>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet.</p>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante.</p>
 				</aside>
 			</article>
 			<article data-mya="600" id="complex-multicellular-life" class="bio">
-				<h2>Multicellular Life</h2>
+				<h3>Multicellular Life</h3>
 				<span class="time">ca. 600 – 541 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
 			</article>
 			<aside data-mya="675" id="snowball-earth" class="geological">
-				<h2>Snowball Earth</h2>
+				<h3>Snowball Earth</h3>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique.</p>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique.</p>
 			</aside>
 			<div data-mya="750" class="map-spacer"></div>
-			<div data-mya="760" id="precambrian-intro">
+			<aside data-mya="760" id="precambrian-intro">
 				<div>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
 				</div>
-			</div>
+			</aside>
 			<article data-mya="800" id="boring-billion" class="bio">
-				<h2>“Boring Billion”</h2>
+				<h3>“Boring Billion”</h3>
 				<span class="time">ca. 800 – 1800 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu.</p>
 				<p>Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta li.</p>
 				<aside data-mya="800" id="rodinia-breakup" class="geological end">
-					<h2>Rodinia breaks up</h2>
+					<h3>Rodinia breaks up</h3>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet.</p>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta.</p>
 				</aside>
 				<aside data-mya="1000" class="geological">
-					<h2>Rodinia forms</h2>
+					<h3>Rodinia forms</h3>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
 				</aside>
 				<aside data-mya="1300" id="nuna-breakup" class="geological end">
-					<h2>Nuna breaks up</h2>
+					<h3>Nuna breaks up</h3>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
 				</aside>
 			</article>
 			<article data-mya="1800" id="eukaryotes" class="bio">
-				<h2>Eukaryotes</h2>
+				<h3>Eukaryotes</h3>
 				<span class="time">ca. 1800 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet.</p>
 				<aside data-mya="1800" class="geological">
-					<h2>Nuna forms</h2>
+					<h3>Nuna forms</h3>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula.</p>
 				</aside>
 			</article>
 			<article data-mya="2400" id="great-oxidation-event" class="bio">
-				<h2>Great Oxidation Event</h2>
+				<h3>Great Oxidation Event</h3>
 				<span class="time">ca. 2400 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
 			</article>
 			<article data-mya="2700" id="oxygenic-photosynthesis" class="bio">
-				<h2>Oxygenic Photosynthesis</h2>
+				<h3>Oxygenic Photosynthesis</h3>
 				<span class="time">ca. 2700 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
 			</article>
 			<article data-mya="3400" id="oldest-fossils" class="bio">
-				<h2>Oldest Fossils</h2>
+				<h3>Oldest Fossils</h3>
 				<span class="time">ca. 3400 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
 			</article>
 			<article data-mya="4600" id="formation-of-earth" class="bio">
-				<h2>Formation of Earth</h2>
+				<h3>Formation of Earth</h3>
 				<span class="time">ca. 4600 <abbr title="million years ago">mya</abbr></span>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
 			</article>
-		</div>
+		</main>
 	</body>
 	<script src="./js/app.js" type="module"></script>
 </html>

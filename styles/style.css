@@ -74,9 +74,15 @@ body {
 	color: var(--white-shade-1);
 }
 
-h1, h2, #current-map-label {
+h1, h2, h3, #current-map-label {
 	font-family: "Philibert Italic", "CMU Classical Serif";
 	word-spacing: -0.07em;
+}
+h2.hidden {
+	/* hide from view but keep in document outline */
+	text-indent: 100%;
+	white-space: nowrap;
+	overflow: hidden;
 }
 button {
 	font-family: "CMU Serif";
@@ -115,7 +121,7 @@ button {
 	max-width: 22rem;
 	padding-bottom: 100vh;
 }
-#stories h2 {
+#stories h3 {
 	font-size: 20px;
 	margin: 0;
 	line-height: var(--vert-rhythm);
@@ -173,12 +179,12 @@ button {
 #stories article aside.geological {
 	margin-left: 0;
 }
-#stories aside.geological h2 {
+#stories aside.geological h3 {
 	font-family: "CMU Serif";
 	text-transform: uppercase;
 	font-size: 11px;
 }
-#stories aside.geological h2 + p {
+#stories aside.geological h3 + p {
 	margin-top: calc(var(--vert-rhythm) / 2);
 }
 #stories aside.geological p:last-child {
@@ -239,7 +245,7 @@ button {
 		--top-panel-height: var(--globe-size) + var(--globe-top-padding) + var(--current-map-label-size)*3;
 		max-width: 35rem;
 	}
-	#stories article, #stories aside {
+	#stories article, #stories aside.geological {
 		scroll-margin-top: calc(var(--top-panel-height));
 	}
 	#stories > *, #stories #precambrian-intro {
