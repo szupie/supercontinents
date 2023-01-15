@@ -92,6 +92,47 @@
 	background: none;
 }
 
+/* styles for static state, before globe is sticked */
+/* (block pointer events and dim) */
+
+/* pointer event blocker */
+#globe-group::before {
+	content: '';
+	display: block;
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+#globe-group.static::before {
+	pointer-events: auto;
+}
+#globe-group #globe {
+	transition-property: filter;
+	transition-duration: var(--initing-transition-duration, 300ms);
+	transition-timing-function: ease-in-out;
+}
+#globe-group.static #globe {
+	filter: brightness(0.8);
+}
+
+/* hide all overlay elements and controls but keep globe shading */
+#globe-overlay > *,
+#reverse-globe,
+#current-map-label {
+	opacity: 1;
+	transition-property: opacity;
+	transition-duration: var(--initing-transition-duration, 500ms);
+	transition-timing-function: ease-in;
+}
+#globe-group.static #globe-overlay > *,
+#globe-group.static #reverse-globe,
+#globe-group.static #current-map-label {
+	opacity: 0;
+	transition-duration: var(--initing-transition-duration, 100ms);
+}
+
 
 
 /* vector map */

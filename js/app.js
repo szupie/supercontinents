@@ -1,6 +1,6 @@
 import { geoOrthographic } from './d3-modules.js';
 
-import { init as initRotationControl, transitionToCoord } from './globe/rotation-control.js';
+import { init as initRotationControl, transitionToCoord, setConstantRotation } from './globe/rotation-control.js';
 import { init as initTextureGlobe } from './globe/webgl-globe.js';
 import * as globeOverlays from './globe/globe-overlays.js';
 import * as mapSelector from './map-selector.js';
@@ -139,8 +139,22 @@ function checkMainContentVisibility() {
 	);
 	if (visibleHeight < visibilityThreshold) {
 		globeNode.classList.add('peek');
+		if (!window.matchMedia('(prefers-reduced-motion)').matches) {
+			setConstantRotation(true);
+		}
 	} else {
 		globeNode.classList.remove('peek');
+		setConstantRotation(false);
+	}
+
+	// make globe static until it is stickied to the top or stories are visible
+	const globeStickied = globeNode.getBoundingClientRect().top <= 0;
+	const storiesInViewport = viewportHeight > 
+		document.getElementById('stories').getBoundingClientRect().top;
+	if (globeStickied || storiesInViewport) {
+		globeNode.classList.remove('static');
+	} else {
+		globeNode.classList.add('static');
 	}
 }
 
@@ -155,6 +169,8 @@ globeOverlays.bindReverseMapToNode(
 mapSelector.init(document.getElementById('maps-list'), handleMyaUpdate);
 initTimeline();
 
+// randomise starting view
+projection.rotate([Math.random()*360, 0]);
 redrawGlobe();
 
 document.body.style.setProperty('--initing-transition-duration', '0ms');

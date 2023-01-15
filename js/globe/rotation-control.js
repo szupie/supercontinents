@@ -7,7 +7,8 @@ export {
 	getCurrentRotation,
 	isNorthUp,
 	getDragCoords,
-	getAntipodeRotation
+	getAntipodeRotation,
+	setConstantRotation
 }
 
 let projection;
@@ -322,6 +323,26 @@ function calculateRecentSpeed(history) {
 			(sum,current)=>sum+current
 		) / rotationDiffs.length;
 	}
+}
+
+
+// constant rotation
+
+let rotationLoopId;
+function setConstantRotation(active) {
+	window.cancelAnimationFrame(rotationLoopId);
+	if (active) {
+		rotationLoopId = window.requestAnimationFrame(rotationUpdateLoop);
+	}
+}
+
+function rotationUpdateLoop() {
+	// record current rotation
+	const newRotation = getCurrentRotation();
+	newRotation[0] += 0.03;
+
+	redrawGlobe(newRotation);
+	rotationLoopId = window.requestAnimationFrame(rotationUpdateLoop);
 }
 
 
