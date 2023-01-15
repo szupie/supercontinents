@@ -52,18 +52,22 @@ html {
 	--story-padding: 2.5rem;
 	--globe-size: calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width));
 	--globe-margin: 5rem;
+	--globe-top-padding: var(--globe-margin);
 	--current-map-label-size: 1.25rem;
 	--scrubber-width: 64px;
 	--life-events-list-margin: 32px;
 	font-family: "CMU Serif";
 	font-size: 16px;
+	/* set 100vh on root, so js can use element height 
+	to determine viewport height without mobile address bar */
+	height: 100vh;
 }
 @media (max-width: 700px) {
 	html {
 		--story-padding: 1rem;
 		--globe-size: min(calc(100vh - 20rem), calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width)));
-		--globe-top-padding: 2rem;
 		--globe-margin: 1.5rem;
+		--globe-top-padding: calc(var(--globe-margin) + 2rem);
 		--scrubber-width: 24px;
 		--life-events-list-margin: 10px;
 	}
@@ -85,6 +89,18 @@ h2.hidden {
 	text-indent: 100%;
 	white-space: nowrap;
 	overflow: hidden;
+	margin: 0;
+	height: 0;
+}
+p {
+	font-family: "CMU Serif";
+	line-height: var(--vert-rhythm);
+	margin: var(--vert-rhythm) 0;
+	word-spacing: -2px;
+	hyphens: manual;
+}
+br + p {
+	margin-top: 0;
 }
 button {
 	font-family: "CMU Serif";
@@ -125,6 +141,58 @@ a:hover {
 	}
 }
 
+#cover, #intro {
+	background-color: var(--paper-white-hex);
+	color: var(--page-bg);
+	/* position sticky and z-index to draw above timeline */
+	position: sticky;
+	z-index: 4;
+}
+#cover {
+	--vert-rhythm: 22px;
+	height: 100vh;
+	max-height: 225vw;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+}
+h1 {
+	font-size: 33px;
+	font-weight: normal;
+	line-height: 1;
+	margin: var(--vert-rhythm) auto;
+}
+.ampersand {
+	font-family: "CMU Classical Serif";
+	font-size: 0.66em;
+	font-weight: bold;
+}
+#cover p {
+	font-family: "CMU Classical Serif";
+	font-size: 18px;
+	max-width: 17em;
+	margin: 0 auto;
+}
+#cover :first-child {
+	margin-top: 0;
+}
+#intro {
+	--intro-padding: 32px;
+	/* add side padding to keep content width <35rem */
+	padding: 0 max(var(--intro-padding), (100vw - 35rem) / 2);
+	padding-bottom: calc(3 * var(--intro-padding));
+}
+#intro p:first-of-type {
+	border-top: 1px solid var(--action-dark-hex);
+	padding-top: var(--intro-padding);
+	margin-top: 0;
+}
+#intro p:last-of-type {
+	margin-bottom: 0;
+}
+
+
 #stories {
 	--stroke-width: 2px;
 	--stroke-padding: 8px;
@@ -157,12 +225,7 @@ a:hover {
 	text-decoration-color: var(--white-shade-2);
 }
 #stories p {
-	font-family: "CMU Serif";
 	font-size: 15px;
-	line-height: var(--vert-rhythm);
-	margin: var(--vert-rhythm) 0;
-	word-spacing: -2px;
-	hyphens: manual;
 }
 #stories strong {
 	color: #fff;
@@ -260,7 +323,7 @@ a:hover {
 	padding: max(var(--story-padding), (100vw - 40rem) / 2);
 	padding-top: var(--story-padding);
 	padding-bottom: calc(var(--story-padding) * 4);
-	/* position sticky and z-index to force above timeline */
+	/* position sticky and z-index to draw above timeline */
 	position: sticky;
 	z-index: 4;
 }

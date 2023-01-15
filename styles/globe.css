@@ -1,12 +1,24 @@
 #globe-group {
 	position: sticky;
-	top: var(--globe-margin);
+	top: 0;
+	padding-top: var(--globe-top-padding);
 	margin: 0 auto;
 	z-index: 2;
 	touch-action: none;
 	/* prevent pointer capture over story text */
 	pointer-events: none;
 }
+@media (max-width: 700px) {
+	#globe-group {
+		background-color: inherit;
+		width: calc(100% - (var(--scrubber-width) + var(--life-events-list-margin)));
+		margin-left: 0;
+		transition-property: width;
+		transition-duration: var(--initing-transition-duration, 200ms);
+		transition-timing-function: ease-in-out;
+	}
+}
+
 #globe-group > * {
 	pointer-events: auto;
 }
@@ -69,6 +81,18 @@
 	box-shadow: inset 0 0 30px 5px rgba(0,0,0, var(--shadow-strength));
 }
 
+/* make globe show on cover */
+#globe-group.peek {
+	/* draw above cover */
+	position: fixed;
+	z-index: 4;
+	top: 100vh;
+	width: 100%;
+	margin-top: calc(-0.5 * (var(--globe-size)) - (var(--globe-top-padding)));
+	background: none;
+}
+
+
 
 /* vector map */
 .reconstruction .countries path {
@@ -103,8 +127,8 @@ body:not([data-map-type="texture"]) #reverse-texture {
 body:not([data-map-type="texture"]) #globe #globe-overlay {
 	--shadow-strength: 0.3;
 }
-body:not([data-map-type="texture"]) #globe #globe-overlay,
-body:not([data-map-type="texture"]) #reverse-vector {
+body[data-map-type]:not([data-map-type="texture"]) #globe #globe-overlay,
+body[data-map-type]:not([data-map-type="texture"]) #reverse-vector {
 	background-color: #2B2B2B;
 }
 body:not([data-map-type="texture"]) #globe-overlay #meridian {
@@ -217,13 +241,4 @@ body[data-map-type="none"] #globe-overlay .continent-labels {
 }
 body[data-map-type="none"] #reverse-globe {
 	display: none;
-}
-
-@media (max-width: 700px) {
-	#globe-group {
-		top: 0;
-		margin-right: calc(var(--scrubber-width) + var(--life-events-list-margin));
-		padding-top: var(--globe-top-padding);
-		background-color: inherit;
-	}
 }

@@ -123,6 +123,27 @@ function redrawGlobe(rotation = false) {
 	globeOverlays.redraw();
 }
 
+function checkMainContentVisibility() {
+	const globeNode = document.getElementById('globe-group');
+	
+	// get viewport height without floating address bar on mobile browsers
+	const viewportHeight = 
+		document.documentElement.getBoundingClientRect().height;
+	// height of content visible below intro
+	// (distance from bottom of intro to bottom of viewport)
+	const visibleHeight = viewportHeight -
+		document.getElementById('intro').getBoundingClientRect().bottom;
+	// height needed to show hemisphere with top padding
+	const visibilityThreshold = radius + parseFloat(
+		window.getComputedStyle(globeNode).getPropertyValue('padding-top')
+	);
+	if (visibleHeight < visibilityThreshold) {
+		globeNode.classList.add('peek');
+	} else {
+		globeNode.classList.remove('peek');
+	}
+}
+
 
 initRotationControl(projection, document.getElementById('globe'), redrawGlobe);
 
@@ -135,3 +156,11 @@ mapSelector.init(document.getElementById('maps-list'), handleMyaUpdate);
 initTimeline();
 
 redrawGlobe();
+
+document.body.style.setProperty('--initing-transition-duration', '0ms');
+checkMainContentVisibility();
+document.addEventListener('scroll', checkMainContentVisibility);
+// enable transition durations after initial position is rendered
+setTimeout(e=>{
+	document.body.style.removeProperty('--initing-transition-duration');
+}, 500);
