@@ -219,7 +219,7 @@ body:not([data-map-type="texture"]) #maps-list {
 
 /* List of biological events next to timeline */
 #timeline #life-events-list {
-	right: calc(var(--scrubber-width) + var(--life-events-list-margin));
+	right: var(--timeline-safe-width);
 	position: absolute;
 	z-index: 1; /* appear above precambrian anchor */
 }

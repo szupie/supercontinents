@@ -11,7 +11,7 @@
 @media (max-width: 700px) {
 	#globe-group {
 		background-color: inherit;
-		width: calc(100% - (var(--scrubber-width) + var(--life-events-list-margin)));
+		width: calc(100% - var(--timeline-safe-width));
 		margin-left: 0;
 		transition-property: width;
 		transition-duration: var(--initing-transition-duration, 200ms);
@@ -113,8 +113,8 @@
 	transition-duration: var(--initing-transition-duration, 300ms);
 	transition-timing-function: ease-in-out;
 }
-#globe-group.static #globe {
-	filter: brightness(0.8);
+#globe-group:not(.peek).static #globe {
+	filter: brightness(0.7);
 }
 
 /* hide all overlay elements and controls but keep globe shading */
