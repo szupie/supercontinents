@@ -164,7 +164,9 @@ function setMapToMya(targetMya) {
 		resetClassForAllMaps('selected', currentMapIndex);
 
 		// trigger redraw
-		updateCallback(prevMya, currentMya);	
+		if (!noMap) {
+			updateCallback(prevMya, currentMya);	
+		}
 	}
 }
 
