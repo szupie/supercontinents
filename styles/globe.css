@@ -208,6 +208,17 @@ body:not([data-map-type="texture"]) #globe-overlay #meridian {
 	fill: #fff;
 	stroke: #000d;
 }
+#globe-overlay .supercontinent.label {
+	font-family: "CMU Serif";
+	font-size: 16px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	transition: opacity 300ms ease-in;
+}
+#globe-overlay .supercontinent.label:not(.shown) {
+	opacity: 0;
+}
+
 #globe #globe-overlay .graticule path {
 	stroke: #fff8;
 	fill: none;

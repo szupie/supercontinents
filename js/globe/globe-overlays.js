@@ -47,6 +47,10 @@ let redrawReconstruction = ()=>{};
 let getCratonCenters = ()=>{};
 
 let textureContinentLabelsData;
+let supercontinentsData;
+let dataReady;
+
+
 let trackedCratonLabel;
 
 let vectorMapPromise;
@@ -56,14 +60,26 @@ function init(theProjection, overlayNode) {
 	overlay = select(overlayNode);
 
 	overlay.append('g').attr('class', 'continent-labels');
-	fetch('./assets/data/craton-label-positions.json')
+
+	const cratonRequest = fetch('./assets/data/craton-label-positions.json')
 		.then(response=>response.json())
 		.then(data=>{
 			textureContinentLabelsData = data.features;
 			bindDataToCratonLabels(getTextureLabelsDataForMya(0));
 		});
 
-	createGlobeOverlays();
+	const supercontinentRequest = fetch('./assets/data/supercontinent-positions.json')
+		.then(response=>response.json())
+		.then(data=>{
+			supercontinentsData = data;
+			overlay.select('.continent-labels').append('text')
+				.classed('supercontinent label', true)
+				.datum({'coordinates': undefined});
+			updateSupercontinentDataForMya(0);
+		});
+	dataReady = Promise.all([cratonRequest, supercontinentRequest]);
+
+	createConstantOverlays();
 
 
 	// tracked craton label deselection listener
@@ -116,11 +132,14 @@ function init(theProjection, overlayNode) {
 }
 
 async function handleMyaUpdate(prevMya, newMya) {
+	await dataReady;
+
 	overlayTweenStartMya = prevMya;
 	overlayTweenStartTime = Date.now();
 
 	// attach as attribute to persist over data() updates
 	overlay.selectAll('.continent-labels .label')
+		.filter(d=>(d && d['coordinates']))
 		.attr('data-last-lat', d=>d['coordinates'][1])
 		.attr('data-last-lon', d=>d['coordinates'][0]);
 
@@ -142,6 +161,7 @@ async function handleMyaUpdate(prevMya, newMya) {
 		redrawReverseVectorMap();
 		bindDataToCratonLabels(getCratonCenters());
 	}
+	updateSupercontinentDataForMya(newMya);
 
 	// Rotate map to center on hemisphere with more land
 	// (only if map exists, and not user-rotated)
@@ -187,7 +207,7 @@ function bindReverseMapToNode(node, theProjection) {
 }
 
 
-function createGlobeOverlays() {
+function createConstantOverlays() {
 	// create meridian and equator
 	const lines = {
 		'meridian': geoGraticule().step([180, 0]),
@@ -291,7 +311,7 @@ function getTextureLabelsDataForMya(mya) {
 
 function bindDataToCratonLabels(data) {
 	overlay.select('.continent-labels')
-		.selectAll('text').data(data, d=>d['name']).join('text')
+		.selectAll('text.continent').data(data, d=>d['name']).join('text')
 			.text(d=>d['name'])
 			.classed('continent label', true)
 			.attr('data-craton-name', d=>d['name']);
@@ -304,6 +324,28 @@ function setTrackingToLabel(labelNode) {
 	trackedCratonLabel.classList.add('tracked');
 	transitionToCoord(select(trackedCratonLabel).datum()['coordinates']);
 	// TO DO: prevent tracking on drag
+}
+
+function updateSupercontinentDataForMya(mya) {
+	let name, coords;
+	const showLabel = supercontinentsData.some(supercontinent=>{
+		if (mya>=supercontinent['mya-min'] && mya<=supercontinent['mya-max']) {
+			name = supercontinent['name'];
+			if (supercontinent['coords-by-mya'][mya]) {
+				coords = supercontinent['coords-by-mya'][mya];
+				return true;
+			}
+		}
+	})
+	const label = overlay.select('.continent-labels .supercontinent.label');
+	label.classed('shown', showLabel);
+	// prevent label position tweening between different supercontinents
+	if (label.text() != name) {
+		label.attr('data-last-lat', null).attr('data-last-lon', null);
+	}
+	if (showLabel) {
+		label.text(name).datum({'coordinates': coords});
+	}
 }
 
 
