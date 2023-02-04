@@ -410,7 +410,7 @@ function updatePoles() {
 function positionPoles(d) {
 	const polePoint = projection(d.coordinates);
 	const radius = projection.scale();
-	const axisLength = (polePoint[1]-radius)*0.06;
+	const axisLength = (polePoint[1]-radius)*0.04;
 	const labelOffset = (polePoint[1] > radius) ? 16 : -8;
 	const tipPoint = [radius, axisLength + polePoint[1]];
 
@@ -420,7 +420,7 @@ function positionPoles(d) {
 	select(this).selectAll('.label')
 		.attr(
 			'transform', 
-			`translate(${radius}, ${axisLength + labelOffset + polePoint[1]})`
+			`translate(${radius}, ${labelOffset + polePoint[1]})`
 		);
 }
 

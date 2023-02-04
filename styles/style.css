@@ -59,6 +59,7 @@ html {
 	--life-events-list-margin: 32px;
 	--timeline-safe-width: calc(var(--scrubber-width) + var(--life-events-list-margin));
 	font-family: "CMU Serif";
+	word-spacing: -1px;
 	font-size: 16px;
 	/* set 100vh on root, so js can use element height 
 	to determine viewport height without mobile address bar */
@@ -98,7 +99,7 @@ p {
 	font-family: "CMU Serif";
 	line-height: var(--vert-rhythm);
 	margin: var(--vert-rhythm) 0;
-	word-spacing: -2px;
+	word-spacing: -1px;
 	hyphens: manual;
 }
 p[role="note"] {
