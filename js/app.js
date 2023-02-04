@@ -49,7 +49,16 @@ const resolutions = {
 }
 
 async function handleMyaUpdate(prevMya, newMya) {
-	document.getElementById('mya-value').textContent = mapSelector.currentMya;
+	let year, unit;
+	if (mapSelector.currentMya < 1000) {
+		year = mapSelector.currentMya;
+		unit = "million";
+	} else {
+		year = mapSelector.currentMya / 1000;
+		unit = "billion";
+	}
+	document.getElementById('year-value').textContent = year;
+	document.getElementById('year-unit').textContent = unit;
 
 	switch (mapSelector.currentMapType) {
 		case mapSelector.MapTypes.TEXTURE:
