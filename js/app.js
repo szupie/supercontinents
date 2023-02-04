@@ -55,15 +55,16 @@ async function handleMyaUpdate(prevMya, newMya) {
 		case mapSelector.MapTypes.TEXTURE:
 			document.body.setAttribute('data-map-type', 'texture');
 			await loadAndUpdateTexture();
+			globeOverlays.handleMyaUpdate(prevMya, newMya);
 			break;
 		case mapSelector.MapTypes.VECTOR:
 			document.body.setAttribute('data-map-type', 'vector');
+			globeOverlays.handleMyaUpdate(prevMya, newMya);
 			break;
 		default:
 			document.body.setAttribute('data-map-type', 'none');
 			break;
 	}
-	globeOverlays.handleMyaUpdate(prevMya, newMya);
 }
 
 // Make an asynchronous request to load the current map texture,

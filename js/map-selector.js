@@ -148,6 +148,7 @@ function setMapToMya(targetMya) {
 		if (noMap) {
 			currentMapType = MapTypes.NONE;
 			currentMya = Math.round(targetMya/100)*100;
+			// update rough time indicator position in timeline
 			document.getElementById('no-map-indicator').style.top = 
 				`${myaToPercent(targetMya)}%`;
 		} else if (currentMapIndex < textureMapDates.length) {
@@ -164,9 +165,7 @@ function setMapToMya(targetMya) {
 		resetClassForAllMaps('selected', currentMapIndex);
 
 		// trigger redraw
-		if (!noMap) {
-			updateCallback(prevMya, currentMya);	
-		}
+		updateCallback(prevMya, currentMya);	
 	}
 }
 
