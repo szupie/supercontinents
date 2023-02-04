@@ -101,6 +101,11 @@ p {
 	word-spacing: -2px;
 	hyphens: manual;
 }
+p[role="note"] {
+	font-style: italic;
+	font-family: "CMU Classical Serif";
+	word-spacing: -2px; /* CMU Classical has wide spaces between words */
+}
 br + p {
 	margin-top: 0;
 }
@@ -170,6 +175,7 @@ h1 {
 	font-weight: bold;
 }
 #cover p {
+	font-style: italic;
 	font-family: "CMU Classical Serif";
 	font-size: 18px;
 	max-width: 17em;
@@ -180,9 +186,11 @@ h1 {
 }
 #intro {
 	--intro-padding: 32px;
-	/* add side padding to keep content width <35rem */
-	padding: 0 max(var(--intro-padding), (100vw - 35rem) / 2);
-	padding-bottom: calc(3 * var(--intro-padding));
+	--vert-rhythm: 28px;
+	font-size: 18px;
+	/* add side padding to keep content width <26.5em */
+	padding: 0 max(var(--intro-padding), (100vw - 26.5em) / 2);
+	padding-bottom: calc(5 * var(--intro-padding));
 }
 #intro p:first-of-type {
 	border-top: 1px solid var(--action-dark-hex);
@@ -191,6 +199,9 @@ h1 {
 }
 #intro p:last-of-type {
 	margin-bottom: 0;
+}
+#intro a {
+	color: rgb(var(--action-extradark-rgb));
 }
 #instructions {
 	--vert-rhythm: 15px;
@@ -230,6 +241,9 @@ h1 {
 
 #instructions strong {
 	color: var(--action-extralight-hex);
+}
+#globe-group.peek ~ #instructions {
+	margin-top: calc(var(--globe-top-padding) + var(--globe-size) / 2);
 }
 #globe-group:not(.static):not(.peek) ~ #instructions {
 	pointer-events: none;
@@ -280,6 +294,13 @@ h1 {
 #stories strong {
 	color: #fff;
 }
+#stories em {
+	font-style: italic;
+	font-family: "CMU Classical Serif";
+}
+#stories sub {
+	line-height: 1;
+}
 #stories hr {
 	width: 3em;
 	border-style: solid;
@@ -319,8 +340,13 @@ h1 {
 	margin-top: calc(var(--vert-rhythm) / -2);
 	padding-top: var(--vert-rhythm);
 }
+#stories .geological.form + .geological.break {
+	margin-bottom: 0;
+}
+
 #stories .map-spacer {
 	/* extra space to keep last texture map on screen */
+	margin-top: 50vh;
 	height: 200vh;
 }
 
@@ -351,16 +377,24 @@ h1 {
 	padding: var(--stroke-padding);
 	padding-bottom: 0;
 }
-#stories #boring-billion .geological.end {
-	padding-bottom: 40vh;
-	margin-bottom: 0;
+#stories #boring-billion #rodinia-formation {
+	padding-top: 40vh;
+	margin-bottom: 120vh;
 }
 #stories #boring-billion #nuna-breakup {
 	padding-bottom: 85vh;
 }
-#stories #boring-billion .geological.end + .geological {
-	margin-top: 0;
-	margin-bottom: 120vh;
+
+/* no map available, reduce vertical spacing */
+#stories #eukaryotes {
+	margin-bottom: 50vh;
+}
+#stories #eukaryotes ~ article {
+	min-height: initial;
+	margin-bottom: calc(var(--vert-rhythm) * 10);
+}
+#stories #eukaryotes ~ article:last-child {
+	margin-bottom: 0;
 }
 
 
@@ -444,12 +478,22 @@ h1 {
 }
 #references li {
 	list-style: none;
+	margin-bottom: var(--vert-rhythm);
 }
 #references .citation {
 	--hanging-indent: 1em;
 	display: block;
 	margin-left: var(--hanging-indent);
 	text-indent: calc(-1 * var(--hanging-indent));
+}
+.citation .chapter-title,
+.citation .article-title {
+	font-style: normal;
+}
+.citation .larger-work-title,
+.citation cite:not(.chapter-title):not(.article-title) {
+	font-style: italic;
+	font-family: "CMU Classical Serif";
 }
 
 
@@ -466,7 +510,7 @@ h1 {
 		margin-right: var(--timeline-safe-width);
 	}
 	#stories article.bio {
-		min-height: calc(100vh - (var(--top-panel-height)));
+		min-height: calc(min(100vh, 80em) - (var(--top-panel-height)));
 	}
 	#stories p {
 		font-size: 1rem;
@@ -484,7 +528,7 @@ h1 {
 		padding: 2em;
 		transform: translateY(calc(-1 * var(--curtain-offset) - (var(--top-panel-height))));
 	}
-	#stories #boring-billion .geological.end + .geological {
+	#stories #boring-billion .geological.break + .geological.form:not(:last-child) {
 		margin-bottom: 25em;
 	}
 	#stories #eukaryotes ~ article:last-child {

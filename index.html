@@ -8,15 +8,15 @@
 	</head>
 	<body>
 		<header id="cover">
-			<h1>Life <span class="ampersand">&</span> Supercontinents</h1>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam</p>
+			<h1>Life <span class="ampersand">&amp;</span> Supercontinents</h1>
+			<p>A history of Earth’s supercontinents and their impact on evolution</p>
 		</header>
 		<section id="intro">
 			<h2 class="hidden">Introduction</h2>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a</p>
+			<p>A series of supercontinents have formed and broken up over the course of Earth’s history. These tectonic activities have had profound influence on the evolution of life – changing not only habitat availability and competition levels, but also nutrient levels and global climate.</p>
+			<p>Here is an interactive timelapse of the continents’ prehistoric positions. A selection of notable evolutionary events is also presented in context, highlighting how the supercontinents shaped life on Earth.</p>
 			<br/>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam</p>
+			<p role="note">The following maps are produced by <a href="#scotese-2016">Scotese (2016)</a>.</p>
 		</section>
 		<section id="timeline">
 			<button id="timeline-toggle" aria-expanded="false" aria-controls="timeline"><span class="expand-label">Expand timeline</span><span class="collapse-label" aria-hidden="true">Back to map</span></button>
@@ -25,31 +25,31 @@
 					<li data-mya="0.3">
 						<a href="#humans">Humans</a>
 					</li>
-					<li data-mya="65">
+					<li data-mya="66">
 						<a href="#k-pg-extinction">K–Pg Extinction</a>
 					</li>
 					<li data-mya="125">
 						<a href="#flowers">Flowers</a>
 					</li>
 					<li data-mya="230">
-						<a href="#dinosaurs-mammals">Dinosaurs & Mammals</a>
+						<a href="#dinosaurs-mammals">Dinosaurs &amp; Mammals</a>
 					</li>
 					<li data-mya="251">
 						<a href="#great-dying">Great Dying</a>
 					</li>
-					<li data-mya="315">
+					<li data-mya="320">
 						<a href="#amniotes">Amniotes</a>
 					</li>
-					<li data-mya="365">
+					<li data-mya="370">
 						<a href="#seeds">Seeds</a>
 					</li>
 					<li data-mya="410">
-						<a href="#roots-leaves-stems">Roots, Leaves & Stems</a>
+						<a href="#roots-leaves-stems">Roots, Leaves &amp; Stems</a>
 					</li>
 					<li data-mya="470">
-						<a href="#land-plants-animals">Land Plants & Animals</a>
+						<a href="#land-plants-animals">Land Plants &amp; Animals</a>
 					</li>
-					<li data-mya="541">
+					<li data-mya="540">
 						<a href="#animals-diversify">Animals Diversify</a>
 					</li>
 					<li data-mya="600">
@@ -67,6 +67,9 @@
 					<li data-mya="3400" class="pre-rodinian">
 						<a href="#oldest-fossils">Oldest Fossils</a>
 					</li>
+					<li data-mya="4300" class="pre-rodinian">
+						<a href="#water">Water</a>
+					</li>
 					<li data-mya="4600" class="pre-rodinian">
 						<a href="#formation-of-earth">Formation of Earth</a>
 					</li>
@@ -74,20 +77,17 @@
 				<a href="#complex-multicellular-life" id="cambrian-anchor"><span>Complex Multicellular Life</span></a>
 			</nav>
 			<ol id="supercontinents-list">
-				<li data-form-start-mya="320" data-form-mya="255" data-break-mya="225" data-break-end-mya="175">
-					<em class="label">Pangea</em>
+				<li data-form-start-mya="320" data-form-mya="255" data-break-mya="230" data-break-end-mya="180">
+					<em class="label">Pangaea</em>
 				</li>
-				<li data-form-mya="600" data-break-mya="560" class="megacontinent">
+				<li data-form-mya="650" data-break-mya="560" class="megacontinent">
 					<em class="label">Pannotia</em>
 				</li>
-				<li data-form-start-mya="1100" data-form-mya="1000" data-break-mya="800" data-break-end-mya="750">
+				<li data-form-start-mya="1100" data-form-mya="900" data-break-mya="800" data-break-end-mya="700">
 					<em class="label">Rodinia</em>
 				</li>
-				<li data-form-start-mya="1800" data-form-mya="1650" data-break-mya="1300" data-break-end-mya="1200">
+				<li data-form-start-mya="1750" data-form-mya="1650" data-break-mya="1300" data-break-end-mya="1270">
 					<em class="label">Nuna</em>
-				</li>
-				<li data-form-mya="2700" data-break-mya="2500">
-					<em class="label">???</em>
 				</li>
 			</ol>
 			<ol id="periods-list">
@@ -168,146 +168,161 @@
 			<h2 class="hidden">Timeline of evolutionary events</h2>
 			<article data-mya="0.3" id="humans" class="bio">
 				<h3>Humans</h3>
-				<span class="time">ca. 0.3 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta libero. Vivamus maximus blandit sem, blandit pharetra felis lobortis id. Nulla facilisi. Mauris tincidunt erat lorem, eu vestibulum lorem scelerisque at.</p>
+				<span class="time">ca. 0.3 million years ago</span>
+				<p>In the brief period of time since their origin, humans have had a large impact on Earth’s ecosystem.</p>
+				<p>Human activities are driving the current rapid loss of biodiversity – through climate change, habitat destruction, pollution, overhunting, and the spread of pathogens and invasive species.</p>
+				<p>Extinction rates over the last 500 years are higher than those of previous mass extinctions. If rates continue unchanged, in as little as three more centuries the amount of species lost can match those of previous mass extinctions – which took place over millions of years.</p>
 			</article>
 			<article data-mya="65" id="k-pg-extinction" class="bio">
 				<h3>K–Pg Extinction</h3>
-				<span class="time">ca. 65 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta.</p>
+				<span class="time">ca. 66–65 million years ago</span>
+				<p>The asteroid impact at Yucatán Peninsula 66 million years ago marked the end of the Cretaceous period. The impact created gas and dust that blocked out the sun, caused acid rain, and acidified the oceans.</p>
+				<p>As a result, 75% of plant and animal species were driven to extinction, including all non-avian dinosaurs.</p>
+				<p>This was also the beginning of the Age of Mammals, who were able to diversify in newly available niches previously filled by dinosaurs.</p>
 			</article>
 			<article data-mya="125" id="flowers" class="bio">
 				<h3>Flowers</h3>
-				<span class="time">ca. 125 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta li.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus ni.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, loborti.</p>
+				<span class="time">ca. 125 million years ago</span>
+				<p>Flowers use their scent, shape, and colours to attract pollinators who in return spread their pollen. The rapid diversification of flowering plants coincided with the appearance of many new insect groups, as each side coevolved increasingly specialised features adapted for each other.</p>
+				<p>Many also develop fruits, which provide nutrients for seeds and encourage animals to eat and disperse them to new areas.</p>
+				<p>These advantages allowed flowering plants to quickly replace conifers as the dominant form of vegetation on land.</p>
 			</article>
-			<aside data-mya="200" id="pangea-breakup" class="geological">
-				<h3>Pangea breaks up</h3>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
+			<aside id="pangaea-breakup" class="geological break">
+				<h3>Pangaea breaks up</h3>
+				<p>The breakup of Pangaea may have contributed to the <strong>end-Triassic mass extinction</strong> that killed 80% of all species. The rifting of the Atlantic released CO<sub>2</sub> which caused global warming and ocean acidification, and inhibited calcification processes critical to marine life.</p>
+				<p>In the aftermath, dinosaurs were able to become the dominant vertebrates on land as new niches became available.</p>
 			</aside>
 			<article data-mya="230" id="dinosaurs-mammals" class="bio">
-				<h3>Dinosaurs & Mammals</h3>
-				<span class="time">ca. 230 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arc.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta li.</p>
+				<h3>Dinosaurs and Mammals</h3>
+				<span class="time">ca. 230 million years ago</span>
+				<p>The earliest <strong>dinosaurs</strong> appeared around the mid-Triassic period, though they would not become a dominant life form until after the mass extinction event at the end of the Triassic.</p>
+				<p>Dinosaurs breath with air sacs throughout their body, surrounding their organs and filling their bones. This allows them to grow to colossal sizes without overheating. This lightweight body structure also allows some species to fly, and is still seen today in birds, the only surviving dinosaurs.</p>
 				<hr/>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta libero.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien ar.</p>
+				<p>Early <strong>mammals</strong> were small, nocturnal creatures who evolved in the shadow of the dinosaurs. They have a faster metabolism made possible by several adaptations: differentiated teeth that made digestion more efficient, a nose to enable breathing while chewing, and diaphragms that allowed more powerful breaths.</p>
+				<p>Combined with the development of ear drums that help them sense their surroundings in the darkness, mammals were able to find a niche as hunters in the night, when other animals with slower metabolisms move slower due to the cold.</p>
 			</article>
 			<article data-mya="251" id="great-dying" class="bio">
 				<h3>Great Dying</h3>
-				<span class="time">ca. 26x–251 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique lig.</p>
+				<span class="time">ca. 251 million years ago</span>
+				<p>The Permian-Triassic extinction event – commonly known as the <em>Great Dying</em> – was the greatest mass extinction in Earth’s history, killing 96% of all species.</p>
+				<p>The main cause was the large volcanic eruptions of the Siberian Trap, which released toxic gases, caused global warming, acidified the oceans, and reduced oxygen levels.</p>
 			</article>
-			<article data-mya="315" id="amniotes" class="bio">
+			<article data-mya="320" id="amniotes" class="bio">
 				<h3>Amniotes</h3>
-				<span class="time">ca. 315 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta libero. Vivamus maximus.</p>
-				<aside data-mya="320" id="pangea-formation" class="geological">
-					<h3>Pangea forms</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
+				<span class="time">ca. 320 million years ago</span>
+				<p>Unlike fish eggs, the amniote egg provides the embryo a self-contained internal aquatic environment, surrounded by layers of protective membranes.</p>
+				<p>This adaptation allowed amniotes to spread away from water, unlike their amphibian ancestors who still needed to return to water to lay eggs. Amniotes alive today are commonly divided into reptiles, birds, and mammals.</p>
+				<aside data-mya="320" id="pangaea-formation" class="geological form">
+					<h3>Pangaea forms</h3>
+					<p>The configuration of Pangaea prevented warm equatorial waters from circling the Earth, creating highly seasonal climates and arid conditions in the interior of the supercontinent.</p>
+					<p>This may have favoured the diversification of amniotes, who were better adapted to the dry conditions and were free to disperse throughout the continent.</p>
 				</aside>
 			</article>
-			<article data-mya="365" id="seeds" class="bio">
+			<article data-mya="370" id="seeds" class="bio">
 				<h3>Seeds</h3>
-				<span class="time">ca. 365 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta libero. Vivamus maximus blandit sem, blandit pharetra felis.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu.</p>
+				<span class="time">ca. 370 million years ago</span>
+				<p>The seed’s tough rind allows it to lie dormant for years, waiting to germinate in favourable conditions. The nutrient reserves inside also provide seedlings a better chance at surviving early development.</p>
+				<p>And with adaptations like wings and barbs, some seeds can be carried by wind or animals over longer distances compared to single-celled spores.</p>
+				<p>Seed plants also developed pollen, whose protective coat helps them spread their genes farther and reproduce in the absence of water.</p>
+				<p>These adaptations enabled seed plants to colonise inland areas.</p>
 			</article>
 			<article data-mya="410" id="roots-leaves-stems" class="bio">
 				<h3>Roots, Leaves, and Stems</h3>
-				<span class="time">ca. 410 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien ar.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vi.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncu.</p>
+				<span class="time">ca. 410 million years ago</span>
+				<p>The evolution of vascular tissue allowed plants to distribute resources throughout their body, enabling them to grow larger and develop even more specialised organs that help them survive on land.</p>
+				<p><strong>Roots</strong> allow plants to reach water and nutrients stored underground. Plant roots changed Earth’s landscape by creating soil; before, dry land was a desert of bare rock and dust, prone to violent flash floods and temperature fluctuations.</p>
+				<p><strong>Leaves</strong> specialise in photosynthesis, as their large surface areas enable more efficient capture of light and CO<sub>2</sub>.</p>
+				<p><strong>Stems</strong> allow plants to grow taller, giving them a competitive advantage in both sunlight access and spore distribution.</p>
 			</article>
 			<article data-mya="470" id="land-plants-animals" class="bio">
 				<h3>Land Plants and Animals</h3>
-				<span class="time">ca. 470 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringil.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facil.</p>
+				<span class="time">ca. 470 million years ago</span>
+				<p>The first <strong>plants</strong> on land evolved from green algae that developed desiccation-resistant spores. These small, creeping, and moss-like plants live in moist environments near coasts, as they still depend on water to reproduce.</p>
+				<hr/>
+				<p>The first <strong>animals</strong> on land were small, air-breathing arthropods like centipedes or spiders, feeding on microbial mats in coastal environments.</p>
 			</article>
-			<article data-mya="541" id="animals-diversify" class="bio">
+			<article data-mya="540" id="animals-diversify" class="bio">
 				<h3>Animals Diversify</h3>
-				<span class="time">ca. 541 – 516 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla.</p>
-				<aside data-mya="600" id="pannotia-formation" class="geological">
-					<h3>Pannotia</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet.</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante.</p>
-				</aside>
+				<span class="time">ca. 540 – 520 million years ago</span>
+				<p>Animals diversified in the oceans at an unmatched rate during the period commonly known as the <em>Cambrian explosion</em>, which saw the emergence of essentially every phylum of animal known today.</p>
+				<p>This was accompanied by the widespread development of hard body parts – like shells and skeletons – independently in different animal lineages, likely driven by increased predation pressure and availability of calcium in the ocean.</p>
 			</article>
 			<article data-mya="600" id="complex-multicellular-life" class="bio">
-				<h3>Multicellular Life</h3>
-				<span class="time">ca. 600 – 541 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
+				<h3>Complex Multicellular Life</h3>
+				<span class="time">by 600 million years ago</span>
+				<p>The oldest macroscopic fossils of complex multicellular life come from the Ediacaran period.</p>
+				<p>Most of these soft-bodied organisms had very different body structures than life today, and it is hard to tell where they fit in the taxonomy of life.</p>
+				<aside data-mya="600" id="pannotia-formation" class="geological form">
+					<h3>Pannotia</h3>
+					<p>Some theorise that the formation of Pannotia was the cause of the coinciding major increase in atmospheric oxygen.</p>
+					<p>The collision of continents created rapidly-eroding supermountains, releasing nutrients into the oceans which enhances oxygenic photosynthesis. The increased sedimentation also reduced the capture of oxygen by preventing reactions with free oxygen.</p>
+					<p>This rise of atmospheric oxygen to modern levels also oxygenated the deep oceans, and was likely crucial to the development of complex multicellular life with higher energy requirements.</p>
+				</aside>
 			</article>
-			<aside data-mya="675" id="snowball-earth" class="geological">
-				<h3>Snowball Earth</h3>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique.</p>
-			</aside>
 			<div data-mya="750" class="map-spacer"></div>
 			<aside data-mya="760" id="precambrian-intro">
 				<div>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
+					<p>Older palaeogeographic maps vary widely between reconstruction models. It is difficult to constraint Precambrian continent positions, since little of the world’s mapped outcrop are of that age, and reliable palaeomagnetic data are scarce.</p>
+					<p>However, there is growing consensus on the existence of two earlier supercontinents, Rodinia and Nuna. The following maps are based on reconstructions by <a href="#evans-2021">Evans (2021)</a> and <a href="#elming-et-al-2021">Elming et al. (2021)</a>.</p>
 				</div>
+			</aside>
+			<aside data-mya="800" id="rodinia-breakup" class="geological break">
+				<h3>Rodinia breaks up</h3>
+				<p>The breakup of Rodinia may have promoted the diversification of multicellular life. Continental rifting created vast shallow seas, providing more sunlit areas where life can diversify with less competition. In addition, hydrothermal rifts provided critical nutrients for the development of skeletons in Cambrian animals.</p>
 			</aside>
 			<article data-mya="800" id="boring-billion" class="bio">
 				<h3>“Boring Billion”</h3>
-				<span class="time">ca. 800 – 1800 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu.</p>
-				<p>Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet, mollis mi ut, porta li.</p>
-				<aside data-mya="800" id="rodinia-breakup" class="geological end">
-					<h3>Rodinia breaks up</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet.</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta.</p>
-				</aside>
-				<aside data-mya="1000" class="geological">
+				<p>The period between 1.8 to 0.8 billion years ago is sometimes referred to as the <em>Boring Billion</em>, due to the stability in ocean and atmospheric composition as well as apparent slow diversification of life.</p>
+				<p>Although eukaryotes had emerged around the beginning of this period, the oceans remained dominated by single-celled prokaryotes. The development of multicellular life may have been limited by the scarcity of oxygen in the oceans.</p>
+				<aside data-mya="1000" id="rodinia-formation" class="geological form">
 					<h3>Rodinia forms</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
+					<p>The assembly of Rodinia is evidenced by the widespread formation of mountains dated to 1.3–1.0 billion years ago on virtually every continent.</p>
 				</aside>
-				<aside data-mya="1300" id="nuna-breakup" class="geological end">
+				<aside data-mya="1300" id="nuna-breakup" class="geological break">
 					<h3>Nuna breaks up</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
+					<p>Nuna has been given many other names, the most common of which are Columbia and Hudsonland. The exact timing of assembly and breakup of the supercontinent is heavily debated.</p>
+				</aside>
+				<aside data-mya="1650" class="geological form">
+					<h3>Nuna forms</h3>
+					<p>The accretion of Nuna coincided with a period of rapid increase in atmospheric oxygen levels as well as the development of eukaryotes.</p>
+					<p>As with the formation of Pannotia, erosion of the newly-formed supermountains may have triggered the rise in oxygen via increased sedimentation, which promoted photosynthesis while burying materials that react with oxygen. The formation of shallow, oxygenated marine environments may also been crucial to the development of eukaryotes.</p>
 				</aside>
 			</article>
 			<article data-mya="1800" id="eukaryotes" class="bio">
 				<h3>Eukaryotes</h3>
-				<span class="time">ca. 1800 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula. Etiam sapien arcu, dapibus non fringilla porta, lacinia vitae eros. Mauris et sem aliquet.</p>
-				<aside data-mya="1800" class="geological">
-					<h3>Nuna forms</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis, lobortis turpis vel, rhoncus nibh. Mauris a ante quis arcu facilisis gravida a tristique ligula.</p>
-				</aside>
+				<span class="time">by 1.8 billion years ago</span>
+				<p>All complex multicellular organisms like plants, animals, and fungi belong to the domain of Eukarya.</p>
+				<p>Eukaryotic cells contain a nucleus and organelles that perform specialised functions. This compartimentalisation enables more efficient energy use and allows them to attain larger sizes.</p>
+				<p>The most widely-accepted theory for their origin is symbiogenesis, whereby a bacterium becomes an organelle by genetically integrating with a host cell and sharing their functions. The mitochondrion and chloroplast are organelles that each descended from a single lineage of such endosymbiotic events.</p>
 			</article>
 			<article data-mya="2400" id="great-oxidation-event" class="bio">
 				<h3>Great Oxidation Event</h3>
-				<span class="time">ca. 2400 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
+				<span class="time">ca. 2.4 billion years ago</span>
+				<p>Starting around 2.4 billion years ago, oxygen first began to accumulate in the atmosphere as the rate of oxygen production outpaced its sequestration.</p>
+				<p>Although oxygen-producing cyanobacteria had developed by 2.8 billion years ago, for a long time any free oxygen was captured by reactive compounds from Earth’s interior.</p>
+				<p>This influx of oxygen was significant enough to cause mass extinctions of anaerobic life. However, atmospheric oxygen continued to remain below 5% of modern levels until another major increase around 600 million years ago, coinciding with the development of Ediacaran life.</p>
+				<p>The increase in oxygen availability was a critical step towards the development of complex multicellular life, whose higher energy requirements depend on the additional free energy from oxygen.</p>
 			</article>
-			<article data-mya="2700" id="oxygenic-photosynthesis" class="bio">
+			<article data-mya="2800" id="oxygenic-photosynthesis" class="bio">
 				<h3>Oxygenic Photosynthesis</h3>
-				<span class="time">ca. 2700 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
+				<span class="time">by 2.8 billion years ago</span>
+				<p>Cyanobacteria were the first producers of oxygen. Although other early life captured energy from the sun via other types of photosynthesis, these were the first to produce oxygen as a by-product.</p>
+				<p>This innovation apparently occurred only once. In fact, chloroplasts are descendants of a single cyanobacterium that became genetically integrated as an organelle of its host cell. Today’s plants and algae all depend on the chloroplast to perform photosynthesis.</p>
 			</article>
 			<article data-mya="3400" id="oldest-fossils" class="bio">
 				<h3>Oldest Fossils</h3>
-				<span class="time">ca. 3400 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
+				<span class="time">ca. 3.4 billion years ago</span>
+				<p>The oldest fossils found are the stromatolites of the Strelley Pool Formation in Australia. These microscopic sedimentary formations have complex structures that cannot be explained by known non-biotic processes. They were likely formed by photosynthetic microbial mats that lived on the shallow ocean floors.</p>
+			</article>
+			<article data-mya="4300" id="water" class="bio">
+				<h3>Water</h3>
+				<span class="time">by 4.3 billion years ago</span>
+				<p>Signs of crust and liquid water existed by 4.3 billion years ago, when Earth first became theoretically habitable.</p>
 			</article>
 			<article data-mya="4600" id="formation-of-earth" class="bio">
 				<h3>Formation of Earth</h3>
-				<span class="time">ca. 4600 <abbr title="million years ago">mya</abbr></span>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget nisi convallis.</p>
+				<span class="time">ca. 4.6 billion years ago</span>
+				<p>Earth formed around 4.6 billion years ago along with other bodies of the Solar System. Shortly thereafter, around 4.5 billion years ago, a Mars-sized object collided with Earth, ejecting molten debris that became the Moon.</p>
 			</article>
 		</main>
 		<footer id="references">
@@ -315,37 +330,205 @@
 			<section>
 				<h3>Paleogeographic maps</h3>
 				<p><strong>Pangæa and Pannotia</strong>:
-				<span class="citation">Scotese, C.R., 2016. PALEOMAP PaleoAtlas for GPlates and the PaleoData Plotter Program, PALEOMAP Project, <a href="https://www.earthbyte.org/paleomap-paleoatlas-for-gplates/">https://www.earthbyte.org/paleomap-paleoatlas-for-gplates/</a></span></p>
+				<span class="citation">Scotese, C. R. (2016). <cite id="scotese-2016">PALEOMAP PaleoAtlas for GPlates and the PaleoData Plotter Program</cite>. PALEOMAP Project. <a href="https://www.earthbyte.org/paleomap-paleoatlas-for-gplates/">https://www.earthbyte.org/paleomap-paleoatlas-for-gplates/</a></span></p>
 				<p><strong>Rodinia</strong>:
-				<span class="citation">Evans, D.A.D., 2021. Chapter 17, Meso-Neoproterozoic Rodinia supercycle. In: Ancient Supercontinents and the Paleogeography of Earth. Elsevier. <a href="https://doi.org/10.1016/B978-0-12-818533-9.00006-0">https://doi.org/10.1016/B978-0-12-818533-9.00006-0</a></span></p>
+				<span class="citation">Evans, D. A. D. (2021). <cite class="chapter-title" id="evans-2021">Meso-Neoproterozoic Rodinia supercycle</cite>. In L. J. Pesonen, D. A. D. Evans, T. Veikkolainen, J. Salminen, &amp; S.-Å Elming (Eds.), <span class="larger-work-title">Ancient Supercontinents and the Paleogeography of Earth</span> (pp. 549–576). Elsevier. <a href="https://doi.org/10.1016/B978-0-12-818533-9.00006-0">https://doi.org/10.1016/B978-0-12-818533-9.00006-0</a></span></p>
 				<p><strong>Nuna</strong>:
-				<span class="citation">Elming, S.-Å., Salminen, J., & Pesonen, L. J., 2021. Paleo-Mesoproterozoic Nuna supercycle. In: Ancient Supercontinents and the Paleogeography of Earth. Elsevier. <a href="https://doi.org/10.1016/b978-0-12-818533-9.00001-1">https://doi.org/10.1016/b978-0-12-818533-9.00001-1</a></span></p>
+				<span class="citation">Elming, S.-Å., Salminen, J., &amp; Pesonen, L. J. (2021). <cite class="chapter-title" id="elming-et-al-2021">Paleo-Mesoproterozoic Nuna supercycle</cite>. In L. J. Pesonen, D. A. D. Evans, T. Veikkolainen, J. Salminen, &amp; S.-Å Elming (Eds.), <span class="larger-work-title">Ancient Supercontinents and the Paleogeography of Earth</span> (pp. 499–548). Elsevier. <a href="https://doi.org/10.1016/b978-0-12-818533-9.00001-1">https://doi.org/10.1016/b978-0-12-818533-9.00001-1</a></span></p>
 			</section>
 			<details>
 				<summary><h3>References for events</h3></summary>
 				<article>
 					<h4>Humans</h4>
 					<ol>
-						<li><span class="citation">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur efficitur rhoncus hendrerit. Maecenas justo lectus, laoreet eleifend congue nec, rutrum nec magna. Aenean tempus quam sed sapien gravida, tempus volutpat lorem</span></li>
+						<li class="citation">Barnosky, A. D., Matzke, N., Tomiya, S., Wogan, G. O. U., Swartz, B., Quental, T. B., Marshall, C., McGuire, J. L., Lindsey, E. L., Maguire, K. C., Mersey, B., &amp; Ferrer, E. A. (2011). <cite class="article-title">Has the Earth’s sixth mass extinction already arrived?</cite> <span class="larger-work-title">Nature, 471</span>(7336), 51–57. <a href="https://doi.org/10.1038/nature09678">https://doi.org/10.1038/nature09678</a></li>
 					</ol>
 				</article>
 				<article>
 					<h4>K–Pg Extinction</h4>
 					<ol>
-						<li><span class="citation">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur efficitur rhoncus hendrerit. Maecenas justo lectus, laoreet eleifend congue nec, rutrum nec magna. Aenean tempus quam sed sapien gravida, tempus volutpat lorem</span></li>
+						<li class="citation">Barnosky, A. D., Matzke, N., Tomiya, S., Wogan, G. O. U., Swartz, B., Quental, T. B., Marshall, C., McGuire, J. L., Lindsey, E. L., Maguire, K. C., Mersey, B., &amp; Ferrer, E. A. (2011). <cite class="article-title">Has the Earth’s sixth mass extinction already arrived?</cite> <span class="larger-work-title">Nature, 471</span>(7336), 51–57. <a href="https://doi.org/10.1038/nature09678">https://doi.org/10.1038/nature09678</a></li>
 					</ol>
 				</article>
 				<article>
 					<h4>Flowers</h4>
 					<ol>
-						<li><span class="citation">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur efficitur rhoncus hendrerit. Maecenas justo lectus, laoreet eleifend congue nec, rutrum nec magna. Aenean tempus quam sed sapien gravida, tempus volutpat lorem</span></li>
+						<li class="citation">Clark, M. A., Douglas, M., &amp; Choi, J. (2018). <cite>Biology 2e</cite>. OpenStax. <a href="https://openstax.org/details/books/biology-2e">https://openstax.org/details/books/biology-2e</a>.</li>
+						<li class="citation">Gee, H. (2021). <cite>A (Very) Short History of Life On Earth: 4.6 Billion Years in 12 Chapters</cite>. St. Martin's Publishing Group.</li>
+						<li class="citation">Shear, W. A. (1991). <cite class="article-title">The early development of terrestrial ecosystems</cite>. <span class="larger-work-title">Nature 351</span>(6324), 283–289. <a href="https://doi.org/10.1038/351283a0">https://doi.org/10.1038/351283a0</a></li>
 					</ol>
 				</article>
 				<article>
-					<h4>Pangea Breakup</h4>
+					<h4>Pangaea Breakup</h4>
 					<ol>
-						<li><span class="citation">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur efficitur rhoncus hendrerit. Maecenas justo lectus, laoreet eleifend congue nec, rutrum nec magna. Aenean tempus quam sed sapien gravida, tempus volutpat lorem</span></li>
-						<li><span class="citation">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur efficitur rhoncus hendrerit. Maecenas justo lectus, laoreet eleifend congue nec, rutrum nec magna. Aenean tempus quam sed sapien gravida, tempus volutpat lorem</span></li>
+						<li class="citation">Barnosky, A. D., Matzke, N., Tomiya, S., Wogan, G. O. U., Swartz, B., Quental, T. B., Marshall, C., McGuire, J. L., Lindsey, E. L., Maguire, K. C., Mersey, B., &amp; Ferrer, E. A. (2011). <cite class="article-title">Has the Earth’s sixth mass extinction already arrived?</cite> <span class="larger-work-title">Nature, 471</span>(7336), 51–57. <a href="https://doi.org/10.1038/nature09678">https://doi.org/10.1038/nature09678</a></li>
+						<li class="citation">Editors of Encylopaedia Britannica. (n.d.). <cite class="article-title">end-Triassic extinction</cite>. In <span class="larger-work-title">Encyclopedia Britannica</span>. <a href="https://www.britannica.com/science/end-Triassic-extinction">https://www.britannica.com/science/end-Triassic-extinction</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Dinosaurs and Mammals</h4>
+					<ol>
+						<li class="citation">Gee, H. (2021). <cite>A (Very) Short History of Life On Earth: 4.6 Billion Years in 12 Chapters</cite>. St. Martin's Publishing Group.</li>
+						<li class="citation">Kemp, T. S. (2005). <cite>The Origin and Evolution of Mammals</cite>. Oxford University Press on Demand.</li>
+						<li class="citation">Martinez, R. N., Sereno, P. C., Alcober, O. A., Colombi, C. E., Renne, P. R., Montañez, I. P., &amp; Currie, B. S. (2011). <cite class="article-title">A Basal Dinosaur from the Dawn of the Dinosaur Era in Southwestern Pangaea</cite>. <span class="larger-work-title">Science, 331</span>(6014), 206–210. <a href="https://doi.org/10.1126/science.1198467">https://doi.org/10.1126/science.1198467</a></li>
+						<li class="citation">Prothero, D. R. (2016). <cite>The Princeton Field Guide to Prehistoric Mammals</cite>. Princeton University Press. <a href="https://doi.org/10.1515/9781400884452">https://doi.org/10.1515/9781400884452</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Great Dying</h4>
+					<ol>
+						<li class="citation">Barnosky, A. D., Matzke, N., Tomiya, S., Wogan, G. O. U., Swartz, B., Quental, T. B., Marshall, C., McGuire, J. L., Lindsey, E. L., Maguire, K. C., Mersey, B., &amp; Ferrer, E. A. (2011). <cite class="article-title">Has the Earth’s sixth mass extinction already arrived?</cite> <span class="larger-work-title">Nature, 471</span>(7336), 51–57. <a href="https://doi.org/10.1038/nature09678">https://doi.org/10.1038/nature09678</a></li>
+						<li class="citation">Jurikova, H., Gutjahr, M., Wallmann, K., Flögel, S., Liebetrau, V., Posenato, R., Angiolini, L., Garbelli, C., Brand, U., Wiedenbeck, M., &amp; Eisenhauer, A. (2020). <cite class="article-title">Permian–Triassic mass extinction pulses driven by major marine carbon cycle perturbations</cite>. <span class="larger-work-title">Nature Geoscience, 13</span>(11), 745–750. <a href="https://doi.org/10.1038/s41561-020-00646-4">https://doi.org/10.1038/s41561-020-00646-4</a></li>
+						<li class="citation">Rogers, J. J. W., &amp; Santosh, M. (2004). <cite>Continents and Supercontinents</cite>. Oxford University Press.</li>
+					</ol>
+				</article>
+				<article>
+					<h4>Amniotes</h4>
+					<ol>
+						<li class="citation">Benton, M. J., Donoghue, P. C. J., Asher, R. J., Friedman, M., Near, T. J., &amp; Vinther, J. (2015). <cite class="article-title">Constraints on the timescale of animal evolutionary history</cite>. <span class="larger-work-title">Palaeontologia Electronica</span>. <a href="https://doi.org/10.26879/424">https://doi.org/10.26879/424</a></li>
+						<li class="citation">Clark, M. A., Douglas, M., &amp; Choi, J. (2018). <cite>Biology 2e</cite>. OpenStax. <a href="https://openstax.org/details/books/biology-2e">https://openstax.org/details/books/biology-2e</a>.</li>
+						<li class="citation">Gee, H. (2021). <cite>A (Very) Short History of Life On Earth: 4.6 Billion Years in 12 Chapters</cite>. St. Martin's Publishing Group.</li>
+					</ol>
+				</article>
+				<article>
+					<h4>Pangaea forms</h4>
+					<ol>
+						<li class="citation">Gee, H. (2021). <cite>A (Very) Short History of Life On Earth: 4.6 Billion Years in 12 Chapters</cite>. St. Martin's Publishing Group.</li>
+						<li class="citation">Pardo, J. D., Small, B. J., Milner, A. R., &amp; Huttenlocker, A. K. (2019). <cite class="article-title">Carboniferous–Permian climate change constrained early land vertebrate radiations</cite>. <span class="larger-work-title">Nature Ecology &amp; Evolution, 3</span>(2), 200–206. <a href="https://doi.org/10.1038/s41559-018-0776-z">https://doi.org/10.1038/s41559-018-0776-z</a></li>
+						<li class="citation">Rogers, J. J. W., &amp; Santosh, M. (2004). <cite>Continents and Supercontinents</cite>. Oxford University Press.</li>
+					</ol>
+				</article>
+				<article>
+					<h4>Seeds</h4>
+					<ol>
+						<li class="citation">Clark, M. A., Douglas, M., &amp; Choi, J. (2018). <cite>Biology 2e</cite>. OpenStax. <a href="https://openstax.org/details/books/biology-2e">https://openstax.org/details/books/biology-2e</a>.</li>
+						<li class="citation">Labandeira, C. C. (2007). <cite class="article-title">The origin of herbivory on land: Initial patterns of plant tissue consumption by arthropods</cite>. <span class="larger-work-title">Insect Science, 14</span>(4), 259–275. <a href="https://doi.org/10.1111/j.1744-7917.2007.00141.x-i1">https://doi.org/10.1111/j.1744-7917.2007.00141.x-i1</a></li>
+						<li class="citation">Lambers, H. (n.d.). <cite class="article-title">seed</cite>. In <span class="larger-work-title">Encyclopedia Britannica</span>. <a href="https://www.britannica.com/science/seed-plant-reproductive-part">https://www.britannica.com/science/seed-plant-reproductive-part</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Roots, Leaves, and Stems</h4>
+					<ol>
+						<li class="citation">Algeo, T. J., Scheckler, S. E., &amp; Maynard, J. B. (2001). <cite class="article-title">12. Effects of the Middle to Late Devonian Spread of Vascular Land Plants on Weathering Regimes, Marine Biotas, and Global Climate</cite>. In P. Gensel &amp; D. Edwards (Eds.), <span class="larger-work-title">Plants Invade the Land: Evolutionary and Environmental Perspectives</span>, 213-236. Columbia University Press. <a href="https://doi.org/10.7312/gens11160-013">https://doi.org/10.7312/gens11160-013</a></li>
+						<li class="citation">Clark, M. A., Douglas, M., &amp; Choi, J. (2018). <cite>Biology 2e</cite>. OpenStax. <a href="https://openstax.org/details/books/biology-2e">https://openstax.org/details/books/biology-2e</a>.</li>
+						<li class="citation">Labandeira, C. C. (2007). <cite class="article-title">The origin of herbivory on land: Initial patterns of plant tissue consumption by arthropods</cite>. <span class="larger-work-title">Insect Science, 14</span>(4), 259–275. <a href="https://doi.org/10.1111/j.1744-7917.2007.00141.x-i1">https://doi.org/10.1111/j.1744-7917.2007.00141.x-i1</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Colonisation of Land</h4>
+					<ol>
+						<li class="citation">Gee, H. (2021). <cite>A (Very) Short History of Life On Earth: 4.6 Billion Years in 12 Chapters</cite>. St. Martin's Publishing Group.</li>
+						<li class="citation">Knoll, A. H., &amp; Nowak, M. A. (2017). <cite class="article-title">The timetable of evolution</cite>. <span class="larger-work-title">Science advances, 3</span>(5), e1603076. <a href="https://doi.org/10.1126/sciadv.1603076">https://doi.org/10.1126/sciadv.1603076</a></li>
+						<li class="citation">Shear, W. A. (1991). <cite class="article-title">The early development of terrestrial ecosystems</cite>. <span class="larger-work-title">Nature 351</span>(6324), 283–289. <a href="https://doi.org/10.1038/351283a0">https://doi.org/10.1038/351283a0</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Animals Diversify</h4>
+					<ol>
+						<li class="citation">Flannery, T. F. (n.d.). <cite class="article-title">Cambrian explosion</cite>. In <span class="larger-work-title">Encyclopedia Britannica</span>. <a href="https://www.britannica.com/science/Cambrian-explosion">https://www.britannica.com/science/Cambrian-explosion</a></li>
+						<li class="citation">Gee, H. (2021). <cite>A (Very) Short History of Life On Earth: 4.6 Billion Years in 12 Chapters</cite>. St. Martin's Publishing Group.</li>
+						<li class="citation">Maruyama, S., &amp; Santosh, M. (2008). <cite class="article-title">Models on Snowball Earth and Cambrian explosion: A synopsis</cite>. <span class="larger-work-title">Gondwana Research, 14</span>(1–2), 22–32. <a href="https://doi.org/10.1016/j.gr.2008.01.004">https://doi.org/10.1016/j.gr.2008.01.004</a></li>
+						<li class="citation">Wood, R., Liu, A. G., Bowyer, F., Wilby, P. R., Dunn, F. S., Kenchington, C. G., Cuthill, J. F. H., Mitchell, E. G., &amp; Penny, A. (2019). <cite class="article-title">Integrated records of environmental change and evolution challenge the Cambrian Explosion</cite>. <span class="larger-work-title">Nature Ecology &amp; Evolution, 3</span>(4), 528–538. <a href="https://doi.org/10.1038/s41559-019-0821-6">https://doi.org/10.1038/s41559-019-0821-6</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Multicellular Life</h4>
+					<ol>
+						<li class="citation">Bobrovskiy, I., Hope, J. M., Ivantsov, A., Nettersheim, B. J., Hallmann, C., &amp; Brocks, J. J. (2018). <cite class="article-title">Ancient steroids establish the Ediacaran fossil <em>Dickinsonia</em> as one of the earliest animals</cite>. <span class="larger-work-title">Science, 361</span>(6408), 1246–1249. <a href="https://doi.org/10.1126/science.aat7228">https://doi.org/10.1126/science.aat7228</a></li>
+						<li class="citation">Windley, B. F. (n.d.). <cite class="article-title">Ediacara fauna</cite>. In <span class="larger-work-title">Encyclopedia Britannica</span>. <a href="https://www.britannica.com/science/Ediacara-fauna">https://www.britannica.com/science/Ediacara-fauna</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Pannotia</h4>
+					<ol>
+						<li class="citation">Campbell, I. H., &amp; Allen, C. M. (2008). <cite class="article-title">Formation of supercontinents linked to increases in atmospheric oxygen</cite>. <span class="larger-work-title">Nature Geoscience, 1</span>(8), 554–558. <a href="https://doi.org/10.1038/ngeo259">https://doi.org/10.1038/ngeo259</a></li>
+						<li class="citation">Canfield, D. E., Zhang, S., Frank, A. B., Wang, X., Wang, H., Su, J., Ye, Y., &amp; Frei, R. (2018). <cite class="article-title">Highly fractionated chromium isotopes in Mesoproterozoic-aged shales and atmospheric oxygen</cite>. <span class="larger-work-title">Nature Communications, 9</span>(1). <a href="https://doi.org/10.1038/s41467-018-05263-9">https://doi.org/10.1038/s41467-018-05263-9</a></li>
+						<li class="citation">Dalziel, I. W. D. (1997). <cite class="article-title">OVERVIEW: Neoproterozoic-Paleozoic geography and tectonics: Review, hypothesis, environmental speculation</cite>. <span class="larger-work-title">Geological Society of America Bulletin, 109</span>(1), 16–42. <a href="https://doi.org/10.1130/0016-7606(1997)109<0016:onpgat>2.3.co;2">https://doi.org/10.1130/0016-7606(1997)109<0016:onpgat>2.3.co;2</a></li>
+						<li class="citation">Frei, R., Gaucher, C., Poulton, S. W., &amp; Canfield, D. E. (2009). <cite class="article-title">Fluctuations in Precambrian atmospheric oxygenation recorded by chromium isotopes</cite>. <span class="larger-work-title">Nature, 461</span>(7261), 250–253. <a href="https://doi.org/10.1038/nature08266">https://doi.org/10.1038/nature08266</a></li>
+						<li class="citation">Lyons, T. W., Reinhard, C. T., &amp; Planavsky, N. J. (2014). <cite class="article-title">The rise of oxygen in Earth’s early ocean and atmosphere</cite>. <span class="larger-work-title">Nature, 506</span>(7488), 307–315. <a href="https://doi.org/10.1038/nature13068">https://doi.org/10.1038/nature13068</a></li>
+						<li class="citation">Maruyama, S., &amp; Santosh, M. (2008). <cite class="article-title">Models on Snowball Earth and Cambrian explosion: A synopsis</cite>. <span class="larger-work-title">Gondwana Research, 14</span>(1–2), 22–32. <a href="https://doi.org/10.1016/j.gr.2008.01.004">https://doi.org/10.1016/j.gr.2008.01.004</a></li>
+						<li class="citation">Windley, B. F. (n.d.). <cite class="article-title">Ediacara fauna</cite>. In <span class="larger-work-title">Encyclopedia Britannica</span>. <a href="https://www.britannica.com/science/Ediacara-fauna">https://www.britannica.com/science/Ediacara-fauna</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Rodinia Breaks Up</h4>
+					<ol>
+						<li class="citation">Gee, H. (2021). <cite>A (Very) Short History of Life On Earth: 4.6 Billion Years in 12 Chapters</cite>. St. Martin's Publishing Group.</li>
+						<li class="citation">Holland, S. M. (n.d.). <cite class="article-title">Ordovician Period</cite>. In <span class="larger-work-title">Encyclopedia Britannica</span>. <a href="https://www.britannica.com/science/Ordovician-Period">https://www.britannica.com/science/Ordovician-Period</a></li>
+						<li class="citation">Lenton, T. M., Boyle, R. A., Poulton, S. W., Shields-Zhou, G. A., &amp; Butterfield, N. J. (2014). <cite class="article-title">Co-evolution of eukaryotes and ocean oxygenation in the Neoproterozoic era</cite>. <span class="larger-work-title">Nature Geoscience, 7</span>(4), 257–265. <a href="https://doi.org/10.1038/ngeo2108">https://doi.org/10.1038/ngeo2108</a></li>
+						<li class="citation">Maruyama, S., &amp; Santosh, M. (2008). <cite class="article-title">Models on Snowball Earth and Cambrian explosion: A synopsis</cite>. <span class="larger-work-title">Gondwana Research, 14</span>(1–2), 22–32. <a href="https://doi.org/10.1016/j.gr.2008.01.004">https://doi.org/10.1016/j.gr.2008.01.004</a></li>
+						<li class="citation">Nance, R. D., Murphy, J. B., &amp; Santosh, M. (2014). <cite class="article-title">The supercontinent cycle: A retrospective essay</cite>. <span class="larger-work-title">Gondwana Research, 25</span>(1), 4–29. <a href="https://doi.org/10.1016/j.gr.2012.12.026">https://doi.org/10.1016/j.gr.2012.12.026</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Boring Billion</h4>
+					<ol>
+						<li class="citation">Canfield, D. E., Zhang, S., Frank, A. B., Wang, X., Wang, H., Su, J., Ye, Y., &amp; Frei, R. (2018). <cite class="article-title">Highly fractionated chromium isotopes in Mesoproterozoic-aged shales and atmospheric oxygen</cite>. <span class="larger-work-title">Nature Communications, 9</span>(1). <a href="https://doi.org/10.1038/s41467-018-05263-9">https://doi.org/10.1038/s41467-018-05263-9</a></li>
+						<li class="citation">Lenton, T. M., Boyle, R. A., Poulton, S. W., Shields-Zhou, G. A., &amp; Butterfield, N. J. (2014). <cite class="article-title">Co-evolution of eukaryotes and ocean oxygenation in the Neoproterozoic era</cite>. <span class="larger-work-title">Nature Geoscience, 7</span>(4), 257–265. <a href="https://doi.org/10.1038/ngeo2108">https://doi.org/10.1038/ngeo2108</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Rodinia Forms</h4>
+					<ol>
+						<li class="citation">Evans, D. A. D. (2021). <cite class="chapter-title">Meso-Neoproterozoic Rodinia supercycle</cite>. In L. J. Pesonen, D. A. D. Evans, T. Veikkolainen, J. Salminen, &amp; S.-Å Elming (Eds.), <span class="larger-work-title">Ancient Supercontinents and the Paleogeography of Earth</span> (pp. 549–576). Elsevier. <a href="https://doi.org/10.1016/B978-0-12-818533-9.00006-0">https://doi.org/10.1016/B978-0-12-818533-9.00006-0</a></li>
+						<li class="citation">Nance, R. D., Murphy, J. B., &amp; Santosh, M. (2014). <cite class="article-title">The supercontinent cycle: A retrospective essay</cite>. <span class="larger-work-title">Gondwana Research, 25</span>(1), 4–29. <a href="https://doi.org/10.1016/j.gr.2012.12.026">https://doi.org/10.1016/j.gr.2012.12.026</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Nuna Breaks Up</h4>
+					<ol>
+						<li class="citation">Elming, S.-Å., Salminen, J., &amp; Pesonen, L. J. (2021). <cite class="chapter-title">Paleo-Mesoproterozoic Nuna supercycle</cite>. In L. J. Pesonen, D. A. D. Evans, T. Veikkolainen, J. Salminen, &amp; S.-Å Elming (Eds.), <span class="larger-work-title">Ancient Supercontinents and the Paleogeography of Earth</span> (pp. 499–548). Elsevier. <a href="https://doi.org/10.1016/b978-0-12-818533-9.00001-1">https://doi.org/10.1016/b978-0-12-818533-9.00001-1</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Eukaryotes</h4>
+					<ol>
+						<li class="citation">Betts, H. C., Puttick, M. N., Clark, J. W., Williams, T. A., Donoghue, P. C. J., &amp; Pisani, D. (2018). <cite class="article-title">Integrated genomic and fossil evidence illuminates life’s early evolution and eukaryote origin</cite>. <span class="larger-work-title">Nature Ecology &amp; Evolution, 2</span>(10), 1556–1562. <a href="https://doi.org/10.1038/s41559-018-0644-x">https://doi.org/10.1038/s41559-018-0644-x</a></li>
+						<li class="citation">Editors of Encylopaedia Britannica. (n.d.). <cite class="article-title">protist</cite>. In <span class="larger-work-title">Encyclopedia Britannica</span>. <a href="https://www.britannica.com/science/protist">https://www.britannica.com/science/protist</a></li>
+						<li class="citation">Gee, H. (2021). <cite>A (Very) Short History of Life On Earth: 4.6 Billion Years in 12 Chapters</cite>. St. Martin's Publishing Group.</li>
+						<li class="citation">Keeling, P. J. (2010). <cite class="article-title">The endosymbiotic origin, diversification and fate of plastids</cite>. <span class="larger-work-title">Philosophical Transactions of the Royal Society B: Biological Sciences, 365</span>(1541), 729–748. <a href="https://doi.org/10.1098/rstb.2009.0103">https://doi.org/10.1098/rstb.2009.0103</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Nuna Forms</h4>
+					<ol>
+						<li class="citation">Campbell, I. H., &amp; Allen, C. M. (2008). <cite class="article-title">Formation of supercontinents linked to increases in atmospheric oxygen</cite>. <span class="larger-work-title">Nature Geoscience, 1</span>(8), 554–558. <a href="https://doi.org/10.1038/ngeo259">https://doi.org/10.1038/ngeo259</a></li>
+						<li class="citation">Frei, R., Gaucher, C., Poulton, S. W., &amp; Canfield, D. E. (2009). <cite class="article-title">Fluctuations in Precambrian atmospheric oxygenation recorded by chromium isotopes</cite>. <span class="larger-work-title">Nature, 461</span>(7261), 250–253. <a href="https://doi.org/10.1038/nature08266">https://doi.org/10.1038/nature08266</a></li>
+						<li class="citation">Nance, R. D., Murphy, J. B., &amp; Santosh, M. (2014). <cite class="article-title">The supercontinent cycle: A retrospective essay</cite>. <span class="larger-work-title">Gondwana Research, 25</span>(1), 4–29. <a href="https://doi.org/10.1016/j.gr.2012.12.026">https://doi.org/10.1016/j.gr.2012.12.026</a></li>
+						<li class="citation">Rogers, J. J. W., &amp; Santosh, M. (2009). <cite class="article-title">Tectonics and surface effects of the supercontinent Columbia</cite>. <span class="article-title">Gondwana Research, 15</span>(3–4), 373–380. <a href="https://doi.org/10.1016/j.gr.2008.06.008">https://doi.org/10.1016/j.gr.2008.06.008</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Great Oxidation Event</h4>
+					<ol>
+						<li class="citation">Canfield, D. E., Zhang, S., Frank, A. B., Wang, X., Wang, H., Su, J., Ye, Y., &amp; Frei, R. (2018). <cite class="article-title">Highly fractionated chromium isotopes in Mesoproterozoic-aged shales and atmospheric oxygen</cite>. <span class="larger-work-title">Nature Communications, 9</span>(1). <a href="https://doi.org/10.1038/s41467-018-05263-9">https://doi.org/10.1038/s41467-018-05263-9</a></li>
+						<li class="citation">Lyons, T. W., Reinhard, C. T., &amp; Planavsky, N. J. (2014). <cite class="article-title">The rise of oxygen in Earth’s early ocean and atmosphere</cite>. <span class="larger-work-title">Nature, 506</span>(7488), 307–315. <a href="https://doi.org/10.1038/nature13068">https://doi.org/10.1038/nature13068</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Oxygenic Photosynthesis</h4>
+					<ol>
+						<li class="citation">Lyons, T. W., Reinhard, C. T., &amp; Planavsky, N. J. (2014). <cite class="article-title">The rise of oxygen in Earth’s early ocean and atmosphere</cite>. <span class="larger-work-title">Nature, 506</span>(7488), 307–315. <a href="https://doi.org/10.1038/nature13068">https://doi.org/10.1038/nature13068</a></li>
+						<li class="citation">Knoll, A. H., &amp; Nowak, M. A. (2017). <cite class="article-title">The timetable of evolution</cite>. <span class="larger-work-title">Science advances, 3</span>(5), e1603076. <a href="https://doi.org/10.1126/sciadv.1603076">https://doi.org/10.1126/sciadv.1603076</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Oldest Fossils</h4>
+					<ol>
+						<li class="citation">Javaux, E. J. (2019). <cite class="article-title">Challenges in evidencing the earliest traces of life</cite>. <span class="larger-work-title">Nature, 572</span>(7770), 451–460. <a href="https://doi.org/10.1038/s41586-019-1436-4">https://doi.org/10.1038/s41586-019-1436-4</a></li>
+						<li class="citation">Knoll, A. H., &amp; Nowak, M. A. (2017). <cite class="article-title">The timetable of evolution</cite>. <span class="larger-work-title">Science advances, 3</span>(5), e1603076. <a href="https://doi.org/10.1126/sciadv.1603076">https://doi.org/10.1126/sciadv.1603076</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Water</h4>
+					<ol>
+						<li class="citation">Javaux, E. J. (2019). <cite class="article-title">Challenges in evidencing the earliest traces of life</cite>. <span class="larger-work-title">Nature, 572</span>(7770), 451–460. <a href="https://doi.org/10.1038/s41586-019-1436-4">https://doi.org/10.1038/s41586-019-1436-4</a></li>
+					</ol>
+				</article>
+				<article>
+					<h4>Formation of Earth</h4>
+					<ol>
+						<li class="citation">Pesonen, L. J., Evans, D. A. D., Veikkolainen, T., Salminen, J., & Elming, S.-Å. (2021). <cite class="chapter-title">Precambrian supercontinents and supercycles—an overview</cite>. In L. J. Pesonen, D. A. D. Evans, T. Veikkolainen, J. Salminen, &amp; S.-Å Elming (Eds.), <span class="larger-work-title">Ancient Supercontinents and the Paleogeography of Earth</span> (pp. 1–50). Elsevier. <a href="https://doi.org/10.1016/b978-0-12-818533-9.00020-5">https://doi.org/10.1016/b978-0-12-818533-9.00020-5</a></li>
 					</ol>
 				</article>
 			</details>
