@@ -5,6 +5,7 @@
 	margin: 0 auto;
 	z-index: 2;
 	touch-action: none;
+	text-align: center;
 	/* prevent pointer capture over story text */
 	pointer-events: none;
 }
@@ -19,7 +20,7 @@
 	}
 }
 
-#globe-group > * {
+#globe-group:not(.static) > * {
 	pointer-events: auto;
 }
 #globe {
@@ -38,6 +39,7 @@
 	position: absolute;
 	width: 100%;
 	height: 100%;
+	left: 0;
 }
 #globe-texture {
 	border-radius: 100%;
@@ -101,9 +103,12 @@
 	display: block;
 	position: absolute;
 	z-index: 1;
-	top: 0;
-	width: 100%;
-	height: 100%;
+	top: var(--globe-top-padding);
+	width: var(--globe-size);
+	height: var(--globe-size);
+	border-radius: 100%;
+	left: 50%;
+	transform: translateX(-50%);
 }
 #globe-group.static::before {
 	pointer-events: auto;
