@@ -101,15 +101,24 @@ function init(theProjection, overlayNode) {
 
 
 	// handle pointer events
+	let clickStartCraton;
+	overlay.on('mousedown', e=>{
+		clickStartCraton = getTargetCratonName(e);
+	});
 	overlay.on('click', e=>{
 		const name = getTargetCratonName(e);
-		if (name != null) {
+		if (name != null && clickStartCraton && name == clickStartCraton) {
 			setTrackingToLabel(overlayNode.querySelector(
 				`.continent-labels [data-craton-name="${name}"]`
 			));
 		}
 	});
-	overlay.on('mousemove', e=>{
+	// listen on container, which captures pointer on drag
+	select(overlay.node().parentNode).on('mousemove', e=>{
+		// do not track to craton if label is dragged
+		clickStartCraton = undefined;
+
+		// update hovering
 		overlay.selectAll('[data-craton-name]').classed('hovering', false);
 
 		const name = getTargetCratonName(e);
