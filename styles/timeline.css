@@ -1,7 +1,6 @@
 #timeline {
-	--vert-margin: 3rem;
 	--scrubber-full-width: 140px;
-	--scrubber-offscreen-width: (var(--scrubber-full-width) - var(--scrubber-width));
+	--scrubber-offscreen-width: calc(var(--scrubber-full-width) - var(--scrubber-width));
 	--expansion-duration: 150ms;
 	--expansion-easing: ease-in-out;
 	--timeline-bg-rgb: 62, 62, 62;
@@ -10,9 +9,9 @@
 	--swiping-opacity: 0.5;
 	--expanded-opacity: 0.8;
 	--expansion-percent: 0;
-	height: calc(100vh - 2*var(--vert-margin));
+	height: calc(100vh - 2 * var(--scrubber-vert-margin));
 	position: fixed;
-	top: var(--vert-margin);
+	top: var(--scrubber-vert-margin);
 	left: 100%;
 	z-index: 3;
 	pointer-events: none;
@@ -36,11 +35,6 @@
 	text-transform: uppercase;
 	line-height: 1em;
 }
-@media (max-width: 700px) {
-	#timeline {
-		--vert-margin: 4.5rem;
-	}
-}
 
 #timeline-toggle {
 	--button-diameter: 4.5em;
@@ -51,7 +45,7 @@
 	border-radius: var(--button-diameter);
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 	position: absolute;
-	top: calc(8px - var(--vert-margin)); /* 8px from screen top */
+	top: calc(8px - var(--scrubber-vert-margin)); /* 8px from screen top */
 	left: calc(-1 * var(--scrubber-width) - var(--button-diameter)/2);
 	width: calc(var(--scrubber-full-width) + var(--button-diameter));
 	padding: 0;
@@ -133,7 +127,7 @@
 	display: block;
 	position: absolute;
 	z-index: -1; /* do not cover map indicators */
-	height: var(--vert-margin);
+	height: var(--scrubber-vert-margin);
 	width: inherit;
 }
 #maps-list, #maps-list::before, #maps-list::after {
@@ -304,7 +298,7 @@ body:not([data-map-type="texture"]) #maps-list {
 	word-spacing: 100vw; /* hack to break every word into own line */
 	text-transform: none;
 	transform: translateY(-100%);
-	top: calc(100vh - var(--vert-margin) - 32px); /* 32px from bottom of viewport */
+	top: calc(100vh - var(--scrubber-vert-margin) - 32px); /* 32px from bottom of viewport */
 }
 #timeline .axis-labels .label:not(.cursor) {
 	transition-property: opacity, margin-top;
@@ -398,7 +392,7 @@ ol#periods-list {
 	--padding-right: 4px;
 	padding-right: var(--padding-right); /* padding instead of margin, to detect hovers at viewport edge */
 	width: 16px; /* width for hover detection */
-	transform: translateX(calc(var(--scrubber-offscreen-width)));
+	transform: translateX(var(--scrubber-offscreen-width));
 	transition: transform var(--expansion-duration) var(--expansion-easing);
 }
 #periods-list li {
@@ -566,7 +560,7 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 		content: '';
 		position: absolute;
 		right: var(--scrubber-width);
-		top: calc(-1 * var(--vert-margin));
+		top: calc(-1 * var(--scrubber-vert-margin));
 		width: 100vw;
 		height: 100vh;
 		background-color: var(--page-bg);
@@ -580,15 +574,11 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 		opacity: var(--swiping-opacity);
 	}
 
-	#timeline.expanded-overlay.dragging #maps-list {
-		/*background-color: rgba(var(--bg-rgb), var(--swiping-opacity));*/
-	}
-
 	/* trim at edge of screen */
 	#timeline::after {
 		content: '';
 		position: absolute;
-		top: calc(-1 * var(--vert-margin));
+		top: calc(-1 * var(--scrubber-vert-margin));
 		right: 0;
 		height: 100vh;
 		border-right: 1px solid var(--action-hex);

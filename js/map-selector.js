@@ -46,12 +46,14 @@ const textureMapListRequest = fetch('./assets/data/map-dates.json')
 		);
 	});
 
-let reconstructionsData, oldestVectorMya;
+let reconstructionsData, oldestVectorMya, youngestVectorMya;
 const cratonRotationsRequest = fetch('./assets/data/craton-rotations.json')
 	.then(response=>response.json())
 	.then(data=>{
 		reconstructionsData = data;
-		oldestVectorMya = Math.max(...reconstructionsData.map(d=>d['mya']));
+		const myas = reconstructionsData.map(d=>d['mya']);
+		oldestVectorMya = Math.max(...myas);
+		youngestVectorMya = Math.min(...myas);
 	});
 
 let allMapsList;
@@ -441,7 +443,14 @@ function getClosestMapAtPointerEvent(e) {
 }
 function handleDrag(e) {
 	const yPercent = pointer(e, mapsListNode)[1] / mapsListNode.clientHeight;
-	const targetMya = yPercent*oldestTextureMya;
-	setScrollToMya(targetMya);
-	// setTextureMap(getClosestMapAtPointerEvent(e));
+	const targetMya = clamp(
+		yPercent*oldestTextureMya, 
+		0, EARTH_FORMATION_MYA
+	);
+	if (currentMapType == MapTypes.TEXTURE && targetMya > youngestVectorMya) {
+		// show intro when selecting precambrian time from cambrian timeline
+		document.getElementById('precambrian-intro').scrollIntoView();
+	} else {
+		setScrollToMya(targetMya);
+	}
 }

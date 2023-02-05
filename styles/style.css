@@ -56,6 +56,7 @@ html {
 	--globe-top-padding: var(--globe-margin);
 	--current-map-label-size: 1.25rem;
 	--scrubber-width: 64px;
+	--scrubber-vert-margin: 3rem;
 	--life-events-list-margin: 32px;
 	--timeline-safe-width: calc(var(--scrubber-width) + var(--life-events-list-margin));
 	font-family: "CMU Serif";
@@ -73,6 +74,7 @@ html {
 		--globe-top-padding: calc(var(--globe-margin) + 2rem);
 		--scrubber-width: 24px;
 		--life-events-list-margin: 10px;
+		--scrubber-vert-margin: 4.5rem;
 	}
 }
 
@@ -263,7 +265,6 @@ h1 {
 	--stroke-width: 2px;
 	--stroke-padding: 8px;
 	max-width: 22rem;
-	padding-bottom: 100vh;
 }
 #stories h3 {
 	font-size: 20px;
@@ -359,7 +360,9 @@ h1 {
 
 
 #precambrian-intro {
+	--globe-cover-translate: 80vh;
 	width: 100vw;
+	scroll-margin-top: var(--globe-cover-translate);
 }
 #precambrian-intro div {
 	position: relative;
@@ -368,7 +371,7 @@ h1 {
 	margin: auto;
 	background-color: #222;
 	padding: 5em 6em;
-	transform: translateY(-80vh);
+	transform: translateY(calc(-1 * var(--globe-cover-translate)));
 }
 
 
@@ -396,6 +399,9 @@ h1 {
 	margin-bottom: calc(var(--vert-rhythm) * 10);
 }
 #stories #eukaryotes ~ article:last-child {
+	/* make last story tall enough so references section peeks at bottom */
+	/* without covering essential parts of timeline */
+	min-height: calc(100vh - (var(--vert-rhythm) * 2) - var(--scrubber-vert-margin) + 1rem);
 	margin-bottom: 0;
 }
 
@@ -501,18 +507,17 @@ h1 {
 
 @media (max-width: 700px) {
 	#stories {
-		--top-panel-height: var(--globe-size) + var(--globe-top-padding) + var(--current-map-label-size)*3;
+		--top-panel-height: calc(var(--globe-size) + var(--globe-top-padding) + var(--current-map-label-size)*3);
 		max-width: 35rem;
-		padding-bottom: 0;
 	}
 	#stories article, #stories aside.geological {
-		scroll-margin-top: calc(var(--top-panel-height));
+		scroll-margin-top: var(--top-panel-height);
 	}
 	#stories > *, #stories #precambrian-intro {
 		margin-right: var(--timeline-safe-width);
 	}
 	#stories article.bio {
-		min-height: calc(min(100vh, 80em) - (var(--top-panel-height)));
+		min-height: calc(min(100vh, 80em) - var(--top-panel-height));
 	}
 	#stories p {
 		font-size: 1rem;
@@ -521,21 +526,20 @@ h1 {
 		height: 15em;
 	}
 	#precambrian-intro {
-		--curtain-offset: 480px;
+		--globe-cover-translate: calc(var(--top-panel-height) + 480px);
 		min-height: 0;
-		margin-top: calc(var(--top-panel-height) + var(--curtain-offset));
-		margin-bottom: calc(5em - var(--curtain-offset));
+		margin-top: calc(var(--globe-cover-translate));
+		margin-bottom: calc(5em - var(--globe-cover-translate) + var(--top-panel-height));
 	}
 	#precambrian-intro div {
 		padding: 2em;
-		transform: translateY(calc(-1 * var(--curtain-offset) - (var(--top-panel-height))));
 	}
 	#stories #boring-billion .geological.break + .geological.form:not(:last-child) {
 		margin-bottom: 25em;
 	}
 	#stories #eukaryotes ~ article:last-child {
 		/* push references section down until peeking at viewport bottom */
-		min-height: calc(100vh - (var(--top-panel-height)) - (var(--vert-rhythm) * 5));
+		min-height: calc(100vh - var(--top-panel-height) - var(--vert-rhythm) * 5);
 	}
 }
 
