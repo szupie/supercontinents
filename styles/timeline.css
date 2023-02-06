@@ -33,7 +33,7 @@
 	font-family: "CMU Serif";
 	font-size: 11px;
 	text-transform: uppercase;
-	line-height: 1em;
+	line-height: 1;
 }
 
 #timeline-toggle {
@@ -221,7 +221,7 @@ body:not([data-map-type="texture"]) #maps-list {
 	font-family: "CMU Classical Serif";
 	font-size: 14px;
 	font-weight: 300;
-	line-height: 100%;
+	line-height: 1;
 	word-spacing: -2px; /* CMU Classical has wide spaces between words */
 }
 #timeline #life-events-list li {
@@ -413,6 +413,51 @@ ol#periods-list {
 	transition-timing-function: var(--expansion-easing);
 }
 
+/* Keyboard controls hint */
+#keyboard-hint {
+	position: absolute;
+	bottom: 2em;
+	right: calc(var(--timeline-safe-width) + var(--marker-padding));
+	margin: 0;
+	text-align: right;
+	font-size: 9px;
+	line-height: 1;
+	height: 1em;
+	white-space: nowrap;
+	pointer-events: auto;
+	transition-property: opacity;
+	transition-timing-function: ease-in-out;
+}
+#keyboard-hint .key {
+	--size: 16px;
+	color: var(--action-light-hex);
+	border: 1px solid currentColor;
+	border-radius: 4px;
+	background-color: var(--page-bg);
+	width: var(--size);
+	line-height: var(--size);
+	margin: calc((var(--size) - 1em) * -0.5) 0.25em;
+	display: inline-block;
+	text-align: center;
+}
+#maps-list:not(:hover) ~ #keyboard-hint {
+	opacity: 0;
+	transition-duration: 500ms;
+}
+#maps-list:hover ~ #keyboard-hint {
+	opacity: 1;
+	transition-delay: 1.5s;
+	transition-duration: 1s;
+}
+body:not([data-map-type="texture"]) #keyboard-hint {
+	bottom: calc(100% - var(--zoomed-timeline-proportion) * 1.5);
+}
+@media (max-width: 700px) {
+	#keyboard-hint {
+		visibility: hidden;
+	}
+}
+
 /* Timeline since formation of Earth */
 #timeline ol, 
 #timeline .axis-labels {
@@ -456,7 +501,7 @@ body:not([data-map-type="texture"]) #timeline {
 	content: '↑';	
 	position: absolute;
 	font-size: 26px;
-	line-height: 1em;
+	line-height: 1;
 	font-family: "Arial", "Times New Roman";
 	font-style: normal;
 	font-weight: normal;

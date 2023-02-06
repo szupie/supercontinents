@@ -109,6 +109,11 @@ p[role="note"] {
 	font-family: "CMU Classical Serif";
 	word-spacing: -2px; /* CMU Classical has wide spaces between words */
 }
+p.instruction {
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
 br + p {
 	margin-top: 0;
 }
@@ -234,9 +239,6 @@ h1 {
 	transition-timing-function: ease-in-out;
 }
 #instructions p {
-	font-weight: bold;
-	text-transform: uppercase;
-	letter-spacing: 0.04em;
 	word-spacing: normal;
 	margin-left: auto;
 	margin-right: auto;
