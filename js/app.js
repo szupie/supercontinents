@@ -166,7 +166,10 @@ function checkMainContentVisibility() {
 		globeNode.classList.add('static');
 	}
 }
-
+// skip to interactive mode when clicking instructions
+document.getElementById('instructions').addEventListener('click', e=>{
+	document.getElementById('globe-group').scrollIntoView();
+})
 
 initRotationControl(projection, document.getElementById('globe'), redrawGlobes);
 
@@ -178,8 +181,8 @@ globeOverlays.bindReverseMapToNode(
 mapSelector.init(document.getElementById('maps-list'), handleMyaUpdate);
 initTimeline();
 
-// randomise starting view
-projection.rotate([Math.random()*360, 0]);
+// randomise starting view (not centered on the Pacific Ocean)
+projection.rotate([Math.random()*180 - 90, 0]);
 redrawGlobes();
 
 document.body.style.setProperty('--initing-transition-duration', '0ms');
