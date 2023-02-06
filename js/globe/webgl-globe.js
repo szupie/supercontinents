@@ -18,12 +18,11 @@ export {
 
 function init(canvas, radius) {
 	let context;
-	let texture;
 	let translateUniform, scaleUniform, rotateUniform;
 
 	initWebgl();
 
-	resize(radius*2);
+	resize(radius);
 
 	return {
 		resize,
@@ -31,9 +30,13 @@ function init(canvas, radius) {
 		redraw
 	};
 
-	function resize(diameter) {
-		context.uniform2f(translateUniform, diameter / 2, diameter / 2);
-		context.viewport(0, 0, diameter, diameter);
+	function resize(newRadius) {
+		radius = newRadius;
+		canvas.setAttribute("width", radius*2);
+		canvas.setAttribute("height", radius*2);
+		context.uniform1f(scaleUniform, radius);
+		context.uniform2f(translateUniform, radius, radius);
+		context.viewport(0, 0, radius*2, radius*2);
 	}
 
 	function setTexture(image) {
@@ -42,7 +45,6 @@ function init(canvas, radius) {
 
 	function redraw(rotation=[0,0,0]) {
 		context.uniform3fv(rotateUniform, rotation);
-		// context.bindTexture(context.TEXTURE_2D, texture); // XXX Safari
 		context.drawArrays(context.TRIANGLE_FAN, 0, 4);
 	}
 
@@ -90,10 +92,7 @@ function init(canvas, radius) {
 		scaleUniform = context.getUniformLocation(program, "u_scale");
 		rotateUniform = context.getUniformLocation(program, "u_rotate");
 
-		context.uniform1f(scaleUniform, radius);
-
-		texture = context.createTexture();
-		context.bindTexture(context.TEXTURE_2D, texture);
+		context.bindTexture(context.TEXTURE_2D, context.createTexture());
 		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
 		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR_MIPMAP_LINEAR);
 

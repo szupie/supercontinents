@@ -9,8 +9,6 @@ import { init as initTimeline } from './timeline.js';
 
 const textureCanvas = document.getElementById('globe-texture');
 let radius = textureCanvas.offsetWidth/2;
-textureCanvas.setAttribute('width', radius*2);
-textureCanvas.setAttribute('height', radius*2);
 
 const projection = geoOrthographic()
 	.translate([radius, radius])
@@ -18,8 +16,6 @@ const projection = geoOrthographic()
 
 const reverseCanvas = document.getElementById('reverse-texture');
 let reverseRadius = reverseCanvas.offsetWidth/2;
-reverseCanvas.setAttribute('width', reverseRadius*2);
-reverseCanvas.setAttribute('height', reverseRadius*2);
 
 const reverseProjection = geoOrthographic()
 	.translate([reverseRadius, reverseRadius])
@@ -34,6 +30,14 @@ document.getElementById('reverse-globe').addEventListener('click', e=>{
 	transitionToCoord(reverseProjection.rotate().map(val=>-val));
 });
 
+window.addEventListener('resize', e=>{
+	radius = textureCanvas.offsetWidth/2;
+	projection.translate([radius, radius]).scale(radius);
+	globeOverlays.redraw();
+	globeTexture.resize(radius);
+	globeTexture.redraw(projection.rotate());
+});
+
 const overlayNode = document.getElementById('globe-overlay');
 overlayNode.setAttribute('width', radius*2);
 overlayNode.setAttribute('height', radius*2);
@@ -42,11 +46,6 @@ overlayNode.setAttribute('height', radius*2);
 let lastUpdate = 0;
 const hiResDelay = 100;
 let hiResDelayTimer;
-
-const resolutions = {
-	'hi': mapSelector.getClosestResolution(radius*12),
-	'lo': mapSelector.getClosestResolution(radius*2)
-}
 
 async function handleMyaUpdate(prevMya, newMya) {
 	let year, unit;
@@ -84,15 +83,15 @@ function loadAndUpdateTexture() {
 	clearTimeout(hiResDelayTimer);
 
 	let firstAvailImgPromise;
-	if (mapSelector.currentTextureIsCached(resolutions['hi'])) {
+	if (mapSelector.currentTextureIsCached(mapSelector.TextureRes.HI)) {
 		// use high resolution if already loaded
-		firstAvailImgPromise = mapSelector.getCurrentTexture(resolutions['hi']);
+		firstAvailImgPromise = mapSelector.getCurrentTexture(mapSelector.TextureRes.HI);
 	} else {
 		// otherwise use preview resolution
-		firstAvailImgPromise = mapSelector.getCurrentTexture(resolutions['lo']);
+		firstAvailImgPromise = mapSelector.getCurrentTexture(mapSelector.TextureRes.LO);
 		// debounce request for high res image
 		hiResDelayTimer = setTimeout(() => {
-			mapSelector.getCurrentTexture(resolutions['hi']).then(img=>{
+			mapSelector.getCurrentTexture(mapSelector.TextureRes.HI).then(img=>{
 				// drop texture if a later request was fulfilled
 				if (requestTime >= lastUpdate) {
 					lastUpdate = requestTime;
@@ -121,7 +120,7 @@ function updateTexture(textureInstance, img) {
 	textureInstance.redraw(rotation);
 }
 
-function redrawGlobe(rotation = false) {
+function redrawGlobes(rotation = false) {
 	if (rotation && !isNaN(rotation[0]) && !isNaN(rotation[1])) {
 		projection.rotate(rotation);
 		reverseProjection.rotate([rotation[0]+180, -rotation[1]]);
@@ -169,7 +168,7 @@ function checkMainContentVisibility() {
 }
 
 
-initRotationControl(projection, document.getElementById('globe'), redrawGlobe);
+initRotationControl(projection, document.getElementById('globe'), redrawGlobes);
 
 globeOverlays.init(projection, overlayNode);
 globeOverlays.bindReverseMapToNode(
@@ -181,7 +180,7 @@ initTimeline();
 
 // randomise starting view
 projection.rotate([Math.random()*360, 0]);
-redrawGlobe();
+redrawGlobes();
 
 document.body.style.setProperty('--initing-transition-duration', '0ms');
 checkMainContentVisibility();

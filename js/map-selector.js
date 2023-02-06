@@ -6,6 +6,7 @@ export {
 	init,
 	mapsReadyPromise, // when ready, returns: myaToPercent, setMapToMya, myaAt100Percent
 	MapTypes,
+	TextureRes,
 	EARTH_FORMATION_MYA,
 	
 	currentMya,
@@ -13,7 +14,6 @@ export {
 
 	getCurrentTexture,
 	currentTextureIsCached,
-	getClosestResolution,
 
 	getCurrentReconstructionData,
 	getCurrentMapCenter
@@ -30,6 +30,11 @@ const MapTypes = Object.freeze({
 	VECTOR: 2
 });
 let currentMapType = MapTypes.TEXTURE;
+
+const TextureRes = Object.freeze({
+	LO: 512,
+	HI: 3600
+});
 
 /*
   Fetch map data
@@ -67,13 +72,6 @@ const mapsReadyPromise = Promise.all(
 });
 
 let mapsListNode;
-const resolutions = [
-	256, 
-	512, 
-	1024, 
-	2048,
-	3600
-];
 
 let updateCallback = ()=>{};
 function init(containerNode, mapUpdateCallback) {
@@ -297,11 +295,6 @@ function getTexturePath(name, resolution) {
 	} else {
 		return null;
 	}
-}
-
-const resBisector = bisector(val => val);
-function getClosestResolution(target) {
-	return resolutions[resBisector.center(resolutions, target)];
 }
 
 function getCurrentTexture(resolution) {
