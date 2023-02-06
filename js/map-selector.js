@@ -410,6 +410,8 @@ function setUpKeyboardHandler() {
 			setScrollToMya(newMya);
 			// also update map manually in case scroll distance is too small
 			setMapToMya(newMya);
+			
+			resetClassForAllMaps('hovering');
 		}
 	});
 }
