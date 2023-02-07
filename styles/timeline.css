@@ -215,7 +215,7 @@ body:not([data-map-type="texture"]) #maps-list {
 #timeline #life-events-list {
 	right: var(--timeline-safe-width);
 	position: absolute;
-	z-index: 1; /* appear above precambrian anchor */
+	z-index: 2; /* appear above precambrian anchor */
 }
 #timeline #life-events-list, #cambrian-anchor {
 	font-family: "CMU Classical Serif";
@@ -291,7 +291,6 @@ body:not([data-map-type="texture"]) #maps-list {
 	color: var(--grey-on-black);
 	text-align: right;
 	pointer-events: auto;
-	z-index: -1;
 }
 #timeline .axis-labels .title {
 	font-size: 9px;
@@ -318,7 +317,14 @@ body:not([data-map-type="texture"]) #maps-list {
 }
 @media (max-width: 700px) {
 	#timeline:not(.expanded-overlay) .axis-labels .label {
-		opacity: 0;
+		opacity: var(--expansion-percent);
+	}
+	#timeline .axis-labels .title {
+		transform: none;
+		top: calc(100vh - var(--scrubber-vert-margin) * 2 + 0.75em);
+	}
+	#timeline #maps-list:hover~.axis-labels .label.title.obscured {
+		margin-top: 0;
 	}
 }
 
@@ -474,6 +480,7 @@ body:not([data-map-type="texture"]) #timeline {
 /* anchor link back up to zoomed timeline */
 #cambrian-anchor {
 	position: absolute;
+	z-index: 1; /* appear above mya labels to capture clicks */
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
