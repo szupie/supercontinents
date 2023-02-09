@@ -52,6 +52,7 @@ let dataReady;
 
 
 let trackedCratonLabel;
+const supercontinentsShown = new Set();
 
 let vectorMapPromise;
 function init(theProjection, overlayNode) {
@@ -170,16 +171,21 @@ async function handleMyaUpdate(prevMya, newMya) {
 		redrawReverseVectorMap();
 		bindDataToCratonLabels(getCratonCenters());
 	}
-	updateSupercontinentDataForMya(newMya);
+
+	const currentSuper = updateSupercontinentDataForMya(newMya);
+	const superIsNew = currentSuper && !supercontinentsShown.has(currentSuper);
+	if (currentSuper) {
+		supercontinentsShown.add(currentSuper);
+	}
 
 	// Rotate map to center on hemisphere with more land
-	// (only if map exists, and not user-rotated)
+	// (only if map exists, and (new supercontinent or not user-rotated))
 	if (
 		mapSelector.currentMapType != mapSelector.MapTypes.NONE &&
-		overlay.filter(':not(.user-rotated) > svg').size() > 0
+		(superIsNew || overlay.filter(':not(.user-rotated) > svg').size() > 0)
 	) {
 		let center = mapSelector.getCurrentMapCenter();
-		if (center) {
+	if (center) {
 			if (mapSelector.currentMapType == mapSelector.MapTypes.VECTOR) {
 				center = vectorMapOffsetRotator(center);
 			}
@@ -335,6 +341,8 @@ function setTrackingToLabel(labelNode) {
 	// TO DO: prevent tracking on drag
 }
 
+// sets supercontinent label text and position according to mya
+// returns name of supercontinent at mya if exists; otherwise false
 function updateSupercontinentDataForMya(mya) {
 	let name, coords;
 	const showLabel = supercontinentsData.some(supercontinent=>{
@@ -354,7 +362,9 @@ function updateSupercontinentDataForMya(mya) {
 	}
 	if (showLabel) {
 		label.text(name).datum({'coordinates': coords});
+		return name;
 	}
+	return false;
 }
 
 
