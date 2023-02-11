@@ -306,11 +306,16 @@ function getCurrentTexture(resolution) {
 		image.onload = e=>{
 			resolve(image);
 		};
-		image.onerror = reject;
+		image.onerror = e=>{
+			reject();
+		};
 		image.src = getTexturePath(
 			textureMapDates[currentMapIndex]['file'], 
 			resolution
 		);
+	}).catch(e=>{
+		if (e) console.error(e);
+		return null;
 	});
 }
 

@@ -93,7 +93,7 @@ function loadAndUpdateTexture() {
 		hiResDelayTimer = setTimeout(() => {
 			mapSelector.getCurrentTexture(mapSelector.TextureRes.HI).then(img=>{
 				// drop texture if a later request was fulfilled
-				if (requestTime >= lastUpdate) {
+				if (img && requestTime >= lastUpdate) {
 					lastUpdate = requestTime;
 					updateTexture(globeTexture, img);
 				}
@@ -101,7 +101,7 @@ function loadAndUpdateTexture() {
 		}, hiResDelay);
 	}
 	return firstAvailImgPromise.then(img=>{
-		if (requestTime > lastUpdate) {
+		if (img && requestTime > lastUpdate) {
 			lastUpdate = requestTime;
 			updateTexture(globeTexture, img);
 			updateTexture(reverseTexture, img);
