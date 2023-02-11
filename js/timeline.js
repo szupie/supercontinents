@@ -233,6 +233,10 @@ function setUpListeners() {
 	const snappingDistance = 10;
 	function handleDragStart(e) {
 		timelineNode.classList.add('dragging');
+		// do not scrub through time if touch started on expansion toggle
+		if (!document.getElementById('timeline-toggle').contains(e.target)) {
+			timelineNode.classList.add('scrubbing');
+		}
 		dragStartExpansion = timelineNode.style.getPropertyValue('--expansion-percent');
 		dragStartX = e.clientX;
 	}
@@ -251,6 +255,7 @@ function setUpListeners() {
 			// this can only be triggered by shade pseudoelement
 			setTimelineExpandedOverlay(false);
 		}
+		timelineNode.classList.remove('scrubbing');
 	});
 	document.addEventListener('pointermove', e=>{
 		if (timelineNode.classList.contains('dragging')) {

@@ -421,7 +421,7 @@ function setUpPointerHandler() {
 		handleDrag(e);
 	});
 	document.addEventListener('pointermove', e=>{
-		if (mapsListNode.parentNode.classList.contains('dragging')) {
+		if (mapsListNode.parentNode.classList.contains('scrubbing')) {
 			handleDrag(e);
 		}
 	});
