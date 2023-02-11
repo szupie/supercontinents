@@ -206,7 +206,7 @@ body:not([data-map-type="texture"]) #maps-list {
 }
 @media (pointer: coarse) {
 	/* lengthen indicator so it is not covered by fingers */
-	#timeline.dragging #maps-list a.selected {
+	#timeline.dragging:not(.expanded-overlay) #maps-list a.selected {
 		width: calc(100% + 40px);
 		margin-left: -40px;
 	}
@@ -228,6 +228,7 @@ body:not([data-map-type="texture"]) #maps-list {
 #timeline #life-events-list li {
 	transform: translateY(-50%);
 	right: 0;
+	touch-action: pinch-zoom;
 	pointer-events: auto;
 }
 #timeline #life-events-list a, #cambrian-anchor span {

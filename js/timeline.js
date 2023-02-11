@@ -68,7 +68,9 @@ function createMyaLabels() {
 	labelsContainerNode.appendChild(cursorNode);
 
 	// update cursor label text and position
-	mapsListNode.addEventListener('mousemove', e=>{
+	mapsListNode.addEventListener('pointermove', handlePointerMove);
+	mapsListNode.addEventListener('pointerdown', handlePointerMove);
+	function handlePointerMove(e) {
 		if (e.target == mapsListNode) {
 			// clamp timeline cursor to current min/max
 			let cursorMaxY = mapsListNode.clientHeight;
@@ -106,7 +108,7 @@ function createMyaLabels() {
 			cursorNode.style.transform = 
 				`translateY(calc(${cursorClamped}px - 50%))`;
 		}
-	});
+	}
 
 	timelineNode.appendChild(labelsContainerNode);
 }
