@@ -27,7 +27,7 @@ const globeTexture = initTextureGlobe(textureCanvas, radius);
 const reverseTexture = initTextureGlobe(reverseCanvas, reverseRadius);
 
 document.getElementById('reverse-globe').addEventListener('click', e=>{
-	transitionToCoord(reverseProjection.rotate().map(val=>-val));
+	transitionToCoord(reverseProjection.rotate().slice(0, 2).map(val=>-val));
 });
 
 window.addEventListener('resize', e=>{
@@ -123,7 +123,7 @@ function updateTexture(textureInstance, img) {
 function redrawGlobes(rotation = false) {
 	if (rotation && !isNaN(rotation[0]) && !isNaN(rotation[1])) {
 		projection.rotate(rotation);
-		reverseProjection.rotate([rotation[0]+180, -rotation[1]]);
+		reverseProjection.rotate([((rotation[0] + 360) % 360) - 180, -rotation[1]]);
 	}
 	if (mapSelector.currentMapType == mapSelector.MapTypes.TEXTURE) {
 		globeTexture.redraw(projection.rotate());
@@ -182,8 +182,7 @@ mapSelector.init(document.getElementById('maps-list'), handleMyaUpdate);
 initTimeline();
 
 // randomise starting view (not centered on the Pacific Ocean)
-projection.rotate([Math.random()*180 - 90, 0]);
-redrawGlobes();
+redrawGlobes([Math.random()*180 - 90, 0]);
 
 document.body.style.setProperty('--initing-transition-duration', '0ms');
 checkMainContentVisibility();

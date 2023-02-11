@@ -1,5 +1,5 @@
 import { pointer } from '../d3-modules.js';
-import { clampAbs, clamp, easeInOut } from '../common-utils.js';
+import { clampAbs, clamp, easeInOut, easeInOutQuart } from '../common-utils.js';
 
 export {
 	init,
@@ -7,7 +7,6 @@ export {
 	getCurrentRotation,
 	isNorthUp,
 	getDragCoords,
-	getAntipodeRotation,
 	setConstantRotation
 }
 
@@ -31,6 +30,16 @@ function init(theProjection, theHandlerNode, redrawFunction) {
 let transitionLoop;
 const transitionDuration = 500;
 
+// Adjust how much equatorial rotation is concentrated to middle of transition
+// (for long north-south rotations, it feels less disorientating to perform
+// east-west rotations around midpoint of transition, 
+// when rotation speed is already high)
+const eastWestEaseFactor = 0.5;
+function concentratedEase(percentage, distanceFactor) {
+	return (easeInOut(percentage) * (1 - distanceFactor*eastWestEaseFactor)) +
+		(easeInOutQuart(percentage) * distanceFactor*eastWestEaseFactor);
+} 
+
 function transitionToCoord(geoCoord) {
 	cancelInertia();
 
@@ -39,13 +48,17 @@ function transitionToCoord(geoCoord) {
 	const rotationDiff = start.map((val,i)=>
 		closestHalfRotation(-geoCoord[i]-val)
 	);
+	const northSouthDistance = Math.abs(rotationDiff[1] / 180);
 	transitionLoop = ()=>{
 		const percentage = clamp(
 			(Date.now() - startTime)/transitionDuration,
 			0, 1
 		);
-		const eased = easeInOut(percentage);
-		const newRotation = rotationDiff.map((val,i)=>val*eased+start[i]);
+		const eastWestEase = concentratedEase(percentage, northSouthDistance);
+		const newRotation = [
+			rotationDiff[0]*eastWestEase+start[0],
+			rotationDiff[1]*easeInOut(percentage)+start[1]
+		];
 		redrawGlobe(newRotation);
 
 		if (percentage < 1) {
@@ -373,8 +386,4 @@ function getCurrentRotation() {
 
 function isNorthUp() {
 	return (getCurrentRotation()[1] < 90 && getCurrentRotation()[1] > -90);
-}
-
-function getAntipodeRotation() {
-	return [getCurrentRotation()[0]+180, -getCurrentRotation()[1]];
 }
