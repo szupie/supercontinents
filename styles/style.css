@@ -315,6 +315,7 @@ h1 {
 	border-color: rgb(var(--land-light-rgb));
 	margin-left: var(--story-padding);
 	padding: calc(var(--vert-rhythm) / 2) var(--stroke-padding);
+	padding-right: var(--story-padding);
 	margin-bottom: calc(var(--vert-rhythm) / 2);
 }
 #stories aside.geological,
@@ -535,6 +536,7 @@ h1 {
 	}
 	#precambrian-intro div {
 		padding: 2em;
+		margin-right: var(--scrubber-width);
 	}
 	#stories #boring-billion .geological.break + .geological.form:not(:last-child) {
 		margin-bottom: 25em;
