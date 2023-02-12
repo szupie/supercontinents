@@ -93,6 +93,7 @@ async function loadAndUpdateTexture() {
 	}
 
 	let firstAvailImgPromise;
+	let highResLoaded = false;
 	if (mapSelector.currentTextureIsCached(TextureRes.HI)) {
 		// use high resolution if already loaded
 		firstAvailImgPromise = mapSelector.getCurrentTexture(TextureRes.HI);
@@ -107,11 +108,14 @@ async function loadAndUpdateTexture() {
 	}
 	function updateTextureIfNewer(img) {
 		// drop texture if a later request was fulfilled
-		if (img && requestTime >= lastUpdate) {
+		if (img && !highResLoaded && requestTime >= lastUpdate) {
 			lastUpdate = requestTime;
 			const downsampled = getDownsampledImageData(img, optimalRes);
 			updateTexture(globeTexture, downsampled);
 			updateTexture(reverseTexture, img);
+			if (img.width >= TextureRes.HI) {
+				highResLoaded = true;
+			}
 		}
 	}
 	return firstAvailImgPromise.then(updateTextureIfNewer);
