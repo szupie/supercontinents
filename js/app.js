@@ -47,6 +47,8 @@ let lastUpdate = 0;
 const hiResDelay = 100;
 let hiResDelayTimer;
 
+let useReducedRes = false;
+
 async function handleMyaUpdate(prevMya, newMya) {
 	let year, unit;
 	if (mapSelector.currentMya < 1000) {
@@ -75,38 +77,44 @@ async function handleMyaUpdate(prevMya, newMya) {
 	}
 }
 
+const TextureRes = mapSelector.TextureRes;
 // Make an asynchronous request to load the current map texture,
 // dropping all older requests if a more recent one loads first
 // to avoid jumping back and forth in time in case of many concurrent requests
-function loadAndUpdateTexture() {
+async function loadAndUpdateTexture() {
+	await mapSelector.mapsReadyPromise;
 	const requestTime = Date.now();
 	clearTimeout(hiResDelayTimer);
 
+	// lower resolution reduces antialiasing artifacts when globe is rotating
+	let optimalRes = radius * 12;
+	if (useReducedRes) {
+		optimalRes = radius * 6;
+	}
+
 	let firstAvailImgPromise;
-	if (mapSelector.currentTextureIsCached(mapSelector.TextureRes.HI)) {
+	if (mapSelector.currentTextureIsCached(TextureRes.HI)) {
 		// use high resolution if already loaded
-		firstAvailImgPromise = mapSelector.getCurrentTexture(mapSelector.TextureRes.HI);
+		firstAvailImgPromise = mapSelector.getCurrentTexture(TextureRes.HI);
 	} else {
 		// otherwise use preview resolution
-		firstAvailImgPromise = mapSelector.getCurrentTexture(mapSelector.TextureRes.LO);
+		firstAvailImgPromise = mapSelector.getCurrentTexture(TextureRes.LO);
 		// debounce request for high res image
 		hiResDelayTimer = setTimeout(() => {
-			mapSelector.getCurrentTexture(mapSelector.TextureRes.HI).then(img=>{
-				// drop texture if a later request was fulfilled
-				if (img && requestTime >= lastUpdate) {
-					lastUpdate = requestTime;
-					updateTexture(globeTexture, img);
-				}
-			})
+			mapSelector.getCurrentTexture(TextureRes.HI)
+				.then(updateTextureIfNewer);
 		}, hiResDelay);
 	}
-	return firstAvailImgPromise.then(img=>{
-		if (img && requestTime > lastUpdate) {
+	function updateTextureIfNewer(img) {
+		// drop texture if a later request was fulfilled
+		if (img && requestTime >= lastUpdate) {
 			lastUpdate = requestTime;
-			updateTexture(globeTexture, img);
+			const downsampled = getDownsampledImageData(img, optimalRes);
+			updateTexture(globeTexture, downsampled);
 			updateTexture(reverseTexture, img);
 		}
-	});
+	}
+	return firstAvailImgPromise.then(updateTextureIfNewer);
 }
 
 function updateTexture(textureInstance, img) {
@@ -118,6 +126,20 @@ function updateTexture(textureInstance, img) {
 	}
 	textureInstance.setTexture(img);
 	textureInstance.redraw(rotation);
+}
+
+const scalerCanvas = document.createElement('canvas');
+function getDownsampledImageData(img, size) {
+	const scale = size / img.width;
+
+	// skip downsampling step for speed
+	if (scale > 1) return img;
+
+	const ctx = scalerCanvas.getContext('2d');
+	scalerCanvas.width = img.width * scale;
+	scalerCanvas.height = img.height * scale;
+	ctx.drawImage(img, 0, 0, scalerCanvas.width, scalerCanvas.height);
+	return ctx.getImageData(0, 0, scalerCanvas.width, scalerCanvas.height);
 }
 
 function redrawGlobes(rotation = false) {
@@ -160,10 +182,18 @@ function checkMainContentVisibility() {
 	const globeStickied = globeNode.getBoundingClientRect().top <= 0;
 	const storiesInViewport = viewportHeight > 
 		document.getElementById('stories').getBoundingClientRect().top;
+	const lastState = globeNode.classList.contains('static');
 	if (globeStickied || storiesInViewport) {
 		globeNode.classList.remove('static');
+		useReducedRes = false;
 	} else {
 		globeNode.classList.add('static');
+		useReducedRes = true;
+	}
+	// use lower resolution during initial autorotate to reduce antialiasing
+	// (but wait until static state change for smoother transition animation)
+	if (lastState != globeNode.classList.contains('static')) {
+		loadAndUpdateTexture();
 	}
 }
 // skip to interactive mode when clicking instructions
