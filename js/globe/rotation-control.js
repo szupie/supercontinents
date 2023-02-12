@@ -120,7 +120,11 @@ function handleDragMove(e) {
 		startingGeoCoord, pointerOffset, radius
 	);
 	if (!isNaN(lambda) && !isNaN(phi)) {
-		const direction = lastY - pointerOffset[1];
+		let direction = lastY - pointerOffset[1];
+		// do not allow dragged point to rotate to back hemisphere at low inclinations
+		if (degreeToAbsoluteInclination(phi) < 45) {
+			direction = 0;
+		}
 		hemisphereOrientation = getHemisphereOrientation(
 			startingGeoCoord, lambda, direction
 		);
@@ -386,4 +390,9 @@ function getCurrentRotation() {
 
 function isNorthUp() {
 	return (getCurrentRotation()[1] < 90 && getCurrentRotation()[1] > -90);
+}
+
+// returns how many degrees pole is tilted from vertical (0°–90°)
+function degreeToAbsoluteInclination(degree) {
+	return 90-Math.abs(Math.abs(degree)-90);
 }
