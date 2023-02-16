@@ -24,6 +24,8 @@ const EARTH_FORMATION_MYA = 4600;
 let currentMapIndex;
 let currentMya = 0;
 
+let lastScrollMya;
+
 const MapTypes = Object.freeze({
 	NONE: 0,
 	TEXTURE: 1,
@@ -82,6 +84,12 @@ function init(containerNode, mapUpdateCallback) {
 		createMapIndicators();
 
 		document.addEventListener('scroll', handleScrollChange);
+		window.addEventListener('resize', e=>{
+			// preserve scroll position and map on resize
+			if (lastScrollMya > 0 && lastScrollMya < EARTH_FORMATION_MYA) {
+				setScrollToMya(lastScrollMya);
+			}
+		});
 		handleScrollChange();
 	
 		setUpKeyboardHandler();
@@ -137,6 +145,8 @@ function getClosestMapAtMya(mya) {
 }
 
 function setMapToMya(targetMya) {
+	lastScrollMya = targetMya;
+
 	const closestIndex = getClosestMapAtMya(targetMya);
 	const noMap = (closestIndex >= allMapsList.length);
 
@@ -224,7 +234,9 @@ function highlightTimelineEvent(scrollY) {
 	}
 }
 
-const myaAttrBisector = bisector(node => node.getAttribute('data-mya')).left;
+const myaAttrBisector = bisector(node => 
+	Number.parseFloat(node.getAttribute('data-mya'))
+).left;
 	
 function setScrollToMya(mya) {
 	const prevStoryIndex = clamp(myaAttrBisector(storyNodes, mya)-1, 0, storyNodes.length-2);
