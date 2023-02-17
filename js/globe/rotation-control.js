@@ -7,7 +7,9 @@ export {
 	getCurrentRotation,
 	isNorthUp,
 	getDragCoords,
-	setConstantRotation
+	setConstantRotation,
+	setTrackToLand,
+	isTrackingToLand
 }
 
 let projection;
@@ -22,6 +24,8 @@ function init(theProjection, theHandlerNode, redrawFunction) {
 	dragHandlerNode = theHandlerNode;
 	dragHandlerNode.addEventListener('pointerdown', handleDragStart);
 	dragHandlerNode.addEventListener('pointerup', handleDragEnd);
+
+	setTrackToLand(true);
 }
 
 
@@ -29,16 +33,6 @@ function init(theProjection, theHandlerNode, redrawFunction) {
 
 let transitionLoop;
 const transitionDuration = 500;
-
-// Adjust how much equatorial rotation is concentrated to middle of transition
-// (for long north-south rotations, it feels less disorientating to perform
-// east-west rotations around midpoint of transition, 
-// when rotation speed is already high)
-const eastWestEaseFactor = 0.5;
-function concentratedEase(percentage, distanceFactor) {
-	return (easeInOut(percentage) * (1 - distanceFactor*eastWestEaseFactor)) +
-		(easeInOutQuart(percentage) * distanceFactor*eastWestEaseFactor);
-} 
 
 function transitionToCoord(geoCoord) {
 	cancelInertia();
@@ -71,6 +65,25 @@ function cancelTransition() {
 	transitionLoop = ()=>{};
 }
 
+// Adjust how much equatorial rotation is concentrated to middle of transition
+// (for long north-south rotations, it feels less disorientating to perform
+// east-west rotations around midpoint of transition, 
+// when rotation speed is already high)
+const eastWestEaseFactor = 0.5;
+function concentratedEase(percentage, distanceFactor) {
+	return (easeInOut(percentage) * (1 - distanceFactor*eastWestEaseFactor)) +
+		(easeInOutQuart(percentage) * distanceFactor*eastWestEaseFactor);
+}
+
+let trackingToLand = true;
+function isTrackingToLand() {
+	return trackingToLand;
+}
+function setTrackToLand(shouldTrack) {
+	trackingToLand = shouldTrack;
+	dragHandlerNode.classList.toggle('tracking-to-land', shouldTrack);
+}
+
 
 // Handle drag events
 
@@ -83,7 +96,7 @@ function handleDragStart(e) {
 
 	startingGeoCoord = projection.invert(pointer(e, dragHandlerNode));
 	if (!isNaN(startingGeoCoord[0]) && !isNaN(startingGeoCoord[1])) {
-		dragHandlerNode.classList.add('user-rotated');
+		setTrackToLand(false);
 		dragHandlerNode.classList.add('dragging');
 		dragHandlerNode.setPointerCapture(e.pointerId);
 		dragHandlerNode.addEventListener('pointermove', handleDragMove);

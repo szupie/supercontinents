@@ -11,7 +11,9 @@ import {
 	transitionToCoord,
 	getCurrentRotation,
 	isNorthUp,
-	getDragCoords
+	getDragCoords,
+	isTrackingToLand,
+	setTrackToLand
 } from './rotation-control.js';
 import * as mapSelector from '../map-selector.js';
 
@@ -102,22 +104,29 @@ function init(theProjection, overlayNode) {
 
 
 	// handle pointer events
-	let clickStartCraton;
+	let clickStartTarget;
 	overlay.on('mousedown', e=>{
-		clickStartCraton = getTargetCratonName(e);
+		clickStartTarget = e.target;
 	});
 	overlay.on('click', e=>{
-		const name = getTargetCratonName(e);
-		if (name != null && clickStartCraton && name == clickStartCraton) {
-			setTrackingToLabel(overlayNode.querySelector(
-				`.continent-labels [data-craton-name="${name}"]`
-			));
+		if (clickStartTarget && e.target == clickStartTarget) {
+			const name = getTargetCratonName(e);
+			if (name != null) {
+				// handle click on craton label
+				setTrackingToLabel(overlayNode.querySelector(
+					`.continent-labels [data-craton-name="${name}"]`
+				));
+			} else if (e.target.matches('.supercontinent.label')) {
+				// handle click on supercontinent label
+				setTrackToLand(true);
+				transitionToMapCenter();
+			}
 		}
 	});
 	// listen on container, which captures pointer on drag
 	select(overlay.node().parentNode).on('mousemove', e=>{
 		// do not track to craton if label is dragged
-		clickStartCraton = undefined;
+		clickStartTarget = undefined;
 
 		// update hovering
 		overlay.selectAll('[data-craton-name]').classed('hovering', false);
@@ -132,6 +141,7 @@ function init(theProjection, overlayNode) {
 		overlay.selectAll('[data-craton-name]').classed('hovering', false);
 	});
 
+	// get craton name from labels and shapes
 	function getTargetCratonName(e) {
 		const targetCratonParent = e.target.closest('[data-craton-name]');
 		if (targetCratonParent) {
@@ -179,22 +189,23 @@ async function handleMyaUpdate(prevMya, newMya) {
 	}
 
 	// Rotate map to center on hemisphere with more land
-	// (only if map exists, and (new supercontinent or not user-rotated))
-	if (
-		mapSelector.currentMapType != mapSelector.MapTypes.NONE &&
-		(superIsNew || overlay.filter(':not(.user-rotated) > svg').size() > 0)
-	) {
-		let center = mapSelector.getCurrentMapCenter();
-	if (center) {
-			if (mapSelector.currentMapType == mapSelector.MapTypes.VECTOR) {
-				center = vectorMapOffsetRotator(center);
-			}
-			transitionToCoord(center);
-		}
+	// (only if map exists, and (new supercontinent or tracking to land))
+	if ( mapSelector.currentMapType && (superIsNew || isTrackingToLand()) ) {
+		transitionToMapCenter();
 	}
 
 	if (trackedCratonLabel) {
 		transitionToCoord(select(trackedCratonLabel).datum()['coordinates']);
+	}
+}
+
+function transitionToMapCenter() {
+	let center = mapSelector.getCurrentMapCenter();
+	if (center) {
+		if (mapSelector.currentMapType == mapSelector.MapTypes.VECTOR) {
+			center = vectorMapOffsetRotator(center);
+		}
+		transitionToCoord(center);
 	}
 }
 
@@ -338,7 +349,6 @@ function setTrackingToLabel(labelNode) {
 	trackedCratonLabel = labelNode;
 	trackedCratonLabel.classList.add('tracked');
 	transitionToCoord(select(trackedCratonLabel).datum()['coordinates']);
-	// TO DO: prevent tracking on drag
 }
 
 // sets supercontinent label text and position according to mya

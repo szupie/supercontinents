@@ -207,9 +207,9 @@ body:not([data-map-type="texture"]) #globe-overlay #meridian {
 	cursor: pointer;
 	pointer-events: auto;
 }
-#globe-overlay .continent.label:hover,
-#globe-overlay .continent.label.hovering,
-#globe-overlay .continent.label.tracked {
+#globe-overlay .continent-labels .label:hover,
+#globe-overlay .continent-labels .label.hovering,
+#globe-overlay .continent-labels .label.tracked {
 	fill: #fff;
 	stroke: #000d;
 }
@@ -219,9 +219,16 @@ body:not([data-map-type="texture"]) #globe-overlay #meridian {
 	letter-spacing: 0.2em;
 	text-transform: uppercase;
 	transition: opacity 300ms ease-in;
+	cursor: pointer;
 }
 #globe-overlay .supercontinent.label:not(.shown) {
 	opacity: 0;
+}
+#globe-overlay .supercontinent.label:hover {
+	stroke: #0009;
+}
+#globe.tracking-to-land .supercontinent.label {
+	pointer-events: none;
 }
 
 #globe #globe-overlay .graticule path {
