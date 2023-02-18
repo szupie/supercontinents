@@ -66,15 +66,36 @@ html {
 	to determine viewport height without mobile address bar */
 	height: 100vh;
 }
+@supports not (width: min(1px, 0px)) {
+	html {
+		--max-spacer-height: 225vw;
+	}
+	@media (max-height: 225vw) {
+		html {
+			--max-spacer-height: 100vh;
+		}
+	}
+}
 @media (max-width: 700px) {
 	html {
 		--story-padding: 1rem;
-		--globe-size: min(calc(100vh - 20rem), calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width)));
+		--globe-size: min(calc(100vh - 20rem), calc(100vw - var(--globe-margin)*2 - var(--scrubber-width)));
 		--globe-margin: 1.5rem;
 		--globe-top-padding: calc(var(--globe-margin) + 2rem);
 		--scrubber-width: 24px;
 		--life-events-list-margin: 10px;
 		--scrubber-vert-margin: 4.5rem;
+	}
+	@supports not (width: min(1px, 0px)) {
+		html {
+			--globe-size: calc(100vw - var(--globe-margin)*2 - var(--scrubber-width));
+		}
+		/* wider (i.e. shorter) than 3:4 */
+		@media (min-aspect-ratio: 3/4) {
+			html {
+				--globe-size: calc(calc(100vh - 20rem));
+			}
+		}
 	}
 }
 
@@ -197,9 +218,13 @@ h1 {
 	--intro-padding: 32px;
 	--vert-rhythm: 28px;
 	font-size: 18px;
-	/* add side padding to keep content width <26.5em */
-	padding: 0 max(var(--intro-padding), (100vw - 26.5em) / 2);
+	padding: 0 var(--intro-padding);
 	padding-bottom: calc(5 * var(--intro-padding));
+}
+#intro > * {
+	max-width: 25.5em;
+	margin-left: auto;
+	margin-right: auto;
 }
 #intro p:first-of-type {
 	border-top: 1px solid var(--action-dark-hex);
@@ -223,7 +248,7 @@ h1 {
 	background-color: rgba(34, 34, 34, 0.8);
 	padding: var(--vert-rhythm);
 
-	/* add side margin to constraint width, while aligning with globe */
+	/* add side margin to constrain width, while aligning with globe */
 	--max-width: min(var(--globe-size), 29em);
 	--extra-right-space: 0px;
 	--side-margin: calc(((100% - var(--extra-right-space)) - var(--max-width)) / 2);
@@ -259,6 +284,11 @@ h1 {
 @media (max-width: 700px) {
 	#instructions {
 		--extra-right-space: var(--timeline-safe-width);
+	}
+}
+@supports not (width: min(1px, 0px)) {
+	#instructions {
+		--max-width: 29em;
 	}
 }
 
@@ -414,19 +444,22 @@ h1 {
 	background-color: var(--paper-white-hex);
 	color: var(--page-bg);
 	line-height: var(--vert-rhythm);
-	/* add side padding to keep content width <40rem */
-	padding: max(var(--story-padding), (100vw - 40rem) / 2);
-	padding-top: var(--story-padding);
+	padding: var(--story-padding);
 	padding-bottom: calc(var(--story-padding) * 4);
 	/* position relative and z-index to draw above timeline */
 	position: relative;
 	z-index: 4;
 }
+#references > * {
+	max-width: 40rem;
+	margin-left: auto;
+	margin-right: auto;
+}
 #references h2, #references h4 {
 	font-size: 20px;
 	font-weight: normal;
 	line-height: 2;
-	margin: 0;
+	margin: 0 auto;
 }
 /* references title */
 #references h2 {
@@ -520,7 +553,7 @@ h1 {
 		margin-right: var(--timeline-safe-width);
 	}
 	#stories article.bio {
-		min-height: calc(min(100vh, 80em) - var(--top-panel-height));
+		min-height: min(100vh - var(--top-panel-height), 40em);
 	}
 	#stories p {
 		font-size: 1rem;
@@ -544,6 +577,11 @@ h1 {
 	#stories #eukaryotes ~ article:last-child {
 		/* push references section down until peeking at viewport bottom */
 		min-height: calc(100vh - var(--top-panel-height) - var(--vert-rhythm) * 5);
+	}
+	@supports not (width: min(1px, 0px)) {
+		#stories article.bio {
+			min-height: 40em;
+		}
 	}
 }
 
