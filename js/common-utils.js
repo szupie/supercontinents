@@ -1,5 +1,5 @@
 export {
-	clampAbs, clamp, easeInOut, easeInOutQuart
+	clampAbs, clamp, easeInOut, easeInOutQuart, addPointerListener
 }
 
 function clampAbs(val, abs) {
@@ -19,5 +19,31 @@ function easeInOutQuart(percentage) {
 		return 8 * Math.pow(percentage, 4);
 	} else {
 		return 1 - Math.pow(-2 * percentage + 2, 4) / 2;
+	}
+}
+
+const PointerEventMap = Object.freeze({
+	'pointerdown': {
+		'touch': 'touchstart',
+		'mouse': 'mousedown'
+	},
+	'pointerup': {
+		'touch': 'touchend',
+		'mouse': 'mouseup'
+	},
+	'pointermove': {
+		'touch': 'touchmove',
+		'mouse': 'mousemove'
+	},
+});
+// attaches pointer event listener, or equivalent single-touch or mouse events
+function addPointerListener(node, eventType, handler) {
+	if (typeof PointerEvent !== 'undefined') {
+		node.addEventListener(eventType, handler);
+	} else {
+		node.addEventListener(PointerEventMap[eventType]['touch'], e=>{
+			handler(e.touches[0]);
+		});
+		node.addEventListener(PointerEventMap[eventType]['mouse'], handler);
 	}
 }

@@ -1,7 +1,7 @@
 import { 
 	mapsReadyPromise, currentMapType, MapTypes, EARTH_FORMATION_MYA 
 } from './map-selector.js';
-import { clamp } from './common-utils.js';
+import { clamp, addPointerListener } from './common-utils.js';
 
 export {
 	init
@@ -68,8 +68,8 @@ function createMyaLabels() {
 	labelsContainerNode.appendChild(cursorNode);
 
 	// update cursor label text and position
-	mapsListNode.addEventListener('pointermove', handlePointerMove);
-	mapsListNode.addEventListener('pointerdown', handlePointerMove);
+	addPointerListener(mapsListNode, 'pointermove', handlePointerMove);
+	addPointerListener(mapsListNode, 'pointerdown', handlePointerMove);
 	function handlePointerMove(e) {
 		if (e.target == mapsListNode) {
 			// clamp timeline cursor to current min/max
@@ -242,9 +242,9 @@ function setUpListeners() {
 		dragStartExpansion = timelineNode.style.getPropertyValue('--expansion-percent');
 		dragStartX = e.clientX;
 	}
-	mapsListNode.addEventListener('pointerdown', handleDragStart);
-	expansionButton.addEventListener('pointerdown', handleDragStart);
-	document.addEventListener('pointerup', e=>{
+	addPointerListener(mapsListNode, 'pointerdown', handleDragStart);
+	addPointerListener(expansionButton, 'pointerdown', handleDragStart);
+	addPointerListener(document, 'pointerup', e=>{
 		if (timelineNode.classList.contains('dragging')) {
 			timelineNode.classList.remove('dragging');
 			if (timelineNode.classList.contains('expanded-overlay')) {
@@ -259,7 +259,7 @@ function setUpListeners() {
 		}
 		timelineNode.classList.remove('scrubbing');
 	});
-	document.addEventListener('pointermove', e=>{
+	addPointerListener(document, 'pointermove', e=>{
 		if (timelineNode.classList.contains('dragging')) {
 			const dragChange = dragStartX - e.clientX;
 			const newOffset = dragChange + getExpansionX()*dragStartExpansion;

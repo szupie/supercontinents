@@ -1,6 +1,6 @@
 import { select, selectAll, pointer } from './d3-modules.js';
 import { bisector } from './d3-modules.js';
-import { clamp } from './common-utils.js';
+import { clamp, addPointerListener } from './common-utils.js';
 
 export {
 	init,
@@ -434,10 +434,8 @@ function setUpKeyboardHandler() {
 }
 
 function setUpPointerHandler() {
-	mapsListNode.addEventListener('pointerdown', e=>{
-		handleDrag(e);
-	});
-	document.addEventListener('pointermove', e=>{
+	addPointerListener(mapsListNode, 'pointerdown', handleDrag);
+	addPointerListener(document, 'pointermove', e=>{
 		if (mapsListNode.parentNode.classList.contains('scrubbing')) {
 			handleDrag(e);
 		}

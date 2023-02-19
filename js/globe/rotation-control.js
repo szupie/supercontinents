@@ -1,5 +1,5 @@
 import { pointer } from '../d3-modules.js';
-import { clampAbs, clamp, easeInOut, easeInOutQuart } from '../common-utils.js';
+import { clampAbs, clamp, easeInOut, easeInOutQuart, addPointerListener } from '../common-utils.js';
 
 export {
 	init,
@@ -22,8 +22,8 @@ function init(theProjection, theHandlerNode, redrawFunction) {
 	redrawGlobe = redrawFunction;
 
 	dragHandlerNode = theHandlerNode;
-	dragHandlerNode.addEventListener('pointerdown', handleDragStart);
-	dragHandlerNode.addEventListener('pointerup', handleDragEnd);
+	addPointerListener(dragHandlerNode, 'pointerdown', handleDragStart);
+	addPointerListener(dragHandlerNode, 'pointerup', handleDragEnd);
 
 	setTrackToLand(true);
 }
@@ -98,8 +98,10 @@ function handleDragStart(e) {
 	if (!isNaN(startingGeoCoord[0]) && !isNaN(startingGeoCoord[1])) {
 		setTrackToLand(false);
 		dragHandlerNode.classList.add('dragging');
-		dragHandlerNode.setPointerCapture(e.pointerId);
-		dragHandlerNode.addEventListener('pointermove', handleDragMove);
+		if (typeof PointerEvent !== 'undefined') {
+			dragHandlerNode.setPointerCapture(e.pointerId);
+		}
+		addPointerListener(dragHandlerNode, 'pointermove', handleDragMove);
 
 		const radius = projection.scale();
 		lastY = pointer(e, dragHandlerNode)[1]-radius;
@@ -151,8 +153,13 @@ function handleDragMove(e) {
 
 function handleDragEnd(e) {
 	dragHandlerNode.classList.remove('dragging');
-	dragHandlerNode.releasePointerCapture(e.pointerId);
-	dragHandlerNode.removeEventListener('pointermove', handleDragMove);
+	if (typeof PointerEvent !== 'undefined') {
+		dragHandlerNode.releasePointerCapture(e.pointerId);
+		dragHandlerNode.removeEventListener('pointermove', handleDragMove);
+	} else {
+		dragHandlerNode.removeEventListener('touchmove', handleDragMove);
+		dragHandlerNode.removeEventListener('mousemove', handleDragMove);
+	}
 }
 
 function getDragCoords() {

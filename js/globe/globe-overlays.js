@@ -23,7 +23,7 @@ import {
 	offsetRotator as vectorMapOffsetRotator
 } from './craton-drawer.js';
 
-import { clamp, easeInOut } from '../common-utils.js';
+import { clamp, easeInOut, addPointerListener } from '../common-utils.js';
 
 export {
 	init,
@@ -86,7 +86,7 @@ function init(theProjection, overlayNode) {
 
 
 	// tracked craton label deselection listener
-	overlay.node().parentNode.addEventListener('pointerdown', e=>{
+	addPointerListener(overlay.node().parentNode, 'pointerdown', e=>{
 		if (trackedCratonLabel) {
 			trackedCratonLabel.classList.remove('tracked');
 			trackedCratonLabel = false;
