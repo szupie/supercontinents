@@ -412,8 +412,10 @@ function adjustEquatorLabel() {
 			labelOffsetSign = -1;
 		}
 	}
+	// increase offset as radius decreases while label stays constant size
+	const labelOffsetAmount = 1800/projection.scale();
 	graticuleLabel.setAttribute(
-		'startOffset', `${(100 - 7*labelOffsetSign) % 100}%`
+		'startOffset', `${(100 - labelOffsetAmount*labelOffsetSign) % 100}%`
 	);
 }
 
