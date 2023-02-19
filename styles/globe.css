@@ -306,3 +306,10 @@ body[data-map-type="none"] #globe-overlay .continent-labels {
 body[data-map-type="none"] #reverse-globe {
 	display: none;
 }
+
+@supports not (position: sticky) {
+	/* uh if sticky is not support at least make it fixed? */
+	#globe-group {
+		position: fixed;
+	}
+}

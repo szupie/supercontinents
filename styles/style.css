@@ -597,3 +597,11 @@ h1 {
 		transition-duration: 100ms;
 	}
 }
+
+/* hack to keep position: sticky working on firefox <69 */
+/* https://bugzilla.mozilla.org/show_bug.cgi?id=1560237 */
+@supports not (contain: none) {
+	html {
+		scroll-behavior: auto;
+	}
+}
