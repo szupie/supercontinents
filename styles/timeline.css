@@ -214,7 +214,7 @@ body:not([data-map-type="texture"]) #maps-list {
 
 /* List of biological events next to timeline */
 #timeline #life-events-list {
-	right: var(--timeline-safe-width);
+	right: var(--event-marker-position-right);
 	position: absolute;
 	z-index: 2; /* appear above precambrian anchor */
 }
@@ -231,6 +231,9 @@ body:not([data-map-type="texture"]) #maps-list {
 	touch-action: pinch-zoom;
 	pointer-events: auto;
 }
+#timeline #life-events-list li:hover {
+	z-index: 1;
+}
 #timeline #life-events-list a, #cambrian-anchor span {
 	display: block;
 	text-decoration-line: underline;
@@ -246,8 +249,9 @@ body:not([data-map-type="texture"]) #maps-list {
 #timeline #life-events-list a {
 	overflow: hidden;
 }
-#timeline:not(.dragging) #life-events-list a,
-#timeline:not(.dragging) #cambrian-anchor span {
+#timeline.expanded-overlay:not(.dragging) #life-events-list a,
+#timeline.expanded-overlay:not(.dragging) #cambrian-anchor span,
+#timeline #life-events-list.hovering a {
 	background-color: rgb(var(--page-bg-rgb), 0.75);
 }
 #timeline #life-events-list a:hover,
@@ -268,17 +272,6 @@ body:not([data-map-type="texture"]) #maps-list {
 }
 #timeline #life-events-list li.current a::after {
 	background-color: var(--action-extralight-hex);
-}
-@media (max-width: 700px) {
-	#timeline:not(.expanded-overlay) #life-events-list:not(.hovering) a {
-		text-indent: calc(100% + var(--marker-size) + var(--marker-padding)*2);
-		max-width: 0;
-		color: transparent;
-		padding-right: 10px;
-	}
-	#timeline.expanded-overlay #life-events-list a {
-		color: #fff;
-	}
 }
 
 /* MYA labels */
@@ -316,18 +309,6 @@ body:not([data-map-type="texture"]) #maps-list {
 }
 #timeline #maps-list:hover~.axis-labels .label.title.obscured {
 	margin-top: 2em;
-}
-@media (max-width: 700px) {
-	#timeline:not(.expanded-overlay) .axis-labels .label {
-		opacity: var(--expansion-percent);
-	}
-	#timeline .axis-labels .title {
-		transform: none;
-		top: calc(100vh - var(--scrubber-vert-margin) * 2 + 0.75em);
-	}
-	#timeline #maps-list:hover~.axis-labels .label.title.obscured {
-		margin-top: 0;
-	}
 }
 
 #supercontinents-list, #periods-list {
@@ -389,11 +370,6 @@ body[data-map-type='texture'] #supercontinents-list li:nth-child(3) .label {
 	top: 0;
 	transform: translateY(-100%);
 }
-@media (max-width: 700px) {
-	ol#supercontinents-list {
-		margin-left: 0;
-	}
-}
 
 /* Geological periods */
 ol#periods-list {
@@ -425,7 +401,7 @@ ol#periods-list {
 #keyboard-hint {
 	position: absolute;
 	bottom: 2em;
-	right: calc(var(--timeline-safe-width) + var(--marker-padding));
+	right: calc(var(--event-marker-position-right) + var(--marker-padding));
 	margin: 0;
 	text-align: right;
 	font-size: 9px;
@@ -460,7 +436,8 @@ ol#periods-list {
 body:not([data-map-type="texture"]) #keyboard-hint {
 	bottom: calc(100% - var(--zoomed-timeline-proportion) * 1.5);
 }
-@media (max-width: 700px) {
+/* assume no keyboard input if there is no mouse */
+@media not (any-pointer: fine) {
 	#keyboard-hint {
 		visibility: hidden;
 	}
@@ -487,24 +464,13 @@ body:not([data-map-type="texture"]) #timeline {
 	flex-direction: column;
 	justify-content: center;
 	right: var(--scrubber-width);
-	padding: 0 var(--life-events-list-margin);
+	padding: 0 var(--event-marker-clear-width);
 	text-decoration-color: var(--action-hex);
 	pointer-events: auto;
 	cursor: pointer;
 }
 #cambrian-anchor span {
 	position: relative;
-}
-@media (max-width: 700px) {
-	#timeline:not(.expanded-overlay) #cambrian-anchor:not(:hover) span {
-		transform: translateX(calc(100% + var(--marker-size) + var(--marker-padding)*2));
-		max-width: 0;
-		padding: 0;
-		opacity: 0;
-	}
-	#timeline:not(.expanded-overlay) #cambrian-anchor:not(:hover) span::after {
-		opacity: 0;
-	}
 }
 #cambrian-anchor span::after {
 	content: '↑';	
@@ -526,7 +492,7 @@ body[data-map-type="texture"] #cambrian-anchor {
 	content: '';
 	display: block;
 	position: absolute;
-	left: calc(100% - var(--life-events-list-margin) - var(--marker-padding) + 2px);
+	left: calc(100% - var(--event-marker-clear-width) - var(--marker-padding) + 2px);
 	width: 8px;
 	height: 8px;
 	border: 1px solid var(--grey-on-black);
@@ -576,37 +542,47 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 }
 
 
-@media (min-width: 701px) {
-	/* Wide screen with geological periods hidden */
-	#timeline:not(.show-periods) #periods-list {
-		transform: none;
-	}
-	#timeline:not(.show-periods) #periods-list li .label {
-		opacity: 0;
-		transform: translateX(100%);
-	}
-	@media (hover: hover) {
-		#timeline:not(.show-periods) ol#periods-list {
-			pointer-events: auto;
-		}
-	}
-
-	/* Full-width state with geological periods */
-	#timeline.show-periods {
-		transform: translateX(calc(-1 * var(--scrubber-offscreen-width)));
-	}
-}
-
-/* Expanded state on narrower screens */
-@media (max-width: 700px) {
+/* not wide enough to show event labels (condensed timeline) */
+@media (width < 700px), (width < 1024px) and (height <= 500px) {
+	/* Expanded/collapsed positioning */
 	#timeline {
 		transform: translateX(calc( -1 * var(--expansion-percent) * var(--scrubber-offscreen-width) ));
 	}
-	#timeline.dragging,
-	#timeline.dragging::before,
-	#timeline.dragging::after,
-	#timeline.dragging #timeline-toggle {
-		transition-duration: 0ms;
+
+	/* hide event labels */
+	#timeline:not(.expanded-overlay) #life-events-list:not(.hovering) a {
+		text-indent: calc(100% + var(--marker-size) + var(--marker-padding)*2);
+		max-width: 0;
+		color: transparent;
+		padding-right: 10px;
+	}
+	#timeline.expanded-overlay #life-events-list a {
+		color: #fff;
+	}
+	/* hide label for cambrian anchor link */
+	#timeline:not(.expanded-overlay) #cambrian-anchor:not(:hover) span {
+		transform: translateX(calc(100% + var(--marker-size) + var(--marker-padding)*2));
+		max-width: 0;
+		padding: 0;
+		opacity: 0;
+	}
+	#timeline:not(.expanded-overlay) #cambrian-anchor:not(:hover) span::after {
+		opacity: 0;
+	}
+	/* hide mya labels */
+	#timeline:not(.expanded-overlay) .axis-labels .label {
+		opacity: var(--expansion-percent);
+	}
+	#timeline .axis-labels .title {
+		transform: none;
+		top: calc(100vh - var(--scrubber-vert-margin) * 2 + 0.75em);
+	}
+	#timeline #maps-list:hover~.axis-labels .label.title.obscured {
+		margin-top: 0;
+	}
+	/* reduce margin for thin timeline */
+	ol#supercontinents-list {
+		margin-left: 0;
 	}
 
 	/* overlay shade behind life events */
@@ -628,15 +604,17 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 		opacity: var(--swiping-opacity);
 	}
 
-	/* trim at edge of screen */
+	/* accent colour along edge of screen */
 	#timeline::after {
 		content: '';
 		position: absolute;
 		top: calc(-1 * var(--scrubber-vert-margin));
 		right: 0;
 		height: 100vh;
-		border-right: 1px solid var(--action-hex);
-		border-width: calc(1px + var(--expansion-percent) * 4px);
+		border-style: solid;
+		border-color: var(--action-hex);
+		border-width: 0;
+		border-right-width: calc(1px + var(--expansion-percent) * 8px);
 		z-index: 1;
 		transform: translateX(calc( var(--expansion-percent) * var(--scrubber-offscreen-width) ));
 		transition: all var(--expansion-duration) var(--expansion-easing);
@@ -659,7 +637,14 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 		));
 	}
 
-
+	/* remove shade immediately on drag */
+	#timeline.dragging,
+	#timeline.dragging::before,
+	#timeline.dragging::after,
+	#timeline.dragging #timeline-toggle {
+		transition-duration: 0ms;
+	}
+	/* additional clearance for mya labels */
 	#timeline.expanded-overlay #life-events-list,
 	#timeline.expanded-overlay #cambrian-anchor {
 		transform: translateX(-1.25em);
@@ -671,5 +656,27 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 	}
 	#timeline.expanded-overlay ~ #globe-group #current-map-label {
 		opacity: 0.5;
+	}
+}
+
+/* NOT not wide enough */
+@media (width >= 700px) and ((width >= 1024px) or (height > 500px)) {
+	/* Wide screen with geological periods hidden */
+	#timeline:not(.expanded-overlay) #periods-list {
+		transform: none;
+	}
+	#timeline:not(.expanded-overlay) #periods-list li .label {
+		opacity: 0;
+		transform: translateX(100%);
+	}
+	@media (hover: hover) {
+		#timeline:not(.expanded-overlay) ol#periods-list {
+			pointer-events: auto;
+		}
+	}
+
+	/* Full-width state with geological periods */
+	#timeline.expanded-overlay {
+		transform: translateX(calc(-1 * var(--scrubber-offscreen-width)));
 	}
 }

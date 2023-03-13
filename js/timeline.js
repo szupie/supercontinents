@@ -175,27 +175,23 @@ function setUpListeners() {
 		clearTimeout(periodsDragDelayTimer);
 		periodsDragDelayTimer = false;
 	}
-	function showPeriods() {
-		timelineNode.classList.add('show-periods');
-		cancelPeriodsTimer();
-	}
-	function hidePeriods() {
-		timelineNode.classList.remove('show-periods');
-		cancelPeriodsTimer();
-	}
-	periodsNode.addEventListener('mouseenter', showPeriods);
+	periodsNode.addEventListener('mouseenter', e=>{
+		setTimelineExpandedOverlay(true);
+	});
 	mapsListNode.addEventListener('mousedown', e=>{
 		if (!periodsDragDelayTimer) {
-			periodsDragDelayTimer = setTimeout(showPeriods, 500);
+			periodsDragDelayTimer = setTimeout(e=>{
+				setTimelineExpandedOverlay(true);
+			}, 500);
 		}
 	});
 
 	timelineNode.addEventListener('mouseleave', e=>{
 		// show periods if cursor moves past edge (Fitts law)
 		if (e.clientX >= document.documentElement.clientWidth) {
-			showPeriods();
+			setTimelineExpandedOverlay(true);
 		} else {
-			hidePeriods();
+			setTimelineExpandedOverlay(false);
 		}
 	});
 	document.addEventListener('mouseup', e=>{

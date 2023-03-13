@@ -48,55 +48,35 @@ html {
 	--land-dark-hex: #6B3F2C;
 	--land-light-rgb: 146, 88, 63;
 	--land-light-on-action-rgb: 166, 99, 60;
-	--max-spacer-height: min(100vh, 225vw);
+
 	--vert-rhythm: 20px;
 	--story-padding: 2.5rem;
-	--globe-size: calc(100vmin - var(--globe-margin)*2 - var(--scrubber-width));
-	--globe-margin: 5rem;
-	--globe-top-padding: var(--globe-margin);
-	--current-map-label-size: 1.25rem;
+	--max-spacer-height: min(100vh, 225vw);
+	--mya-title-font-size: min(1.25rem, calc(9.5vmin - 19px));
+	--globe-clear-height: 5vh;
+
 	--scrubber-width: 64px;
 	--scrubber-vert-margin: 3rem;
-	--life-events-list-margin: 32px;
-	--timeline-safe-width: calc(var(--scrubber-width) + var(--life-events-list-margin));
+	--event-marker-clear-width: 32px;
+	--event-marker-position-right: calc(var(--scrubber-width) + var(--event-marker-clear-width));
+
+	--stories-safe-width: min(22rem, 45vw);
+	--timeline-safe-width: calc(var(--event-marker-position-right) + 10rem);
+
+	--globe-max-width: calc(100vw - var(--globe-clear-height)*2 - var(--stories-safe-width) - var(--timeline-safe-width) - 2rem);
+	--globe-max-height: calc(100vh - var(--globe-clear-height)*2 - var(--mya-title-font-size)*3);
+	--globe-size: min(var(--globe-max-width), var(--globe-max-height));
+
+	--globe-group-height: calc(var(--globe-size) + var(--mya-title-font-size)*3);
+	--globe-panel-safe-height: var(--globe-group-height);
+	--globe-vert-offset: calc((100vh - var(--globe-group-height)) / 2);
+
 	font-family: "CMU Serif";
 	word-spacing: -1px;
 	font-size: 16px;
 	/* set 100vh on root, so js can use element height 
 	to determine viewport height without mobile address bar */
 	height: 100vh;
-}
-@supports not (width: min(1px, 0px)) {
-	html {
-		--max-spacer-height: 225vw;
-	}
-	@media (max-height: 225vw) {
-		html {
-			--max-spacer-height: 100vh;
-		}
-	}
-}
-@media (max-width: 700px) {
-	html {
-		--story-padding: 1rem;
-		--globe-size: min(calc(100vh - 20rem), calc(100vw - var(--globe-margin)*2 - var(--scrubber-width)));
-		--globe-margin: 1.5rem;
-		--globe-top-padding: calc(var(--globe-margin) + 2rem);
-		--scrubber-width: 24px;
-		--life-events-list-margin: 10px;
-		--scrubber-vert-margin: 4.5rem;
-	}
-	@supports not (width: min(1px, 0px)) {
-		html {
-			--globe-size: calc(100vw - var(--globe-margin)*2 - var(--scrubber-width));
-		}
-		/* wider (i.e. shorter) than 3:4 */
-		@media (min-aspect-ratio: 3/4) {
-			html {
-				--globe-size: calc(calc(100vh - 20rem));
-			}
-		}
-	}
 }
 
 body {
@@ -159,23 +139,12 @@ a:hover {
 
 
 #current-map-label {
-	font-size: var(--current-map-label-size);
+	font-size: var(--mya-title-font-size);
 	line-height: 1;
 	text-align: center;
 	margin: 0 auto;
 	padding: 1em 0;
 	display: inline-block;
-}
-@media (max-width: 700px) {
-	#current-map-label {
-		width: 61.8%; /* 1 / 1.618 */
-		border-bottom: 1px solid #666;
-	}
-}
-@media (max-width: 410px) {
-	html {
-		--current-map-label-size: calc(9.5vw - 19px);
-	}
 }
 
 #cover, #intro {
@@ -250,14 +219,16 @@ h1 {
 
 	/* add side margin to constrain width, while aligning with globe */
 	--max-width: min(var(--globe-size), 29em);
-	--extra-right-space: 0px;
-	--side-margin: calc(((100% - var(--extra-right-space)) - var(--max-width)) / 2);
-	margin-left: var(--side-margin);
-	margin-right: calc(var(--side-margin) + var(--extra-right-space));
+	--safe-width-left: 0px;
+	--safe-width-right: 0px;
+	--pad-to-center: calc((100% - var(--max-width) - var(--safe-width-left) - var(--safe-width-right)) / 2);
+	max-width: var(--max-width);
+	margin-left: calc(var(--pad-to-center) + var(--safe-width-left));
+	margin-right: calc(var(--pad-to-center) + var(--safe-width-right));
 
 	/* move up to just below equator */
-	margin-top: calc(-1 * (var(--globe-size) / 2 + var(--current-map-label-size)*3));
-	margin-bottom: calc(var(--max-spacer-height) / 2);
+	margin-top: calc(-1 * (var(--globe-size) / 2 + var(--mya-title-font-size)*3));
+	margin-bottom: var(--globe-panel-safe-height);
 
 	transition-property: opacity, transform;
 	transition-duration: 200ms;
@@ -273,30 +244,85 @@ h1 {
 #instructions strong {
 	color: var(--action-extralight-hex);
 }
-#globe-group.peek ~ #instructions {
-	margin-top: calc(var(--globe-top-padding) + var(--globe-size) / 2);
+
+#globe-group {
+	padding-top: var(--globe-vert-offset);
 }
-#globe-group:not(.static):not(.peek) ~ #instructions {
-	pointer-events: none;
+
+/* adjustments to globe on cover page */
+
+/* make globe show on cover */
+#globe-group.peek {
+	position: fixed;
+	/* draw above cover */
+	z-index: 4;
+	top: 100vh;
+	width: 100%;
+	margin-top: calc((-0.5 * var(--globe-size)) - var(--globe-vert-offset));
+	background: none;
+}
+
+/* transition from cover’s centered position to main position */
+#globe-group.static {
+	transition-property: width;
+	transition-duration: var(--initing-transition-duration, 200ms);
+	transition-timing-function: ease-in-out;
+}
+
+/* styles for static state, before globe is sticked */
+/* (block pointer events and dim) */
+
+/* pointer event blocker */
+#globe-group::before {
+	content: '';
+	display: block;
+	position: absolute;
+	z-index: 1;
+	top: var(--globe-vert-offset);
+	width: var(--globe-size);
+	height: var(--globe-size);
+	border-radius: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+}
+#globe-group.static::before {
+	pointer-events: auto;
+}
+#globe-group #globe {
+	transition-property: filter;
+	transition-duration: var(--initing-transition-duration, 300ms);
+	transition-timing-function: ease-in-out;
+}
+#globe-group:not(.peek).static #globe {
+	filter: brightness(0.7);
+}
+
+/* hide all overlay elements and controls but keep globe shading */
+#globe-overlay > *,
+#reverse-globe,
+#current-map-label {
+	opacity: 1;
+	transition-property: opacity;
+	transition-duration: var(--initing-transition-duration, 500ms);
+	transition-timing-function: ease-in;
+}
+#globe-group.static #globe-overlay > *,
+#globe-group.static #reverse-globe,
+#globe-group.static #current-map-label {
 	opacity: 0;
-	transform: translateY(-2rem);
+	transition-duration: var(--initing-transition-duration, 100ms);
 }
-@media (max-width: 700px) {
-	#instructions {
-		--extra-right-space: var(--timeline-safe-width);
-	}
-}
-@supports not (width: min(1px, 0px)) {
-	#instructions {
-		--max-width: 29em;
-	}
+
+/* offset instructions position when globe is position: fixed */
+#globe-group.peek ~ #instructions {
+	margin-top: calc(var(--globe-vert-offset) + var(--globe-size) / 2);
 }
 
 
 #stories {
 	--stroke-width: 2px;
 	--stroke-padding: 8px;
-	max-width: 22rem;
+	max-width: var(--stories-safe-width);
 }
 #stories h3 {
 	font-size: 20px;
@@ -400,11 +426,12 @@ h1 {
 #precambrian-intro div {
 	position: relative;
 	z-index: 2;
-	max-width: 30em;
-	margin: auto;
+	min-width: var(--globe-size);
+	box-sizing: border-box;
+	margin-left: 50%;
 	background-color: #222;
 	padding: 5em 6em;
-	transform: translateY(calc(-1 * var(--globe-cover-translate)));
+	transform: translate(-50%, calc(-1 * var(--globe-cover-translate)));
 }
 
 
@@ -541,19 +568,45 @@ h1 {
 }
 
 
-@media (max-width: 700px) {
+/* stacked layout (too narrow and tall enough to stack) */
+@media (width < 500px), (width < 1024px) and (height > 500px) {
+	html {
+		--globe-clear-height: 2rem;
+		--stories-safe-width: 35rem;
+		--globe-max-width: calc(100vw - var(--globe-clear-height)*1.5 - var(--timeline-safe-width));
+		--globe-max-height: calc(100vh - 20rem);
+		--globe-panel-safe-height: calc(var(--globe-group-height) + var(--globe-clear-height));
+		--globe-vert-offset: var(--globe-clear-height);
+	}
+	#globe-group {
+		/* globe panel covers top section, do not show text behind globe */
+		background-color: inherit;
+		width: calc(100% - var(--timeline-safe-width));
+	}
+	#current-map-label {
+		width: 61.8%; /* 1 / 1.618 */
+		max-width: 20rem;
+		border-bottom: 1px solid #666;
+	}
+	#reverse-globe {
+		/* align left with stories when stacked */
+		left: max(0px, (100% - var(--stories-safe-width))/2);
+		margin-left: var(--story-padding);
+	}
+	#instructions {
+		--safe-width-right: var(--timeline-safe-width);
+		/* delay fade-in until after globe is in position */
+		transition-delay: 200ms;
+	}
 	#stories {
-		--top-panel-height: calc(var(--globe-size) + var(--globe-top-padding) + var(--current-map-label-size)*3);
-		max-width: 35rem;
+		padding-right: var(--timeline-safe-width);
+		margin: 0 auto;
 	}
 	#stories article, #stories aside.geological {
-		scroll-margin-top: var(--top-panel-height);
-	}
-	#stories > *, #stories #precambrian-intro {
-		margin-right: var(--timeline-safe-width);
+		scroll-margin-top: var(--globe-panel-safe-height);
 	}
 	#stories article.bio {
-		min-height: min(100vh - var(--top-panel-height), 40em);
+		min-height: min(100vh - var(--globe-panel-safe-height), 40em);
 	}
 	#stories p {
 		font-size: 1rem;
@@ -562,26 +615,83 @@ h1 {
 		height: 15em;
 	}
 	#precambrian-intro {
-		--globe-cover-translate: calc(var(--top-panel-height) + 480px);
+		--globe-cover-translate: calc(var(--globe-panel-safe-height) + 480px);
+		width: auto;
 		min-height: 0;
 		margin-top: calc(var(--globe-cover-translate));
-		margin-bottom: calc(5em - var(--globe-cover-translate) + var(--top-panel-height));
+		margin-bottom: calc(5em - var(--globe-cover-translate) + var(--globe-panel-safe-height));
 	}
 	#precambrian-intro div {
 		padding: 2em;
-		margin-right: var(--scrubber-width);
 	}
 	#stories #boring-billion .geological.break + .geological.form:not(:last-child) {
 		margin-bottom: 25em;
 	}
 	#stories #eukaryotes ~ article:last-child {
 		/* push references section down until peeking at viewport bottom */
-		min-height: calc(100vh - var(--top-panel-height) - var(--vert-rhythm) * 5);
+		min-height: calc(100vh - var(--globe-panel-safe-height) - var(--vert-rhythm) * 5);
 	}
 	@supports not (width: min(1px, 0px)) {
+		html {
+			--globe-size: var(--globe-max-width);
+		}
+		/* wider (i.e. shorter) than 3:4 */
+		@media (min-aspect-ratio: 3/4) {
+			html {
+				--globe-size: var(--globe-max-height);
+			}
+		}
 		#stories article.bio {
 			min-height: 40em;
 		}
+	}
+}
+/* not on wide screen, and not stacked */
+@media (width >= 500px) and (width < 1024px) and (height <= 500px) {
+	/* offset globe position for left text */
+	#globe-group {
+		margin-left: var(--stories-safe-width);
+		width: calc(100% - var(--stories-safe-width) - var(--timeline-safe-width));
+	}
+	#instructions {
+		--safe-width-left: var(--stories-safe-width);
+		--safe-width-right: var(--timeline-safe-width);
+		/* delay fade-in until after globe is in position */
+		transition-delay: 200ms;
+	}
+}
+/* not wide enough to show event labels (condensed timeline) */
+@media (width < 700px), (width < 1024px) and (height <= 500px) {
+	html {
+		--story-padding: 1rem;
+
+		/* do not account for label width in safe area */
+		--timeline-safe-width: var(--event-marker-position-right);
+		/* more vertical margin in case of floating mobile browser chrome */
+		--scrubber-vert-margin: 4.5rem;
+		/* thin timeline */
+		--scrubber-width: 24px;
+		/* reduce margin since mya labels are hidden */
+		--event-marker-clear-width: 10px;
+	}
+}
+@supports not (width: min(1px, 0px)) {
+	html {
+		--max-spacer-height: 225vw;
+		--mya-title-font-size: 1.25rem;
+	}
+	@media (height < 225vw) {
+		html {
+			--max-spacer-height: 100vh;
+		}
+	}
+	@media (width < 410px) {
+		html {
+			--mya-title-font-size: calc(9.5vmin - 19px);
+		}
+	}
+	#instructions {
+		--max-width: 29em;
 	}
 }
 

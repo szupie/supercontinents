@@ -1,23 +1,13 @@
 #globe-group {
+	--globe-bg: #2B2B2B;
 	position: sticky;
 	top: 0;
-	padding-top: var(--globe-top-padding);
-	margin: 0 auto;
+	margin: 0;
 	z-index: 2;
 	touch-action: none;
 	text-align: center;
 	/* prevent pointer capture over story text */
 	pointer-events: none;
-}
-@media (max-width: 700px) {
-	#globe-group {
-		background-color: inherit;
-		width: calc(100% - var(--timeline-safe-width));
-		margin-left: 0;
-		transition-property: width;
-		transition-duration: var(--initing-transition-duration, 200ms);
-		transition-timing-function: ease-in-out;
-	}
 }
 
 #globe-group:not(.static) > * {
@@ -46,8 +36,9 @@
 }
 #reverse-globe {
 	position: absolute;
-	bottom: var(--current-map-label-size);
-	left: calc( (100% - var(--globe-size))/2 );
+	bottom: calc(var(--mya-title-font-size));
+	left: 50%;
+	margin-left: calc(-0.5 * var(--globe-size));
 	width: 58px;
 	height: 60px;
 	padding: 0;
@@ -83,62 +74,6 @@
 	box-shadow: inset 0 0 30px 5px rgba(0,0,0, var(--shadow-strength));
 }
 
-/* make globe show on cover */
-#globe-group.peek {
-	/* draw above cover */
-	position: fixed;
-	z-index: 4;
-	top: 100vh;
-	width: 100%;
-	margin-top: calc(-0.5 * (var(--globe-size)) - (var(--globe-top-padding)));
-	background: none;
-}
-
-/* styles for static state, before globe is sticked */
-/* (block pointer events and dim) */
-
-/* pointer event blocker */
-#globe-group::before {
-	content: '';
-	display: block;
-	position: absolute;
-	z-index: 1;
-	top: var(--globe-top-padding);
-	width: var(--globe-size);
-	height: var(--globe-size);
-	border-radius: 100%;
-	left: 50%;
-	transform: translateX(-50%);
-}
-#globe-group.static::before {
-	pointer-events: auto;
-}
-#globe-group #globe {
-	transition-property: filter;
-	transition-duration: var(--initing-transition-duration, 300ms);
-	transition-timing-function: ease-in-out;
-}
-#globe-group:not(.peek).static #globe {
-	filter: brightness(0.7);
-}
-
-/* hide all overlay elements and controls but keep globe shading */
-#globe-overlay > *,
-#reverse-globe,
-#current-map-label {
-	opacity: 1;
-	transition-property: opacity;
-	transition-duration: var(--initing-transition-duration, 500ms);
-	transition-timing-function: ease-in;
-}
-#globe-group.static #globe-overlay > *,
-#globe-group.static #reverse-globe,
-#globe-group.static #current-map-label {
-	opacity: 0;
-	transition-duration: var(--initing-transition-duration, 100ms);
-}
-
-
 
 /* vector map */
 .reconstruction .countries path {
@@ -173,9 +108,9 @@ body:not([data-map-type="texture"]) #reverse-texture {
 body:not([data-map-type="texture"]) #globe #globe-overlay {
 	--shadow-strength: 0.3;
 }
-body[data-map-type]:not([data-map-type="texture"]) #globe #globe-overlay,
-body[data-map-type]:not([data-map-type="texture"]) #reverse-vector {
-	background-color: #2B2B2B;
+#globe,
+body:not([data-map-type="texture"]) #reverse-vector {
+	background-color: var(--globe-bg);
 }
 body:not([data-map-type="texture"]) #globe-overlay #meridian {
 	display: none;
@@ -224,7 +159,9 @@ body:not([data-map-type="texture"]) #globe-overlay #meridian {
 #globe-overlay .supercontinent.label:not(.shown) {
 	opacity: 0;
 }
-#globe-overlay .supercontinent.label:hover {
+#globe-overlay .supercontinent.label:hover,
+#globe.tracking-to-land .supercontinent.label {
+	fill: #fff;
 	stroke: #0009;
 }
 #globe.tracking-to-land .supercontinent.label {
