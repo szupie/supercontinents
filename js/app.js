@@ -158,8 +158,9 @@ function redrawGlobes(rotation = false) {
 	globeOverlays.redraw();
 }
 
+const instructionsNode = document.getElementById('instructions');
+const globePanelNode = document.getElementById('globe-group');
 function checkMainContentVisibility() {
-	const globeNode = document.getElementById('globe-group');
 	
 	// get viewport height without floating address bar on mobile browsers
 	const viewportHeight = 
@@ -170,40 +171,43 @@ function checkMainContentVisibility() {
 		document.getElementById('intro').getBoundingClientRect().bottom;
 	// height needed to show hemisphere with top padding
 	const visibilityThreshold = radius + parseFloat(
-		window.getComputedStyle(globeNode).getPropertyValue('padding-top')
+		window.getComputedStyle(globePanelNode).getPropertyValue('padding-top')
 	);
 	if (visibleHeight < visibilityThreshold) {
-		globeNode.classList.add('peek');
+		globePanelNode.classList.add('peek');
 		if (!window.matchMedia('(prefers-reduced-motion)').matches) {
 			setConstantRotation(true);
 		}
 	} else {
-		globeNode.classList.remove('peek');
+		globePanelNode.classList.remove('peek');
 		setConstantRotation(false);
 	}
 
-	// make globe static until it is stickied to the top or stories are visible
-	const globeStickied = globeNode.getBoundingClientRect().top <= 0;
-	const storiesInViewport = viewportHeight > 
-		document.getElementById('stories').getBoundingClientRect().top;
-	const lastState = globeNode.classList.contains('static');
-	if (globeStickied || storiesInViewport) {
-		globeNode.classList.remove('static');
+	// make globe static until scrolled past instructions
+	const pastInstructions = 
+		(instructionsNode.getBoundingClientRect().bottom <= 20);
+	const lastState = globePanelNode.classList.contains('static');
+	if (pastInstructions) {
+		globePanelNode.classList.remove('static');
 		useReducedRes = false;
 	} else {
-		globeNode.classList.add('static');
+		globePanelNode.classList.add('static');
 		useReducedRes = true;
 	}
 	// use lower resolution during initial autorotate to reduce antialiasing
 	// (but wait until static state change for smoother transition animation)
-	if (lastState != globeNode.classList.contains('static')) {
+	if (lastState != globePanelNode.classList.contains('static')) {
 		loadAndUpdateTexture();
 	}
 }
-// skip to interactive mode when clicking instructions
-document.getElementById('instructions').addEventListener('click', e=>{
-	document.getElementById('globe-group').scrollIntoView();
-})
+// skip to interactive mode when clicking globe
+globePanelNode.addEventListener('click', e=>{
+	if (globePanelNode.classList.contains('static')) {
+		const instructionBottomEdge = 
+			window.scrollY + instructionsNode.getBoundingClientRect().bottom;
+		window.scrollTo(0, instructionBottomEdge);
+	}
+});
 
 initRotationControl(projection, document.getElementById('globe'), redrawGlobes);
 
