@@ -147,9 +147,23 @@ a:hover {
 	display: inline-block;
 }
 
-#cover, #intro {
+#cover, #intro,
+#precambrian-intro div,
+#references {
 	background-color: var(--paper-white-hex);
 	color: var(--page-bg);
+}
+#intro a,
+#precambrian-intro a,
+#references a {
+	color: rgb(var(--action-extradark-rgb));
+}
+#intro a:hover,
+#precambrian-intro a:hover,
+#references a:hover, #references summary:hover {
+	color: inherit;
+}
+#cover, #intro {
 	/* position relative and z-index to draw above timeline */
 	position: relative;
 	z-index: 4;
@@ -202,9 +216,6 @@ h1 {
 }
 #intro p:last-of-type {
 	margin-bottom: 0;
-}
-#intro a {
-	color: rgb(var(--action-extradark-rgb));
 }
 #instructions {
 	--vert-rhythm: 15px;
@@ -430,7 +441,6 @@ h1 {
 	min-width: var(--globe-size);
 	box-sizing: border-box;
 	margin-left: 50%;
-	background-color: #222;
 	padding: 5em 6em;
 	transform: translate(-50%, calc(-1 * var(--globe-cover-translate)));
 }
@@ -469,8 +479,6 @@ h1 {
 
 /* references */
 #references {
-	background-color: var(--paper-white-hex);
-	color: var(--page-bg);
 	line-height: var(--vert-rhythm);
 	padding: var(--story-padding);
 	padding-bottom: calc(var(--story-padding) * 4);
@@ -519,12 +527,6 @@ h1 {
 }
 #references p {
 	margin: var(--vert-rhythm) 0;
-}
-#references a {
-	color: rgb(var(--action-extradark-rgb));
-}
-#references a:hover, #references summary:hover {
-	color: var(--action-dark-hex);
 }
 /* accordion title */
 #references summary {

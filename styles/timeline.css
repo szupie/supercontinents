@@ -446,7 +446,7 @@ body:not([data-map-type="texture"]) #keyboard-hint {
 /* Timeline since formation of Earth */
 #timeline ol, 
 #timeline .axis-labels {
-	transition: height 200ms ease-in-out;
+	transition: height 500ms ease-in-out;
 }
 body:not([data-map-type="texture"]) #timeline ol, 
 body:not([data-map-type="texture"]) #timeline .axis-labels,
