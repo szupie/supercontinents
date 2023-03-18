@@ -534,6 +534,20 @@ h1 {
 	position: sticky;
 	top: 0;
 	background-color: var(--paper-white-hex);
+	color: rgb(var(--action-extradark-rgb));
+}
+#references summary:hover {
+	border-bottom-width: 2px;
+}
+#references summary:not(:hover) {
+	/* pad bottom to avoid content shift when border thickens */
+	padding-bottom: 1px;
+}
+#references summary::marker {
+	color: var(--action-hex);
+}
+#references summary:hover::marker {
+	color: var(--action-dark-hex);
 }
 #references summary h3 {
 	display: inline-block;
@@ -550,15 +564,16 @@ h1 {
 	margin: 0;
 	padding: 0;
 }
-#references li {
-	list-style: none;
-	margin-bottom: var(--vert-rhythm);
-}
 #references .citation {
 	--hanging-indent: 1em;
 	display: block;
 	margin-left: var(--hanging-indent);
 	text-indent: calc(-1 * var(--hanging-indent));
+	list-style: none;
+	margin-bottom: var(--vert-rhythm);
+}
+#references cite {
+	scroll-margin-top: var(--vert-rhythm);
 }
 .citation .chapter-title,
 .citation .article-title {
@@ -568,6 +583,9 @@ h1 {
 .citation cite:not(.chapter-title):not(.article-title) {
 	font-style: italic;
 	font-family: "CMU Classical Serif";
+}
+#references ul {
+	margin-top: 0;
 }
 
 
