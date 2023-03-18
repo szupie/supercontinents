@@ -192,7 +192,7 @@ h1 {
 	font-family: "CMU Classical Serif";
 	font-size: 18px;
 	max-width: 17em;
-	margin: 0 auto;
+	margin: 0 auto calc(var(--globe-size) / 2 / 1.618);
 }
 #cover :first-child {
 	margin-top: 0;
@@ -239,6 +239,7 @@ h1 {
 
 	/* move up to just below equator */
 	margin-top: calc(-1 * (var(--globe-size) / 2 + var(--mya-title-font-size)*3));
+	/* push stories down until after instructions scrolls past globe */
 	margin-bottom: var(--globe-panel-safe-height);
 
 	transition-property: opacity, transform;
@@ -319,8 +320,7 @@ h1 {
 	transition-timing-function: ease-in;
 }
 #globe-group.static #globe-overlay > *,
-#globe-group.static #reverse-globe,
-#globe-group.static #current-map-label {
+#globe-group.static #reverse-globe {
 	opacity: 0;
 	transition-duration: var(--initing-transition-duration, 100ms);
 }
@@ -604,6 +604,8 @@ h1 {
 	#stories {
 		padding-right: var(--timeline-safe-width);
 		margin: 0 auto;
+		/* push stories down when stacked to keep map on 0 mya longer */
+		padding-top: 6rem;
 	}
 	#stories article, #stories aside.geological {
 		scroll-margin-top: var(--globe-panel-safe-height);
