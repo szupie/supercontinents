@@ -1,12 +1,10 @@
-import { select, selectAll } from '../d3-modules.js';
-import { 
-	geoCircle, geoCentroid, geoRotation
-} from '../d3-modules.js';
-
-import { topoToFeature } from '../d3-modules.js';
-import { versor } from '../d3-modules.js';
-import { roundCorners } from 'https://cdn.skypack.dev/svg-round-corners';
-
+import {
+	select, selectAll,
+	geoCircle, geoCentroid, geoRotation,
+	topoToFeature,
+	versor,
+	roundCorners
+} from '../vendor-loader.js';
 
 export {
 	initInstance,

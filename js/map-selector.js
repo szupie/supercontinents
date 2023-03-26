@@ -1,5 +1,7 @@
-import { select, selectAll, pointer } from './d3-modules.js';
-import { bisector } from './d3-modules.js';
+import {
+	select, selectAll, pointer,
+	bisector
+} from './vendor-loader.js';
 import { clamp, addPointerListener } from './common-utils.js';
 
 export {

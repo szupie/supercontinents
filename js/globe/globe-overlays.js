@@ -1,11 +1,7 @@
-import { select, selectAll } from '../d3-modules.js';
-import { 
-	geoPath,
-	geoGraticule,
-	geoDistance,
-	geoCircle,
-	geoInterpolate
-} from '../d3-modules.js';
+import {
+	select, selectAll,
+	geoPath, geoGraticule, geoDistance, geoCircle, geoInterpolate
+} from '../vendor-loader.js';
 
 import {
 	transitionToCoord,

@@ -1,4 +1,4 @@
-import { geoOrthographic } from './d3-modules.js';
+import { geoOrthographic } from './vendor-loader.js';
 
 import { init as initRotationControl, transitionToCoord, setConstantRotation } from './globe/rotation-control.js';
 import { init as initTextureGlobe } from './globe/webgl-globe.js';

@@ -1,4 +1,4 @@
-import { pointer } from '../d3-modules.js';
+import { pointer } from '../vendor-loader.js';
 import { clampAbs, clamp, easeInOut, easeInOutQuart, addPointerListener } from '../common-utils.js';
 
 export {
