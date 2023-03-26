@@ -9,10 +9,11 @@
 	--swiping-opacity: 0.5;
 	--expanded-opacity: 0.8;
 	--expansion-percent: 0;
-	height: calc(100vh - 2 * var(--scrubber-vert-margin));
 	position: fixed;
 	top: var(--scrubber-vert-margin);
-	left: 100%;
+	bottom: var(--scrubber-vert-margin);
+	right: 0;
+	width: var(--scrubber-width);
 	z-index: 3;
 	pointer-events: none;
 	touch-action: pinch-zoom;
@@ -24,10 +25,6 @@
 	margin: 0;
 	padding: 0;
 	text-align: right;
-	height: 100%;
-}
-#timeline li {
-	position: absolute;
 }
 #timeline .label {
 	font-family: "CMU Serif";
@@ -46,7 +43,13 @@
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 	position: absolute;
 	top: calc(8px - var(--scrubber-vert-margin)); /* 8px from screen top */
-	left: calc(-1 * var(--scrubber-width) - var(--button-diameter)/2);
+	/* button position in expanded timeline state: overshoots by radius */
+	left: calc(var(--button-diameter) * -0.5);
+	/* button position in collapsed timeline state: align label to right */
+	transform: translateX(calc(
+		(1 - var(--expansion-percent)) * 
+		(-6px + var(--button-diameter)/2 + var(--scrubber-width) - var(--expand-text-width)) 
+	));
 	width: calc(var(--scrubber-full-width) + var(--button-diameter));
 	padding: 0;
 	z-index: 1;
@@ -112,23 +115,34 @@
 	opacity: 0;
 }
 
+/* elements that scale with timeline */
+#timeline ol, 
+#timeline .axis-labels {
+	position: absolute;
+	height: 100%;
+}
+#timeline ol > *, 
+#timeline .axis-labels > * {
+	position: absolute;
+}
+#maps-list, #supercontinents-list {
+	left: 0;
+}
+
 /* Map selector */
 #maps-list {
-	position: absolute;
-	top: 0;
-	left: calc(-1 * var(--scrubber-width));
 	cursor: pointer;
 	width: var(--scrubber-full-width);
 	pointer-events: auto;
 	touch-action: pinch-zoom;
 	user-select: none; /* prevent text selection on drag */
+	z-index: -1; /* contains background, so appear behind other labels */
 }
 #maps-list::before, #maps-list::after {
 	content: '';
 	display: block;
 	position: absolute;
 	z-index: -1; /* do not cover map indicators */
-	height: var(--scrubber-vert-margin);
 	width: inherit;
 }
 #maps-list, #maps-list::before, #maps-list::after {
@@ -141,12 +155,15 @@ body[data-map-type="texture"] #maps-list::after,
 body:not([data-map-type="texture"]) #maps-list {
 	--section-bg-rgb: var(--action-extradark-rgb);
 }
+/* background for margin above present day */
 #maps-list::before {
 	bottom: 100%;
+	height: var(--scrubber-vert-margin);
 }
+/* background from vector maps section to bottom */
 #maps-list::after {
 	top: 100%;
-	height: 100vh; /* extend background beyond 100% for unzoomed timeline */
+	height: calc(100vh - var(--scrubber-vert-margin) - 100%);
 }
 #maps-list li {
 	height: 0;
@@ -215,7 +232,6 @@ body:not([data-map-type="texture"]) #maps-list {
 /* List of biological events next to timeline */
 #timeline #life-events-list {
 	right: var(--event-marker-position-right);
-	position: absolute;
 	z-index: 2; /* appear above precambrian anchor */
 }
 #timeline #life-events-list, #cambrian-anchor {
@@ -276,13 +292,11 @@ body:not([data-map-type="texture"]) #maps-list {
 
 /* MYA labels */
 #timeline .axis-labels {
-	position: absolute;
-	height: 100%;
+	right: calc(100% + 2px);
 }
 #timeline .axis-labels .label {
-	position: absolute;
 	transform: translateY(-50%);
-	right: calc(var(--scrubber-width) + 2px);
+	right: 0;
 	color: var(--grey-on-black);
 	text-align: right;
 	pointer-events: auto;
@@ -311,17 +325,9 @@ body:not([data-map-type="texture"]) #maps-list {
 	margin-top: 2em;
 }
 
-#supercontinents-list, #periods-list {
-	position: absolute;
-	top: 0;
-	right: 0;
-	z-index: 1;
-}
-
 /* Supercontinents */
 ol#supercontinents-list {
 	margin-left: 3px;
-	left: calc(100% - var(--scrubber-width));
 }
 /* indicator strip */
 #supercontinents-list li {
@@ -374,6 +380,7 @@ body[data-map-type='texture'] #supercontinents-list li:nth-child(3) .label {
 /* Geological periods */
 ol#periods-list {
 	--padding-right: 4px;
+	right: 0;
 	padding-right: var(--padding-right); /* padding instead of margin, to detect hovers at viewport edge */
 	width: 16px; /* width for hover detection */
 	transform: translateX(var(--scrubber-offscreen-width));
@@ -629,13 +636,6 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 	#timeline-toggle {
 		display: block;
 	}
-	/* expand button position in collapsed state */
-	#timeline #timeline-toggle {
-		transform: translateX(calc(
-			(1 - var(--expansion-percent)) * 
-			(-6px + var(--button-diameter)/2 + var(--scrubber-width) - var(--expand-text-width)) 
-		));
-	}
 
 	/* remove shade immediately on drag */
 	#timeline.dragging,
@@ -651,7 +651,7 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 	}
 
 	/* dim background elements when timeline is overlaid */
-	#timeline.expanded-overlay ~ #stories {
+	#timeline.expanded-overlay ~ #stories > *:not(#precambrian-intro) {
 		opacity: 0.3;
 	}
 	#timeline.expanded-overlay ~ #globe-group #current-map-label {

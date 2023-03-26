@@ -74,9 +74,6 @@ html {
 	font-family: "CMU Serif";
 	word-spacing: -1px;
 	font-size: 16px;
-	/* set 100vh on root, so js can use element height 
-	to determine viewport height without mobile address bar */
-	height: 100vh;
 }
 
 body {
@@ -269,7 +266,7 @@ h1 {
 	/* draw above cover */
 	z-index: 4;
 	top: 100vh;
-	width: 100%;
+	width: 100vw;
 	margin-top: calc((-0.5 * var(--globe-size)) - var(--globe-vert-offset));
 	margin-left: 0;
 	background: none;

@@ -158,13 +158,22 @@ function redrawGlobes(rotation = false) {
 	globeOverlays.redraw();
 }
 
+
 const instructionsNode = document.getElementById('instructions');
 const globePanelNode = document.getElementById('globe-group');
+
+// dummy node to determine viewport height without mobile address bar
+const dummyNode = document.createElement('div');
+dummyNode.style.height = '100vh';
+dummyNode.style.position = 'absolute';
+dummyNode.style.visibility = 'hidden';
+document.body.appendChild(dummyNode);
+
 function checkMainContentVisibility() {
 	
 	// get viewport height without floating address bar on mobile browsers
-	const viewportHeight = 
-		document.documentElement.getBoundingClientRect().height;
+	const viewportHeight = dummyNode.getBoundingClientRect().height;
+
 	// height of content visible below intro
 	// (distance from bottom of intro to bottom of viewport)
 	const visibleHeight = viewportHeight -
