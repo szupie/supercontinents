@@ -1,0 +1,15 @@
+{
+  "name": "supercontinents",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "http-server": "^13.0.1",
+    "rollup": "^2.56.2",
+    "rollup-plugin-url-resolve": "^0.2.0"
+  },
+  "author": "szupie",
+  "scripts": {
+    "server": "http-server -c-1 -s",
+    "rollup": "rollup -c"
+  }
+}

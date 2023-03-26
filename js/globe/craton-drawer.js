@@ -4,7 +4,7 @@ import {
 	topoToFeature,
 	versor,
 	roundCorners
-} from '../vendor-loader.js';
+} from '../vendor-local.js';
 
 export {
 	initInstance,
@@ -14,7 +14,7 @@ export {
 
 const cratonsRequest = fetch('./assets/data/craton-shapes.json')
 	.then(response=>response.json());
-const countriesRequest = fetch('https://unpkg.com/world-atlas/countries-110m.json')
+const countriesRequest = fetch('./assets/data/countries-110m-simplified.json')
 	.then(response=>response.json()).then(data=>{
 		return topoToFeature(
 			data, data.objects.countries

@@ -1,7 +1,7 @@
 import {
 	select, selectAll, pointer,
 	bisector
-} from './vendor-loader.js';
+} from './vendor-local.js';
 import { clamp, addPointerListener } from './common-utils.js';
 
 export {
