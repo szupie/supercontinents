@@ -308,18 +308,18 @@ h1 {
 }
 
 /* hide all overlay elements and controls but keep globe shading */
-#globe-overlay > *,
-#reverse-globe,
-#current-map-label {
-	opacity: 1;
+#globe-group.static #globe-overlay > *:not(#drag-indicator),
+#globe-group.static #reverse-globe,
+#globe-group.static #current-map-label {
+	opacity: 0;
+	transition-duration: var(--initing-transition-duration, 100ms);
+}
+#globe-group #globe-overlay > *:not(#drag-indicator),
+#globe-group #reverse-globe,
+#globe-group #current-map-label {
 	transition-property: opacity;
 	transition-duration: var(--initing-transition-duration, 500ms);
 	transition-timing-function: ease-in;
-}
-#globe-group.static #globe-overlay > *,
-#globe-group.static #reverse-globe {
-	opacity: 0;
-	transition-duration: var(--initing-transition-duration, 100ms);
 }
 
 /* offset instructions position when globe is position: fixed */
