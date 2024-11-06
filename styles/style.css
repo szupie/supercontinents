@@ -576,6 +576,19 @@ h1 {
 #references cite {
 	scroll-margin-top: var(--vert-rhythm);
 }
+cite:target {
+	animation: fade-highlight 3s ease-in-out;
+	animation-delay: 1s;
+	animation-fill-mode: backwards;
+}
+@keyframes fade-highlight {
+	from {
+		background-color: var(--action-extralight-hex);
+	}
+	to {
+		background-color: transparent;
+	}
+}
 .citation .chapter-title,
 .citation .article-title {
 	font-style: normal;
