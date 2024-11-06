@@ -63,7 +63,7 @@ html {
 	--stories-safe-width: min(22rem, 45vw);
 	--timeline-safe-width: calc(var(--event-marker-position-right) + 10rem);
 
-	--globe-max-width: calc(100vw - var(--globe-clear-height)*2 - var(--stories-safe-width) - var(--timeline-safe-width) - 2rem);
+	--globe-max-width: calc(100vw - var(--globe-clear-height)*2 - var(--stories-safe-width) - var(--timeline-safe-width) - 4rem);
 	--globe-max-height: calc(100vh - var(--globe-clear-height)*2 - var(--mya-title-font-size)*3);
 	--globe-size: min(var(--globe-max-width), var(--globe-max-height));
 
@@ -132,6 +132,10 @@ a {
 a:hover {
 	color: inherit;
 	text-decoration-thickness: 2px;
+}
+::selection {
+	background-color: var(--action-extralight-hex);
+	color: var(--page-bg);
 }
 
 
@@ -350,7 +354,7 @@ h1 {
 	font-family: "CMU Serif";
 	font-size: 12px;
 	line-height: var(--vert-rhythm);
-	opacity: 0.8;
+	color: var(--white-shade-2);
 }
 #stories abbr {
 	font-variant-caps: all-small-caps;
