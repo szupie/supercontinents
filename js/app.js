@@ -31,11 +31,14 @@ document.getElementById('reverse-globe').addEventListener('click', e=>{
 });
 
 window.addEventListener('resize', e=>{
-	radius = textureCanvas.offsetWidth/2;
-	projection.translate([radius, radius]).scale(radius);
-	globeOverlays.redraw();
-	globeTexture.resize(radius);
-	globeTexture.redraw(projection.rotate());
+	// only update if canvas is displayed, to avoid invalid size
+	if (textureCanvas.offsetWidth > 0) {
+		radius = textureCanvas.offsetWidth/2;
+		projection.translate([radius, radius]).scale(radius);
+		globeOverlays.redraw();
+		globeTexture.resize(radius);
+		globeTexture.redraw(projection.rotate());
+	}
 });
 
 const overlayNode = document.getElementById('globe-overlay');
@@ -102,8 +105,11 @@ async function loadAndUpdateTexture() {
 		firstAvailImgPromise = mapSelector.getCurrentTexture(TextureRes.LO);
 		// debounce request for high res image
 		hiResDelayTimer = setTimeout(() => {
-			mapSelector.getCurrentTexture(TextureRes.HI)
-				.then(updateTextureIfNewer);
+			// update only if still viewing texture map
+			if (mapSelector.currentMapType == mapSelector.MapTypes.TEXTURE) {
+				mapSelector.getCurrentTexture(TextureRes.HI)
+					.then(updateTextureIfNewer);
+			}
 		}, hiResDelay);
 	}
 	function updateTextureIfNewer(img) {
@@ -205,7 +211,10 @@ function checkMainContentVisibility() {
 	}
 	// use lower resolution during initial autorotate to reduce antialiasing
 	// (but wait until static state change for smoother transition animation)
-	if (lastState != globePanelNode.classList.contains('static')) {
+	if (
+		mapSelector.currentMapType == mapSelector.MapTypes.TEXTURE &&
+		lastState != globePanelNode.classList.contains('static') 
+	) {
 		loadAndUpdateTexture();
 	}
 }

@@ -206,8 +206,10 @@ function transitionToMapCenter() {
 }
 
 function redraw() {
-	updateConstantOverlays();
-	updateContinentLabelPositions();
+	if (mapSelector.currentMapType != mapSelector.MapTypes.NONE) {
+		updateConstantOverlays();
+		updateContinentLabelPositions();
+	}
 	if (mapSelector.currentMapType == mapSelector.MapTypes.VECTOR) {
 		redrawReconstruction();
 		redrawReverseVectorMap();
