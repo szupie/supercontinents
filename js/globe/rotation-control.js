@@ -96,11 +96,6 @@ function handleDragStart(e) {
 
 	startingGeoCoord = projection.invert(pointer(e, dragHandlerNode));
 	if (!isNaN(startingGeoCoord[0]) && !isNaN(startingGeoCoord[1])) {
-		setTrackToLand(false);
-		dragHandlerNode.classList.add('dragging');
-		if (typeof PointerEvent !== 'undefined') {
-			dragHandlerNode.setPointerCapture(e.pointerId);
-		}
 		addPointerListener(dragHandlerNode, 'pointermove', handleDragMove);
 
 		const radius = projection.scale();
@@ -115,6 +110,15 @@ function handleDragStart(e) {
 
 function handleDragMove(e) {
 	cancelTransition();
+
+	// capture pointer once moved, to prevent clicks
+	if (!dragHandlerNode.classList.contains('dragging')) {
+		setTrackToLand(false);
+		dragHandlerNode.classList.add('dragging');
+		if (typeof PointerEvent !== 'undefined') {
+			dragHandlerNode.setPointerCapture(e.pointerId);
+		}
+	}
 
 	const radius = projection.scale();
 
