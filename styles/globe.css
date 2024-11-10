@@ -132,6 +132,7 @@ body:not([data-map-type="texture"]) #globe-overlay #meridian {
 }
 #globe-overlay .continent.label {
 	font-family: "CMU Classical Serif";
+	font-style: italic;
 	font-size: 12px;
 	letter-spacing: 0;
 	word-spacing: -2px; /* CMU Classical has wide spaces between words */
@@ -219,6 +220,7 @@ body:not([data-map-type="texture"]) #globe-overlay #meridian {
 	font-family: "CMU Classical Serif";
 	font-size: 14px;
 	font-weight: 300;
+	font-style: italic;
 	line-height: 100%;
 	word-spacing: -2px; /* CMU Classical has wide spaces between words */
 	fill: var(--white-shade-2);

@@ -236,6 +236,7 @@ body:not([data-map-type="texture"]) #maps-list {
 }
 #timeline #life-events-list, #cambrian-anchor {
 	font-family: "CMU Classical Serif";
+	font-style: italic;
 	font-size: 14px;
 	font-weight: 300;
 	line-height: 1;
@@ -395,6 +396,7 @@ ol#periods-list {
 }
 #periods-list li .label {
 	font-family: "CMU Classical Serif";
+	font-style: italic;
 	position: absolute;
 	right: 7px;
 	bottom: 0;
