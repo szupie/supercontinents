@@ -128,6 +128,11 @@
 #maps-list, #supercontinents-list {
 	left: 0;
 }
+#maps-list, #periods-list, #supercontinents-list {
+	/* prevent text selection on drag */
+	-webkit-user-select: none;
+	user-select: none;
+}
 
 /* Map selector */
 #maps-list {
@@ -135,7 +140,6 @@
 	width: var(--scrubber-full-width);
 	pointer-events: auto;
 	touch-action: pinch-zoom;
-	user-select: none; /* prevent text selection on drag */
 	z-index: -1; /* contains background, so appear behind other labels */
 }
 #maps-list::before, #maps-list::after {
