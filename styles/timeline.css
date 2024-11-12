@@ -456,9 +456,10 @@ body:not([data-map-type="texture"]) #keyboard-hint {
 	}
 }
 
-/* Timeline since formation of Earth */
-#timeline ol, 
+/* Timeline zoomed out to since formation of Earth */
+#timeline ol:not(#periods-list), 
 #timeline .axis-labels {
+	/* transition between zoomed in and out */
 	transition: height 500ms ease-in-out;
 }
 body:not([data-map-type="texture"]) #timeline ol, 
