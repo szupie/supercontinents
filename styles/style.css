@@ -630,7 +630,10 @@ cite:target {
 	}
 	#reverse-globe {
 		/* align left with stories when stacked */
-		left: max(0px, (100% - var(--stories-safe-width))/2);
+		left: 0px;
+		@supports (left: max(0px, 1px)) {
+			left: max(0px, (100% - var(--stories-safe-width))/2);
+		}
 		margin-left: var(--story-padding);
 	}
 	#instructions {

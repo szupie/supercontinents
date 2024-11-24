@@ -195,7 +195,7 @@ body:not([data-map-type="texture"]) #maps-list {
 #maps-list #no-map-indicator {
 	height: 10%;
 	background-color: var(--white-shade-2);
-	opacity: 30%;
+	opacity: 0.3;
 	z-index: 0;
 	overflow: visible;
 	transform: translateY(-50%);
