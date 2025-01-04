@@ -475,6 +475,8 @@ function handleDrag(e) {
 			if (currentMapType == MapTypes.TEXTURE && targetMya > youngestVectorMya) {
 				// show intro when selecting precambrian time from cambrian timeline
 				document.getElementById('precambrian-intro').scrollIntoView();
+				// timeline shifted, so prevent further scrubbing until drag reinitiated
+				mapsListNode.parentNode.classList.remove('scrubbing');
 			} else {
 				setScrollToMya(targetMya);
 			}
