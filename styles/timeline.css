@@ -657,13 +657,21 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 	#timeline.expanded-overlay #cambrian-anchor {
 		transform: translateX(-1.25em);
 	}
-
+}
+/* narrowest view */
+@media (max-width: 699px) {
 	/* dim background elements when timeline is overlaid */
 	#timeline.expanded-overlay ~ #stories > *:not(#precambrian-intro) {
 		opacity: 0.3;
 	}
 	#timeline.expanded-overlay ~ #globe-group #current-map-label {
 		opacity: 0.5;
+	}
+}
+/* side-by-side layout for mid viewport width */
+@media (max-width: 1023px) and (max-height: 500px) {
+	#timeline::before {
+		--expanded-opacity: 0.5;
 	}
 }
 
