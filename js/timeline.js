@@ -158,7 +158,15 @@ function positionLifeEvents() {
 }
 
 function handleAnchorClick(e) {
-	document.querySelector(e.currentTarget.hash).scrollIntoView();
+	const scrollTarget = document.querySelector(e.currentTarget.hash);
+	scrollTarget.scrollIntoView();
+
+	// for browsers without scroll-margin support, adjust scroll with js
+	if (!CSS.supports('scroll-margin-top: 0px')) {
+		const scrollOffset = -Number.parseFloat(getComputedStyle(scrollTarget).getPropertyValue('scroll-snap-margin-top'));
+		window.scrollBy(0, scrollOffset);
+	}
+
 	e.preventDefault(); // prevent url change
 	document.querySelector('#stories').classList.add('switching');
 	setTimeout(e=>{

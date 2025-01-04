@@ -193,7 +193,7 @@ const yBisector = bisector(node => getViewY(node)+window.scrollY);
 // Between stories, interpolate target year based on percentage scrolled
 function handleScrollChange() {
 	const correctedScrollY = window.scrollY +
-		Number.parseFloat(getComputedStyle(storyNodes[0]).scrollMarginTop);
+		Number.parseFloat(getComputedStyle(storyNodes[0]).scrollMarginTop || getComputedStyle(storyNodes[0]).scrollSnapMarginTop || 0);
 	setMapToScroll(correctedScrollY);
 	highlightTimelineEvent(correctedScrollY);
 }
@@ -249,7 +249,7 @@ function setScrollToMya(mya) {
 	const nextMya = Number.parseFloat(nextStory.getAttribute('data-mya'));
 
 	const percent = (mya - prevMya) / (nextMya - prevMya);
-	const scrollMargin = Number.parseFloat(getComputedStyle(storyNodes[0]).scrollMarginTop);
+	const scrollMargin = Number.parseFloat(getComputedStyle(storyNodes[0]).scrollMarginTop || getComputedStyle(storyNodes[0]).scrollSnapMarginTop || 0);
 	const newScroll = window.scrollY + getViewY(prevStory) - scrollMargin + 
 		percent*(getViewY(nextStory) - getViewY(prevStory));
 	window.scrollTo({

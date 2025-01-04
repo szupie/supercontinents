@@ -304,6 +304,11 @@ function updateContinentLabelPositions() {
 				this.setAttribute('visibility', 'hidden'); 
 			}
 			this.setAttribute('transform', `translate(${projection(coords)})`);
+
+			// fix unknown paint-order bug in ios safari 12
+			if (getComputedStyle(this).paintOrder === 'normal') {
+				this.style.paintOrder = 'stroke';
+			}
 		}
 	});
 	

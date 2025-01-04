@@ -440,6 +440,7 @@ h1 {
 	--globe-cover-translate: 80vh;
 	width: 100vw;
 	scroll-margin-top: var(--globe-cover-translate);
+	scroll-snap-margin-top: var(--globe-cover-translate); /* fallback for ios safari 12 */
 }
 #precambrian-intro div {
 	position: relative;
@@ -580,6 +581,7 @@ h1 {
 }
 #references cite {
 	scroll-margin-top: var(--vert-rhythm);
+	scroll-snap-margin-top: var(--vert-rhythm); /* fallback for ios safari 12 */
 }
 cite:target {
 	animation: fade-highlight 3s ease-in-out;
@@ -649,6 +651,7 @@ cite:target {
 	}
 	#stories article, #stories aside.geological {
 		scroll-margin-top: var(--globe-panel-safe-height);
+		scroll-snap-margin-top: var(--globe-panel-safe-height); /* fallback for ios safari 12 */
 	}
 	#stories article.bio {
 		min-height: min(100vh - var(--globe-panel-safe-height), 40em);
