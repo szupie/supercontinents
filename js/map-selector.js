@@ -445,25 +445,50 @@ function setUpPointerHandler() {
 
 	// highlight closest map while hovering
 	mapsListNode.addEventListener('mousemove', e=>{
-		resetClassForAllMaps('hovering', getClosestMapAtPointerEvent(e));
+		try {
+			resetClassForAllMaps('hovering', getClosestMapAtPointerEvent(e));
+		} catch(e) {
+			console.debug(e);
+		}
 	});
 }
 function getClosestMapAtPointerEvent(e) {
-	const yPercent = pointer(e, mapsListNode)[1] / mapsListNode.clientHeight;
+	const yPercent = getYPercentFromPointerEvent(e);
 	const mya = yPercent*oldestTextureMya;
 	return getClosestMapAtMya(mya);
 }
+
+// handle scrubbing vertically through time
+let lastScrollRequest;
 function handleDrag(e) {
-	const yPercent = pointer(e, mapsListNode)[1] / mapsListNode.clientHeight;
-	const targetMya = clamp(
-		yPercent*oldestTextureMya, 
-		0, EARTH_FORMATION_MYA
-	);
-	if (currentMapType == MapTypes.TEXTURE && targetMya > youngestVectorMya) {
-		// show intro when selecting precambrian time from cambrian timeline
-		document.getElementById('precambrian-intro').scrollIntoView();
-	} else {
-		setScrollToMya(targetMya);
+	// debounce to reduce number of events with invalid positions (for ios 12)
+	// (only act on last drag event per frame)
+	cancelAnimationFrame(lastScrollRequest);
+	lastScrollRequest = requestAnimationFrame(()=>{
+		try {
+			lastScrollRequest = false;
+			const yPercent = getYPercentFromPointerEvent(e);
+			const targetMya = clamp(
+				yPercent*oldestTextureMya, 
+				0, EARTH_FORMATION_MYA
+			);
+			if (currentMapType == MapTypes.TEXTURE && targetMya > youngestVectorMya) {
+				// show intro when selecting precambrian time from cambrian timeline
+				document.getElementById('precambrian-intro').scrollIntoView();
+			} else {
+				setScrollToMya(targetMya);
+			}
+			e.preventDefault(); // prevent unintended text selection (ios safari 12)
+		} catch(e) {
+			console.debug(e);
+		}
+	});
+}
+function getYPercentFromPointerEvent(e) {
+	const maxReasonableY = window.innerHeight;
+	// ios 12 gives invalid positions while scrolling sometimes
+	if (e.clientY < 0 || e.clientY > maxReasonableY) {
+		throw new Error(`Unexpected offscreen pointer position. Observed Y: ${e.clientY}; Expected range: 0-${maxReasonableY}`);
 	}
-	e.preventDefault(); // prevent unintended text selection (ios safari)
+	return pointer(e, mapsListNode)[1] / mapsListNode.clientHeight;
 }
