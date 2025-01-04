@@ -121,7 +121,7 @@ function init(theProjection, overlayNode) {
 		}
 	});
 	// listen on container, which captures pointer on drag
-	select(overlay.node().parentNode).on('mousemove', e=>{
+	addPointerListener(overlay.node().parentNode, 'pointermove', e=>{
 		// do not track to craton if label is dragged
 		clickStartTarget = undefined;
 
@@ -132,6 +132,11 @@ function init(theProjection, overlayNode) {
 		if (name != null) {
 			overlay.selectAll(`[data-craton-name="${name}"]`)
 				.classed('hovering', true);
+		}
+
+		// prevent scrolling while manipulating globe (ios safari 12)
+		if (!CSS.supports('user-select: none')) {
+			e.preventDefault();
 		}
 	});
 	overlay.on('mouseout', e=>{
