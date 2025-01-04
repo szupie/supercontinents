@@ -609,7 +609,7 @@ cite:target {
 
 
 /* stacked layout (too narrow and tall enough to stack) */
-@media (width < 500px), (width < 1024px) and (height > 500px) {
+@media (max-width: 499px), (max-width: 1023px) and (min-height: 501px) {
 	html {
 		--globe-clear-height: 2rem;
 		--stories-safe-width: 35rem;
@@ -692,7 +692,7 @@ cite:target {
 	}
 }
 /* not on wide screen, and not stacked */
-@media (width >= 500px) and (width < 1024px) and (height <= 500px) {
+@media (min-width: 500px) and (max-width: 1023px) and (max-height: 500px) {
 	/* offset globe position for left text */
 	#globe-group {
 		margin-left: var(--stories-safe-width);
@@ -706,7 +706,7 @@ cite:target {
 	}
 }
 /* not wide enough to show event labels (condensed timeline) */
-@media (width < 700px), (width < 1024px) and (height <= 500px) {
+@media (max-width: 699px), (max-width: 1023px) and (max-height: 500px) {
 	html {
 		--story-padding: 1rem;
 
@@ -725,12 +725,12 @@ cite:target {
 		--max-spacer-height: 225vw;
 		--mya-title-font-size: 1.25rem;
 	}
-	@media (height < 225vw) {
+	@media (max-height: 225vw) {
 		html {
 			--max-spacer-height: 100vh;
 		}
 	}
-	@media (width < 410px) {
+	@media (max-width: 410px) {
 		html {
 			--mya-title-font-size: calc(9.5vmin - 19px);
 		}

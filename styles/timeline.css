@@ -557,7 +557,7 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 
 
 /* not wide enough to show event labels (condensed timeline) */
-@media (width < 700px), (width < 1024px) and (height <= 500px) {
+@media (max-width: 699px), (max-width: 1023px) and (max-height: 500px) {
 	/* Expanded/collapsed positioning */
 	#timeline {
 		transform: translateX(calc( -1 * var(--expansion-percent) * var(--scrubber-offscreen-width) ));
@@ -666,8 +666,8 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 	}
 }
 
-/* NOT not wide enough */
-@media (width >= 700px) and ((width >= 1024px) or (height > 500px)) {
+/* medium to wide viewport width */
+@media (min-width: 700px) and (min-height: 501px), (min-width: 1024px) {
 	/* Wide screen with geological periods hidden */
 	#timeline:not(.expanded-overlay) #periods-list {
 		transform: none;
