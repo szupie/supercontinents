@@ -16,6 +16,7 @@
 	width: var(--scrubber-width);
 	z-index: 3;
 	pointer-events: none;
+	-webkit-user-select: none;
 	touch-action: pinch-zoom;
 
 	transition: transform var(--expansion-duration) var(--expansion-easing);

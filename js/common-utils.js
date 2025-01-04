@@ -22,7 +22,7 @@ function easeInOutQuart(percentage) {
 	}
 }
 
-const PointerEventMap = Object.freeze({
+const PointerEventFallbackMap = Object.freeze({
 	'pointerdown': {
 		'touch': 'touchstart',
 		'mouse': 'mousedown'
@@ -41,9 +41,18 @@ function addPointerListener(node, eventType, handler) {
 	if (typeof PointerEvent !== 'undefined') {
 		node.addEventListener(eventType, handler);
 	} else {
-		node.addEventListener(PointerEventMap[eventType]['touch'], e=>{
-			handler(e.touches[0]);
+		node.addEventListener(PointerEventFallbackMap[eventType]['touch'], e=>{
+			if (e.type === 'touchend') {
+				handler(e);
+			} else if (e.touches[0]) {
+				// copy position data to event root to mimic PointerEvent
+				// (while supporting preventDefault)
+				e.clientX = e.touches[0].clientX;
+				e.clientY = e.touches[0].clientY;
+				handler(e);
+			}
+			else { console.error('Unexpected TouchEvent with no touches', e); }
 		});
-		node.addEventListener(PointerEventMap[eventType]['mouse'], handler);
+		node.addEventListener(PointerEventFallbackMap[eventType]['mouse'], handler);
 	}
 }

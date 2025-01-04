@@ -465,4 +465,5 @@ function handleDrag(e) {
 	} else {
 		setScrollToMya(targetMya);
 	}
+	e.preventDefault(); // prevent unintended text selection (ios safari)
 }

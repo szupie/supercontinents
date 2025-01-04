@@ -103,6 +103,7 @@ function init(theProjection, overlayNode) {
 	let clickStartTarget;
 	overlay.on('mousedown', e=>{
 		clickStartTarget = e.target;
+		e.preventDefault(); // prevent unintended text selection (ios safari 12)
 	});
 	overlay.on('click', e=>{
 		if (clickStartTarget && e.target == clickStartTarget) {

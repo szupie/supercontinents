@@ -233,15 +233,16 @@ function setUpListeners() {
 		}
 	});
 
-	// drag handling: on down, up, and move
+	// handling drag to expand/collapse: on pointer down, up, and move
 	let dragStartX, dragStartExpansion;
 	const expandThreshold = 0.5;
 	const snappingDistance = 10;
 	function handleDragStart(e) {
 		timelineNode.classList.add('dragging');
-		// do not scrub through time if touch started on expansion toggle
+		// scrub through timeline only if press started NOT on expansion toggle
 		if (!document.getElementById('timeline-toggle').contains(e.target)) {
 			timelineNode.classList.add('scrubbing');
+			e.preventDefault(); // prevent unintended text selection (ios safari 12)
 		}
 		dragStartExpansion = timelineNode.style.getPropertyValue('--expansion-percent');
 		dragStartX = e.clientX;
