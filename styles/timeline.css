@@ -669,18 +669,15 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 
 /* medium to wide viewport width */
 @media (min-width: 700px) and (min-height: 501px), (min-width: 1024px) {
-	/* Wide screen with geological periods hidden */
+	/* Wide screen with geological period labels hidden */
 	#timeline:not(.expanded-overlay) #periods-list {
-		transform: none;
+		transform: none; /* do not push labels right to offscreen */
+		pointer-events: auto; /* allow click on periods to expand timeline */
+		cursor: pointer;
 	}
 	#timeline:not(.expanded-overlay) #periods-list li .label {
 		opacity: 0;
 		transform: translateX(100%);
-	}
-	@media (hover: hover) {
-		#timeline:not(.expanded-overlay) ol#periods-list {
-			pointer-events: auto;
-		}
 	}
 
 	/* Full-width state with geological periods */

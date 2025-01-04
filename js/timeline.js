@@ -175,25 +175,28 @@ function handleAnchorClick(e) {
 	setTimelineExpandedOverlay(false);
 }
 
-let periodsDragDelayTimer;
-let eventsHoverDelayTimer;
+// Handlers to show/hide full-width timeline with period and event labels
 function setUpListeners() {
-	// Show/hide full-width timeline with periods
-	function cancelPeriodsTimer() {
-		clearTimeout(periodsDragDelayTimer);
-		periodsDragDelayTimer = false;
-	}
+
+	// hover or tap on period indicator lines to show labels
 	periodsNode.addEventListener('mouseenter', e=>{
 		setTimelineExpandedOverlay(true);
 	});
+	addPointerListener(periodsNode, 'pointerdown', e=>{
+		setTimelineExpandedOverlay(true);
+	});
+
+	// press and hold on timeline to expand
+	let mapsListHoldDelayTimer;
 	mapsListNode.addEventListener('mousedown', e=>{
-		if (!periodsDragDelayTimer) {
-			periodsDragDelayTimer = setTimeout(e=>{
+		if (!mapsListHoldDelayTimer) {
+			mapsListHoldDelayTimer = setTimeout(e=>{
 				setTimelineExpandedOverlay(true);
 			}, 500);
 		}
 	});
 
+	// handle hover exit
 	timelineNode.addEventListener('mouseleave', e=>{
 		// show periods if cursor moves past edge (Fitts law)
 		if (e.clientX >= document.documentElement.clientWidth) {
@@ -202,11 +205,22 @@ function setUpListeners() {
 			setTimelineExpandedOverlay(false);
 		}
 	});
-	document.addEventListener('mouseup', e=>{
-		cancelPeriodsTimer();
-	});
 
-	// Show life events on hover
+	// handle click release
+	addPointerListener(document, 'pointerup', e=>{
+		cancelPeriodsTimer();
+		// collapse after any click outside timeline
+		if (!timelineNode.contains(e.target)) {
+			setTimelineExpandedOverlay(false);
+		}
+	});
+	function cancelPeriodsTimer() {
+		clearTimeout(mapsListHoldDelayTimer);
+		mapsListHoldDelayTimer = false;
+	}
+
+	// Show life events on hover (narrow screens)
+	let eventsHoverDelayTimer;
 	// use mouseenter instead of :hover for better timing control
 	// and more accurate hover feature detection
 	lifeEventsNode.addEventListener('mouseenter', e=>{
@@ -221,10 +235,7 @@ function setUpListeners() {
 		}, 1000);
 	})
 
-
-	// Expand/collapse timeline overlay on narrow screens:
-
-	// toggle button
+	// toggle button (narrow screens)
 	expansionButton.addEventListener('click', e=>{
 		if (!timelineNode.classList.contains('expanded-overlay')) {
 			setTimelineExpandedOverlay(true);
@@ -242,7 +253,9 @@ function setUpListeners() {
 		// scrub through timeline only if press started NOT on expansion toggle
 		if (!document.getElementById('timeline-toggle').contains(e.target)) {
 			timelineNode.classList.add('scrubbing');
-			e.preventDefault(); // prevent unintended text selection (ios safari 12)
+			if (!CSS.supports('user-select: none')) {
+				e.preventDefault(); // prevent unintended text selection (ios safari 12)
+			}
 		}
 		dragStartExpansion = timelineNode.style.getPropertyValue('--expansion-percent');
 		dragStartX = e.clientX;
