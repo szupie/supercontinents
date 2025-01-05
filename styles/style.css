@@ -439,8 +439,8 @@ h1 {
 #precambrian-intro {
 	--globe-cover-translate: 80vh;
 	width: 100vw;
-	scroll-margin-top: var(--globe-cover-translate);
-	scroll-snap-margin-top: var(--globe-cover-translate); /* fallback for ios safari 12 */
+	scroll-margin-top: calc(var(--globe-cover-translate) + var(--globe-vert-offset));
+	scroll-snap-margin-top: calc(var(--globe-cover-translate) + var(--globe-vert-offset)); /* fallback for ios safari 12 */
 }
 #precambrian-intro div {
 	position: relative;
