@@ -17,7 +17,7 @@
 	z-index: 3;
 	pointer-events: none;
 	-webkit-user-select: none;
-	touch-action: pinch-zoom;
+	touch-action: none;
 
 	transition: transform var(--expansion-duration) var(--expansion-easing);
 }
@@ -57,7 +57,6 @@
 	transition: transform var(--expansion-duration) var(--expansion-easing);
 	pointer-events: auto;
 	cursor: pointer;
-	touch-action: pinch-zoom;
 
 	display: none;
 }
@@ -140,7 +139,7 @@
 	cursor: pointer;
 	width: var(--scrubber-full-width);
 	pointer-events: auto;
-	touch-action: pinch-zoom;
+	touch-action: none;
 	z-index: -1; /* contains background, so appear behind other labels */
 }
 #maps-list::before, #maps-list::after {
@@ -250,7 +249,6 @@ body:not([data-map-type="texture"]) #maps-list {
 #timeline #life-events-list li {
 	transform: translateY(-50%);
 	right: 0;
-	touch-action: pinch-zoom;
 	pointer-events: auto;
 }
 #timeline #life-events-list li:hover {
