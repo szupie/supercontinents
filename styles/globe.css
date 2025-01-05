@@ -4,13 +4,13 @@
 	top: 0;
 	margin: 0;
 	z-index: 2;
-	touch-action: none;
 	text-align: center;
 	/* prevent pointer capture over story text */
 	pointer-events: none;
 }
 
 #globe-group:not(.static) > * {
+	touch-action: pan-x pinch-zoom; /* pinch zoom only, no vertical scroll */
 	pointer-events: auto;
 }
 #globe {
@@ -19,7 +19,6 @@
 	height: var(--globe-size);
 	margin: 0 auto;
 	border-radius: 100%;
-	touch-action: pinch-zoom;
 	cursor: grab;
 }
 #globe.dragging {

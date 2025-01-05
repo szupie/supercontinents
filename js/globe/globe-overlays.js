@@ -120,7 +120,7 @@ function init(theProjection, overlayNode) {
 			}
 		}
 	});
-	// listen on container, which captures pointer on drag
+	// listen on container, which captures pointer on drag (rotation-control.js)
 	addPointerListener(overlay.node().parentNode, 'pointermove', e=>{
 		// do not track to craton if label is dragged
 		clickStartTarget = undefined;
