@@ -79,10 +79,10 @@
 /* vector map */
 .reconstruction .countries path {
 	pointer-events: none;
-	/* temporary style */
 	fill: none;
-	stroke: #666;
+	stroke: var(--grey-on-black);
 	stroke-width: 1px;
+	opacity: 0.3;
 }
 .reconstruction .craton-path {
 	pointer-events: auto;
@@ -95,7 +95,9 @@
 }
 .reconstruction g.craton:hover .countries path,
 .reconstruction g.craton.hovering .countries path {
-	stroke: #fff; /* temporary style */
+	stroke: var(--white-shade-2);
+	stroke-dasharray: 2 3;
+	opacity: 1;
 }
 
 body:not([data-map-type="vector"]) .reconstruction {

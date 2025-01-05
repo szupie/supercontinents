@@ -190,7 +190,6 @@ function initInstance(pathGen, svgNode, {simple=false}={}) {
 				.attr('clip-path', `url(#${clipIdPrefix}-${cratonId})`)
 				.selectAll('path').data(countrySubset).join('path')
 					.attr('d', pathGen)
-					.style('fill', 'none')
 					.each(function(d) {
 						if (countryRotations) {
 							const rot = countryRotations[d.properties.name];

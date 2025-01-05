@@ -127,7 +127,7 @@ function init(theProjection, overlayNode) {
 
 		// update hovering
 		overlay.selectAll('[data-craton-name]').classed('hovering', false);
-
+		// sync hover states of craton label and path
 		const name = getTargetCratonName(e);
 		if (name != null) {
 			overlay.selectAll(`[data-craton-name="${name}"]`)
