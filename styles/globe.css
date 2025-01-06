@@ -34,13 +34,16 @@
 	border-radius: 100%;
 }
 #reverse-globe {
+	--globe-top-margin: 4px;
+	--reverse-globe-size: 40px;
 	position: absolute;
 	bottom: calc(var(--mya-title-font-size));
 	left: 50%;
 	margin-left: calc(-0.5 * var(--globe-size));
-	width: 58px;
-	height: 60px;
+	width: calc(var(--reverse-globe-size) + 18px);
+	height: calc(var(--reverse-globe-size) + 20px);
 	padding: 0;
+	padding-top: calc(var(--reverse-globe-size) + var(--globe-top-margin));
 	border: 1px solid var(--action-hex);
 	border-radius: 4px;
 	color: var(--grey-on-black);
@@ -50,9 +53,13 @@
 	pointer-events: auto;
 }
 #reverse-texture, #reverse-vector {
-	width: 40px;
-	height: 40px;
+	width: var(--reverse-globe-size);
+	height: var(--reverse-globe-size);
 	border-radius: 100%;
+	position: absolute;
+	top: var(--globe-top-margin);
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 #reverse-globe:not(:hover) #reverse-texture, 
