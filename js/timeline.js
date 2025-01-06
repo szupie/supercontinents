@@ -78,7 +78,13 @@ function createMyaLabels() {
 				cursorMaxY *=
 					EARTH_FORMATION_MYA / mapsSelectorData.myaAt100Percent;
 			}
-			const cursorClamped = clamp(e.offsetY, 0, cursorMaxY);
+
+			let pointerOffsetY = e.offsetY;
+			// fallback for browsers that only support Touch Events (no offsetY)
+			if (typeof e.offsetY === 'undefined') {
+				pointerOffsetY = e.clientY - e.target.getBoundingClientRect().y;
+			}
+			const cursorClamped = clamp(pointerOffsetY, 0, cursorMaxY);
 
 			// calculate mya at cursor
 			const mya = cursorClamped *
