@@ -194,13 +194,19 @@ function setUpListeners() {
 
 	// press and hold on timeline to expand
 	let mapsListHoldDelayTimer;
-	mapsListNode.addEventListener('mousedown', e=>{
+	addPointerListener(mapsListNode, 'pointerdown', e=>{
 		if (!mapsListHoldDelayTimer) {
 			mapsListHoldDelayTimer = setTimeout(e=>{
 				setTimelineExpandedOverlay(true);
+				// after auto expansion, keep timeline expanded while scrubbing
+				dragStartExpansion = 1;
 			}, 500);
 		}
 	});
+	function cancelPeriodsTimer() {
+		clearTimeout(mapsListHoldDelayTimer);
+		mapsListHoldDelayTimer = false;
+	}
 
 	// handle hover exit
 	timelineNode.addEventListener('mouseleave', e=>{
@@ -214,19 +220,6 @@ function setUpListeners() {
 			setTimelineExpandedOverlay(false);
 		}
 	});
-
-	// handle click release
-	addPointerListener(document, 'pointerup', e=>{
-		cancelPeriodsTimer();
-		// collapse after any click outside timeline
-		if (!timelineNode.contains(e.target)) {
-			setTimelineExpandedOverlay(false);
-		}
-	});
-	function cancelPeriodsTimer() {
-		clearTimeout(mapsListHoldDelayTimer);
-		mapsListHoldDelayTimer = false;
-	}
 
 	// Show life events on hover (narrow screens)
 	let eventsHoverDelayTimer;
@@ -285,6 +278,13 @@ function setUpListeners() {
 			setTimelineExpandedOverlay(false);
 		}
 		timelineNode.classList.remove('scrubbing');
+
+		cancelPeriodsTimer();
+
+		// collapse after any click outside timeline
+		if (!timelineNode.contains(e.target)) {
+			setTimelineExpandedOverlay(false);
+		}
 	});
 	addPointerListener(document, 'pointermove', e=>{
 		if (timelineNode.classList.contains('dragging')) {
@@ -324,7 +324,7 @@ function setUpListeners() {
 	});
 	
 	// collapse on selecting a life event
-	lifeEventsNode.addEventListener('mouseup', e=>{
+	addPointerListener(lifeEventsNode, 'pointerup', e=>{
 		setTimelineExpandedOverlay(false);
 	});
 
