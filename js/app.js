@@ -220,7 +220,7 @@ function checkMainContentVisibility() {
 }
 // skip to interactive mode when clicking globe
 globePanelNode.addEventListener('click', e=>{
-	if (globePanelNode.classList.contains('static')) {
+	if (globePanelNode.matches('.static:not(.peek)')) {
 		const instructionBottomEdge = 
 			window.scrollY + instructionsNode.getBoundingClientRect().bottom;
 		window.scrollTo(0, instructionBottomEdge);
