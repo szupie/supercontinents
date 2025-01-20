@@ -474,7 +474,13 @@ function handleDrag(e) {
 			);
 			if (currentMapType == MapTypes.TEXTURE && targetMya > youngestVectorMya) {
 				// show intro when selecting precambrian time from cambrian timeline
-				document.getElementById('precambrian-intro').scrollIntoView();
+				const precambrianIntro = document.getElementById('precambrian-intro');
+				if (CSS.supports('scroll-margin-top: 0px')) {
+					precambrianIntro.scrollIntoView();
+				} else {
+					// workaround for ios 12, which reports the wrong y for container
+					precambrianIntro.firstElementChild.scrollIntoView();
+				}
 				// timeline shifted, so prevent further scrubbing until drag reinitiated
 				mapsListNode.parentNode.classList.remove('scrubbing');
 			} else {
