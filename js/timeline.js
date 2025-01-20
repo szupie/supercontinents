@@ -192,22 +192,6 @@ function setUpListeners() {
 		setTimelineExpandedOverlay(true);
 	});
 
-	// press and hold on timeline to expand
-	let mapsListHoldDelayTimer;
-	addPointerListener(mapsListNode, 'pointerdown', e=>{
-		if (!mapsListHoldDelayTimer) {
-			mapsListHoldDelayTimer = setTimeout(e=>{
-				setTimelineExpandedOverlay(true);
-				// after auto expansion, keep timeline expanded while scrubbing
-				dragStartExpansion = 1;
-			}, 500);
-		}
-	});
-	function cancelPeriodsTimer() {
-		clearTimeout(mapsListHoldDelayTimer);
-		mapsListHoldDelayTimer = false;
-	}
-
 	// handle hover exit
 	timelineNode.addEventListener('mouseleave', e=>{
 		const threshold = 20;
@@ -278,8 +262,6 @@ function setUpListeners() {
 			setTimelineExpandedOverlay(false);
 		}
 		timelineNode.classList.remove('scrubbing');
-
-		cancelPeriodsTimer();
 
 		// collapse after any click outside timeline
 		if (!timelineNode.contains(e.target)) {
