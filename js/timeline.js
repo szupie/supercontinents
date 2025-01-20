@@ -195,9 +195,12 @@ function setUpListeners() {
 	// handle hover exit
 	timelineNode.addEventListener('mouseleave', e=>{
 		const threshold = 20;
-		// show periods if cursor moves past edge (Fitts law)
-		if (e.clientX + threshold > document.documentElement.clientWidth) {
-			setTimelineExpandedOverlay(true);
+		// only if indicators are visible
+		if (getComputedStyle(timelineNode).getPropertyValue('transform') === 'none') {
+			// show periods if cursor moves past edge (Fitts law)
+			if (e.clientX + threshold > document.documentElement.clientWidth) {
+				setTimelineExpandedOverlay(true);
+			}
 		}
 		// collapse if cursor exits left
 		if (e.offsetX - threshold < 0) {
