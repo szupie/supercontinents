@@ -578,6 +578,7 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 		max-width: 0;
 		padding: 0;
 		opacity: 0;
+		pointer-events: none; /* prevent slide in animation bug on hover */
 	}
 	#timeline:not(.expanded-overlay) #cambrian-anchor:not(:hover) span::after {
 		opacity: 0;
