@@ -256,6 +256,7 @@ function setScrollToMya(mya) {
 		top: newScroll,
 		behavior: 'instant'
 	});
+	debounceScroll();
 }
 function getViewY(node) {
 	return node.getBoundingClientRect().y;
@@ -435,6 +436,30 @@ function setUpKeyboardHandler() {
 	});
 }
 
+// debounce to avoid events with invalid pointer positions (for ios)
+// (ignore pointer events for a few frames after scrolling)
+let scrollCooldown = 0;
+function throwIfScrolling() {
+	if (scrollCooldown > 0) {
+		throw new Error(`Ignoring pointer event during scroll debounce period`);
+	}
+}
+function debounceScroll() {
+	const isIOS = 
+		['iPad', 'iPhone'].includes(navigator.platform) ||
+		(navigator.userAgent.includes("Mac") && "ontouchend" in document);
+	if (isIOS) {
+		scrollCooldown = 5;
+		tickFrame();
+	}
+}
+function tickFrame() {
+	if (scrollCooldown > 0) {
+		scrollCooldown--;
+		requestAnimationFrame(tickFrame);
+	}
+}
+
 function setUpPointerHandler() {
 	addPointerListener(mapsListNode, 'pointerdown', handleDrag);
 	addPointerListener(document, 'pointermove', e=>{
@@ -448,7 +473,7 @@ function setUpPointerHandler() {
 		try {
 			resetClassForAllMaps('hovering', getClosestMapAtPointerEvent(e));
 		} catch(e) {
-			console.debug(e);
+			// console.debug(e);
 		}
 	});
 }
@@ -459,40 +484,34 @@ function getClosestMapAtPointerEvent(e) {
 }
 
 // handle scrubbing vertically through time
-let lastScrollRequest;
 function handleDrag(e) {
-	// debounce to reduce number of events with invalid positions (for ios 12)
-	// (only act on last drag event per frame)
-	cancelAnimationFrame(lastScrollRequest);
-	lastScrollRequest = requestAnimationFrame(()=>{
-		try {
-			lastScrollRequest = false;
-			const yPercent = getYPercentFromPointerEvent(e);
-			const targetMya = clamp(
-				yPercent*oldestTextureMya, 
-				0, EARTH_FORMATION_MYA
-			);
-			if (currentMapType == MapTypes.TEXTURE && targetMya > youngestVectorMya) {
-				// show intro when selecting precambrian time from cambrian timeline
-				const precambrianIntro = document.getElementById('precambrian-intro');
-				if (CSS.supports('scroll-margin-top: 0px')) {
-					precambrianIntro.scrollIntoView();
-				} else {
-					// workaround for ios 12, which reports the wrong y for container
-					precambrianIntro.firstElementChild.scrollIntoView();
-				}
-				// timeline shifted, so prevent further scrubbing until drag reinitiated
-				mapsListNode.parentNode.classList.remove('scrubbing');
+	try {
+		const yPercent = getYPercentFromPointerEvent(e);
+		const targetMya = clamp(
+			yPercent*oldestTextureMya, 
+			0, EARTH_FORMATION_MYA
+		);
+		// show intro when selecting precambrian time from cambrian timeline
+		if (currentMapType == MapTypes.TEXTURE && targetMya > youngestVectorMya) {
+			const precambrianIntro = document.getElementById('precambrian-intro');
+			if (CSS.supports('scroll-margin-top: 0px')) {
+				precambrianIntro.scrollIntoView();
 			} else {
-				setScrollToMya(targetMya);
+				// workaround for ios 12, which reports the wrong y for container
+				precambrianIntro.firstElementChild.scrollIntoView();
 			}
-			e.preventDefault(); // prevent unintended text selection (ios safari 12)
-		} catch(e) {
-			console.debug(e);
+			// timeline shifted, so prevent further scrubbing until drag reinitiated
+			mapsListNode.parentNode.classList.remove('scrubbing');
+		} else {
+			setScrollToMya(targetMya);
 		}
-	});
+		e.preventDefault(); // prevent unintended text selection (ios safari 12)
+	} catch(e) {
+		// console.debug(e);
+	}
 }
 function getYPercentFromPointerEvent(e) {
+	throwIfScrolling();
 	const maxReasonableY = window.innerHeight;
 	// ios 12 gives invalid positions while scrolling sometimes
 	if (e.clientY < 0 || e.clientY > maxReasonableY) {
