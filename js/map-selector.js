@@ -465,6 +465,10 @@ function setUpPointerHandler() {
 	addPointerListener(document, 'pointermove', e=>{
 		if (mapsListNode.parentNode.classList.contains('scrubbing')) {
 			handleDrag(e);
+
+			if (!CSS.supports('user-select: none')) {
+				e.preventDefault(); // prevent unintended text selection (safari)
+			}
 		}
 	});
 
@@ -505,7 +509,6 @@ function handleDrag(e) {
 		} else {
 			setScrollToMya(targetMya);
 		}
-		e.preventDefault(); // prevent unintended text selection (ios safari 12)
 	} catch(e) {
 		// console.debug(e);
 	}

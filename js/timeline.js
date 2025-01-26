@@ -242,9 +242,6 @@ function setUpListeners() {
 		// scrub through timeline only if press started NOT on expansion toggle
 		if (!document.getElementById('timeline-toggle').contains(e.target)) {
 			timelineNode.classList.add('scrubbing');
-			if (!CSS.supports('user-select: none')) {
-				e.preventDefault(); // prevent unintended text selection (ios safari 12)
-			}
 		}
 		dragStartExpansion = timelineNode.style.getPropertyValue('--expansion-percent');
 		dragStartX = e.clientX;
