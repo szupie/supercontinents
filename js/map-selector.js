@@ -18,7 +18,9 @@ export {
 	currentTextureIsCached,
 
 	getCurrentReconstructionData,
-	getCurrentMapCenter
+	getCurrentMapCenter,
+
+	throwIfScrolling
 }
 
 const EARTH_FORMATION_MYA = 4600;

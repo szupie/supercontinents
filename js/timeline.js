@@ -1,5 +1,5 @@
 import { 
-	mapsReadyPromise, currentMapType, MapTypes, EARTH_FORMATION_MYA 
+	mapsReadyPromise, currentMapType, MapTypes, EARTH_FORMATION_MYA, throwIfScrolling 
 } from './map-selector.js';
 import { clamp, addPointerListener } from './common-utils.js';
 
@@ -71,6 +71,14 @@ function createMyaLabels() {
 	addPointerListener(mapsListNode, 'pointermove', handlePointerMove);
 	addPointerListener(mapsListNode, 'pointerdown', handlePointerMove);
 	function handlePointerMove(e) {
+		// ignore unreliable pointer events while scrolling on ios
+		try {
+			throwIfScrolling();
+		} catch(e) {
+			// console.debug(e);
+			return; // exit out of handler upon exception
+		}
+
 		if (e.target == mapsListNode) {
 			// clamp timeline cursor to current min/max
 			let cursorMaxY = mapsListNode.clientHeight;
