@@ -41,6 +41,7 @@ function addPointerListener(node, eventType, handler) {
 	if (typeof PointerEvent !== 'undefined') {
 		node.addEventListener(eventType, handler);
 	} else {
+		// pointer event not supported, using fallback
 		node.addEventListener(PointerEventFallbackMap[eventType]['touch'], e=>{
 			if (e.type === 'touchend') {
 				handler(e);
@@ -52,7 +53,7 @@ function addPointerListener(node, eventType, handler) {
 				handler(e);
 			}
 			else { console.error('Unexpected TouchEvent with no touches', e); }
-		});
+		}, { passive: false }); // allow preventDefault (on some browsers, passive defaults to true)
 		node.addEventListener(PointerEventFallbackMap[eventType]['mouse'], handler);
 	}
 }
