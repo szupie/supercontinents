@@ -19,7 +19,8 @@
 	-webkit-user-select: none;
 	touch-action: none;
 
-	transition: transform var(--expansion-duration) var(--expansion-easing);
+	/* use position instead of transform to avoid iphone flickering bug on scroll when combining position: fixed with transform */
+	transition: right var(--expansion-duration) var(--expansion-easing);
 }
 #timeline ol {
 	list-style: none;
@@ -559,7 +560,7 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 @media (max-width: 699px), (max-width: 1023px) and (max-height: 500px) {
 	/* Expanded/collapsed positioning */
 	#timeline {
-		transform: translateX(calc( -1 * var(--expansion-percent) * var(--scrubber-offscreen-width) ));
+		right: calc(var(--expansion-percent) * var(--scrubber-offscreen-width));
 	}
 
 	/* hide event labels */
@@ -689,6 +690,6 @@ body[data-map-type="texture"] #timeline .axis-labels .label.full-timeline {
 
 	/* Full-width state with geological periods */
 	#timeline.expanded-overlay {
-		transform: translateX(calc(-1 * var(--scrubber-offscreen-width)));
+		right: var(--scrubber-offscreen-width);
 	}
 }
