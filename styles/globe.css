@@ -29,10 +29,29 @@
 	width: 100%;
 	height: 100%;
 	left: 0;
+	pointer-events: none; /* prevent globe rotation target area extending into space on safari */
 }
 #globe-texture {
 	border-radius: 100%;
 }
+#globe-overlay {
+	overflow: visible;
+	z-index: 1; /* appear above shading */
+}
+/* shading around globe for depth */
+#globe::after {
+	--shadow-strength: 0.5;
+	--shadow-colour: rgba(0,0,0, var(--shadow-strength));
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	border-radius: 100%;
+	box-shadow: inset 0 0 30px 5px var(--shadow-colour);
+}
+
 #reverse-globe {
 	--globe-top-margin: 4px;
 	--reverse-globe-size: 40px;
@@ -73,13 +92,6 @@
 	transform: translateX(-50%);
 	box-shadow: inset 0 0 5px 1px #0008;
 }
-#globe-overlay {
-	--shadow-strength: 0.5;
-	--shadow-colour: rgba(0,0,0, var(--shadow-strength));
-	overflow: visible;
-	border-radius: 100%;
-	box-shadow: inset 0 0 30px 5px var(--shadow-colour);
-}
 
 
 /* vector map */
@@ -114,7 +126,7 @@ body:not([data-map-type="texture"]) #globe-texture,
 body:not([data-map-type="texture"]) #reverse-texture {
 	visibility: hidden;
 }
-body:not([data-map-type="texture"]) #globe #globe-overlay {
+body:not([data-map-type="texture"]) #globe::after {
 	--shadow-strength: 0.3;
 }
 #globe,
@@ -241,8 +253,8 @@ body:not([data-map-type="none"]) #globe-overlay #no-map-message {
 body[data-map-type="none"] #globe {
 	pointer-events: none;
 }
-body[data-map-type="none"] #globe-overlay {
-	box-shadow: none;
+body[data-map-type="none"] #globe::after {
+	--shadow-strength: 0;
 }
 body[data-map-type="none"] #globe-texture,
 body[data-map-type="none"] #globe-overlay .reconstruction,
