@@ -611,7 +611,7 @@ cite:target {
 
 
 /* stacked layout (too narrow and tall enough to stack) */
-@media (max-width: 499px), (max-width: 1023px) and (min-height: 501px) {
+@media (max-width: 499px), (max-width: 1023px) and (min-height: 501px), (orientation: portrait) {
 	html {
 		--globe-clear-height: 2rem;
 		--stories-safe-width: 35rem;
