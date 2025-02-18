@@ -1,7 +1,7 @@
 import {
 	select, selectAll,
 	geoPath, geoGraticule, geoDistance, geoCircle, geoInterpolate
-} from '../vendor-loader.js';
+} from '../vendor-local.js';
 
 import {
 	transitionToCoord,

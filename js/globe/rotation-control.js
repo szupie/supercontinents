@@ -1,4 +1,4 @@
-import { pointer } from '../vendor-loader.js';
+import { pointer } from '../vendor-local.js';
 import { clampAbs, clamp, easeInOut, easeInOutQuart, addPointerListener } from '../common-utils.js';
 
 export {
