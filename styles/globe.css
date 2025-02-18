@@ -10,7 +10,7 @@
 }
 
 #globe-group:not(.static) > * {
-	touch-action: pan-x pinch-zoom; /* pinch zoom only, no vertical scroll */
+	touch-action: pinch-zoom;
 	pointer-events: auto;
 }
 #globe {
