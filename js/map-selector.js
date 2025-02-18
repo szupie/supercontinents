@@ -38,8 +38,8 @@ const MapTypes = Object.freeze({
 let currentMapType = MapTypes.TEXTURE;
 
 const TextureRes = Object.freeze({
-	LO: 512,
-	HI: 3600
+	LO: 'lo-res',
+	HI: 'hi-res'
 });
 
 /*
