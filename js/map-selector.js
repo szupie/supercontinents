@@ -478,10 +478,10 @@ function setUpPointerHandler() {
 	addPointerListener(document, 'pointermove', e=>{
 		if (mapsListNode.parentNode.classList.contains('scrubbing')) {
 			handleDrag(e);
+		}
 
-			if (!CSS.supports('user-select: none')) {
-				e.preventDefault(); // prevent unintended text selection (safari)
-			}
+		if (e.target == mapsListNode && !CSS.supports('user-select: none')) {
+			e.preventDefault(); // prevent unintended text selection (safari)
 		}
 	});
 
