@@ -188,7 +188,7 @@ body:not([data-map-type="texture"]) #maps-list {
 	pointer-events: none;
 }
 #maps-list .map-indicator.selected {
-	border-color: var(--action-light-hex);
+	border-color: var(--action-extralight-hex);
 	/* selected indicator should appear above others */
 	position: relative;
 	z-index: 1;
@@ -222,8 +222,8 @@ body:not([data-map-type="texture"]) #maps-list {
 	display: none;
 }
 @media (hover: hover) {
-	#maps-list:hover a.hovering {
-		border-color: var(--action-extralight-hex);
+	#maps-list:hover a.hovering:not(.selected) {
+		border-color: var(--action-light-hex);
 	}
 }
 @media (pointer: coarse) {
