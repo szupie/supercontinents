@@ -158,6 +158,7 @@ function setMapToMya(targetMya) {
 		currentMapIndex = closestIndex;
 
 		const prevMya = currentMya;
+		const prevMapType = currentMapType;
 
 		if (noMap) {
 			currentMapType = MapTypes.NONE;
@@ -177,6 +178,16 @@ function setMapToMya(targetMya) {
 
 		// highlight indicator for current map
 		resetClassForAllMaps('selected', currentMapIndex);
+		
+		// stop scrubbing on magnification change 
+		// (when going between TEXTURE and VECTOR)
+		if (
+			prevMapType !== currentMapType && 
+			currentMapType !== MapTypes.NONE && 
+			prevMapType !== MapTypes.NONE
+		) {
+			mapsListNode.parentNode.classList.remove('scrubbing');
+		}
 
 		// trigger redraw
 		updateCallback(prevMya, currentMya);	
@@ -497,20 +508,23 @@ function handleDrag(e) {
 			yPercent*oldestTextureMya, 
 			0, EARTH_FORMATION_MYA
 		);
+
 		// show intro when selecting precambrian time from cambrian timeline
-		if (currentMapType == MapTypes.TEXTURE && targetMya > youngestVectorMya) {
+		if (currentMapType == MapTypes.TEXTURE && targetMya > oldestTextureMya) {
 			const precambrianIntro = document.getElementById('precambrian-intro');
 			if (CSS.supports('scroll-margin-top: 0px')) {
+
 				precambrianIntro.scrollIntoView();
+
 			} else {
 				// workaround for ios 12, which reports the wrong y for container
 				precambrianIntro.firstElementChild.scrollIntoView();
 			}
-			// timeline shifted, so prevent further scrubbing until drag reinitiated
-			mapsListNode.parentNode.classList.remove('scrubbing');
+
 		} else {
 			setScrollToMya(targetMya);
 		}
+
 	} catch(e) {
 		// console.debug(e);
 	}
