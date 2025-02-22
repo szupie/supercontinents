@@ -20,6 +20,7 @@
 	margin: 0 auto;
 	border-radius: 100%;
 	cursor: grab;
+	-webkit-user-select: none; /* prevent unwanted text selection on ios */
 }
 #globe.dragging {
 	cursor: grabbing;
