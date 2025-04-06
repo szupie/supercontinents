@@ -10,8 +10,13 @@
 }
 
 #globe-group:not(.static) > * {
-	touch-action: pan-x pinch-zoom; /* pinch zoom only, no vertical scroll */
+	touch-action: none;
 	pointer-events: auto;
+}
+@supports not (touch-action: none) {
+	#globe-group:not(.static) > * {
+		touch-action: pinch-zoom;
+	}
 }
 #globe {
 	position: relative;
@@ -20,6 +25,7 @@
 	margin: 0 auto;
 	border-radius: 100%;
 	cursor: grab;
+	-webkit-user-select: none; /* prevent unwanted text selection on ios */
 }
 #globe.dragging {
 	cursor: grabbing;
