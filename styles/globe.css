@@ -10,8 +10,13 @@
 }
 
 #globe-group:not(.static) > * {
-	touch-action: pinch-zoom;
+	touch-action: none;
 	pointer-events: auto;
+}
+@supports not (touch-action: none) {
+	#globe-group:not(.static) > * {
+		touch-action: pinch-zoom;
+	}
 }
 #globe {
 	position: relative;
